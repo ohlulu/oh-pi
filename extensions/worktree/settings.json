@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "pikmin-pocket-ios": {
+      "sync": "rm -rf {{worktree}}/.pi/todos && cp -r {{main}}/.pi/todos {{worktree}}/.pi/todos"
+    }
+  }
+}
