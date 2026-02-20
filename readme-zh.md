@@ -75,6 +75,8 @@ pi
 | [swiftui-expert-skill](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-expert-skill) | SwiftUI 最佳實踐 — 狀態管理、View 組合、效能、現代 API。 |
 | [swiftui-liquid-glass](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-liquid-glass) | iOS 26+ Liquid Glass — `.glassEffect`、glass buttons、morphing transitions。 |
 | [swiftui-performance-audit](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-performance-audit) | SwiftUI 效能審計 — 慢渲染、過度更新、layout thrash 診斷。 |
+| [swiftui-ui-patterns](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-ui-patterns) | SwiftUI UI 元件模式 — tabs、navigation、sheets、lists 等最佳實踐與範例。 |
+| [swiftui-view-refactor](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-view-refactor) | SwiftUI View 重構 — 統一結構排序、依賴注入和 Observation 使用方式。 |
 | [update-changelog](https://github.com/ohlulu/oh-pi/tree/main/skills/update-changelog) | 將最近版本以來的使用者可見變更更新到 CHANGELOG.md。 |
 
 ### 第三方 Skills（pi-skills）

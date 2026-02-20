@@ -75,6 +75,8 @@ On-demand capability packages loaded by the agent when a task matches.
 | [swiftui-expert-skill](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-expert-skill) | SwiftUI best practices — state management, view composition, performance, modern APIs. |
 | [swiftui-liquid-glass](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-liquid-glass) | iOS 26+ Liquid Glass — `.glassEffect`, glass buttons, morphing transitions. |
 | [swiftui-performance-audit](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-performance-audit) | Audit SwiftUI runtime performance — slow rendering, excessive updates, layout thrash. |
+| [swiftui-ui-patterns](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-ui-patterns) | Best practices and example-driven guidance for building SwiftUI views and components. |
+| [swiftui-view-refactor](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-view-refactor) | Refactor SwiftUI views for consistent structure, dependency injection, and Observation usage. |
 | [update-changelog](https://github.com/ohlulu/oh-pi/tree/main/skills/update-changelog) | Update CHANGELOG.md with user-facing changes since the last release. |
 
 ### Third-Party Skills (pi-skills)
