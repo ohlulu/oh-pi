@@ -10,12 +10,31 @@ A curated collection of personal [pi](https://github.com/badlogic/pi) agent reso
 
 ## Table of Contents
 
+- [Usage](#usage)
 - [Extensions](#extensions)
 - [Skills](#skills)
 - [Prompt Templates](#prompt-templates)
 - [Shared Prompts](#shared-prompts)
 - [AGENTS.md](#agentsmd)
-- [Usage](#usage)
+
+## Usage
+
+Clone the repo, open it with pi, and explore interactively:
+
+```bash
+git clone https://github.com/ohlulu/oh-pi.git
+cd oh-pi
+pi
+```
+
+Use `/dig` to understand any extension, skill, or prompt before adopting it:
+
+```
+/dig @skills/swift-concurrency
+/dig @extensions/ralph-wiggum
+```
+
+> `/dig` outputs in Chinese by default. Non-Chinese speakers: ask pi to translate `./prompts/dig.md` to your language and copy it to `~/.pi/agent/prompts/` — then `/dig` will work in your language everywhere.
 
 ## Extensions
 
@@ -94,39 +113,6 @@ Reusable prompt fragments referenced by extensions or other prompts.
 > # Project
 > cp AGENTS.md .pi/agent/AGENTS.md
 > ```
-
-## Usage
-
-Clone the repo, open it with pi, and explore interactively:
-
-```bash
-git clone https://github.com/ohlulu/oh-pi.git
-cd oh-pi
-pi
-```
-
-Use `/dig` to understand any extension, skill, or prompt before adopting it:
-
-```
-/dig @skills/swift-concurrency
-/dig @extensions/ralph-wiggum
-```
-
-> `/dig` outputs in Chinese by default. Non-Chinese speakers: ask pi to translate `./prompts/dig.md` to your language and copy it to `~/.pi/agent/prompts/` — then `/dig` will work in your language everywhere.
-
-Once you find something useful, ask pi to copy it to your user-level config:
-
-```
-Help me copy swift-concurrency skill to ~/.pi/agent/skills/
-```
-
-Or do it manually:
-
-```bash
-cp -r oh-pi/skills/swift-concurrency ~/.pi/agent/skills/
-cp oh-pi/extensions/done-sound.ts ~/.pi/agent/extensions/
-cp oh-pi/prompts/handoff.md ~/.pi/agent/prompts/
-```
 
 ## Acknowledgments
 

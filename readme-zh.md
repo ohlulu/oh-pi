@@ -10,12 +10,31 @@
 
 ## 目錄
 
+- [使用方式](#使用方式)
 - [Extensions](#extensions)
 - [Skills](#skills)
 - [Prompt Templates](#prompt-templates)
 - [Shared Prompts](#shared-prompts)
 - [AGENTS.md](#agentsmd)
-- [使用方式](#使用方式)
+
+## 使用方式
+
+Clone repo，用 pi 打開，互動式探索：
+
+```bash
+git clone https://github.com/ohlulu/oh-pi.git
+cd oh-pi
+pi
+```
+
+用 `/dig` 深入了解任何 extension、skill 或 prompt：
+
+```
+/dig @skills/swift-concurrency
+/dig @extensions/ralph-wiggum
+```
+
+> `/dig` 預設輸出中文。非中文使用者：請 pi 把 `./prompts/dig.md` 翻譯成你熟悉的語言，複製到 `~/.pi/agent/prompts/`，之後 `/dig` 就會用你的語言輸出。
 
 ## Extensions
 
@@ -94,39 +113,6 @@
 > # 專案
 > cp AGENTS.md .pi/agent/AGENTS.md
 > ```
-
-## 使用方式
-
-Clone repo，用 pi 打開，互動式探索：
-
-```bash
-git clone https://github.com/ohlulu/oh-pi.git
-cd oh-pi
-pi
-```
-
-用 `/dig` 深入了解任何 extension、skill 或 prompt：
-
-```
-/dig @skills/swift-concurrency
-/dig @extensions/ralph-wiggum
-```
-
-> `/dig` 預設輸出中文。非中文使用者：請 pi 把 `./prompts/dig.md` 翻譯成你熟悉的語言，複製到 `~/.pi/agent/prompts/`，之後 `/dig` 就會用你的語言輸出。
-
-找到想用的東西後，直接請 pi 幫你搬到 user-level 設定：
-
-```
-幫我把 swift-concurrency skill 複製到 ~/.pi/agent/skills/
-```
-
-或手動複製：
-
-```bash
-cp -r oh-pi/skills/swift-concurrency ~/.pi/agent/skills/
-cp oh-pi/extensions/done-sound.ts ~/.pi/agent/extensions/
-cp oh-pi/prompts/handoff.md ~/.pi/agent/prompts/
-```
 
 ## 致謝
 
