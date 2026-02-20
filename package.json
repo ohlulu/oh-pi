@@ -1,0 +1,12 @@
+{
+  "name": "@ohlulu/oh-pi",
+  "version": "0.1.0",
+  "description": "Ohlulu's pi agent resources — extensions, skills, and prompt templates",
+  "keywords": ["pi-package"],
+  "license": "MIT",
+  "pi": {
+    "extensions": ["./extensions"],
+    "skills": ["./skills"],
+    "prompts": ["./prompts", "./shared/prompts"]
+  }
+}

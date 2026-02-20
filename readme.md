@@ -1,33 +1,51 @@
-# pi-extension
+# oh-pi
 
-簡單的 pi extension 專案起手式。
+Ohlulu 的 pi agent 資源包 — extensions、skills、prompt templates。
 
-## 目標
+## 安裝
 
-- 建立一個可被 pi 載入的 extension
-- 先做最小可行版本（MVP）
+```bash
+# 本機路徑安裝（全域）
+pi install /path/to/oh-pi
 
-## 快速開始
+# 本機路徑安裝（專案）
+pi install -l /path/to/oh-pi
 
-1. 建立 extension 檔案：
-   - `./.pi/extensions/my-extension.ts`
-2. 在 pi 內執行 `/reload` 重新載入
-3. 測試 extension 是否生效
-
-## 最小範例
-
-```ts
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
-
-export default function (pi: ExtensionAPI) {
-  pi.on("session_start", async (_event, ctx) => {
-    ctx.ui.notify("my-extension loaded", "info");
-  });
-}
+# 從 git 安裝
+pi install git:github.com/ohlulu/oh-pi
 ```
 
-## 下一步
+## 內容
 
-- 加一個自訂 command（例如 `/hello`）
-- 加一個自訂 tool
-- 補上測試與使用說明
+| 類別 | 路徑 | 說明 |
+|------|------|------|
+| Extensions | `extensions/` | ask-me, context, done-sound, inject-docs, lazygit, notify, open-with, ralph-wiggum, review, tab-status, todo, worktree, yazi |
+| Skills | `skills/` | bdd, clean-architecture, commit, dev-principles, pi-skills (brave-search, browser-tools, …), ralph-wiggum, swift-coding-style, swift-concurrency, swiftui-expert-skill, swiftui-liquid-glass, swiftui-performance-audit, update-changelog |
+| Prompts | `prompts/` | dig, handoff, mcp, pickup, spec-workshop, tech-stack-decision |
+| Shared Prompts | `shared/prompts/` | review-rubric |
+
+## AGENTS.md
+
+`AGENTS.md` 不會被 pi package 自動載入。  
+如需使用，請手動複製到全域或專案位置：
+
+```bash
+# 全域
+cp AGENTS.md ~/.pi/agent/AGENTS.md
+
+# 專案
+cp AGENTS.md .pi/agent/AGENTS.md
+```
+
+## Skills with Dependencies
+
+部分 skills（如 `brave-search`、`browser-tools`）需要 `npm install`：
+
+```bash
+cd skills/pi-skills/brave-search && npm install
+cd skills/pi-skills/browser-tools && npm install
+```
+
+## License
+
+MIT
