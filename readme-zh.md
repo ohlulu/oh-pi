@@ -127,3 +127,4 @@ pi install /path/to/oh-pi
 - [michaelshimeles/ralphy](https://github.com/michaelshimeles/ralphy)
 - [tmustier/pi-extensions](https://github.com/tmustier/pi-extensions)
 - [arosstale/pi-pai](https://github.com/arosstale/pi-pai)
+- [SwiftLee - AvdLee](https://github.com/AvdLee)
