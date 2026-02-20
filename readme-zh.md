@@ -97,16 +97,34 @@
 
 ## 使用方式
 
-瀏覽內容，挑選你需要的部分。
+Clone repo，用 pi 打開，互動式探索：
 
 ```bash
-# 複製單一 extension
-cp oh-pi/extensions/done-sound.ts ~/.pi/agent/extensions/
+git clone https://github.com/ohlulu/oh-pi.git
+cd oh-pi
+pi
+```
 
-# 複製一個 skill
+用 `/dig` 深入了解任何 extension、skill 或 prompt：
+
+```
+/dig @skills/swift-concurrency
+/dig @extensions/ralph-wiggum
+```
+
+> `/dig` 預設輸出中文。非中文使用者：可以先請 pi 翻譯成你熟悉的語言，或直接在後面加語言（例如 `/dig @skills/bdd in English`）。
+
+找到想用的東西後，直接請 pi 幫你搬到 user-level 設定：
+
+```
+幫我把 swift-concurrency skill 複製到 ~/.pi/agent/skills/
+```
+
+或手動複製：
+
+```bash
 cp -r oh-pi/skills/swift-concurrency ~/.pi/agent/skills/
-
-# 複製一個 prompt template
+cp oh-pi/extensions/done-sound.ts ~/.pi/agent/extensions/
 cp oh-pi/prompts/handoff.md ~/.pi/agent/prompts/
 ```
 

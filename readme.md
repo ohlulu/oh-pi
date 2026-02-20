@@ -97,16 +97,34 @@ Reusable prompt fragments referenced by extensions or other prompts.
 
 ## Usage
 
-Browse the contents and cherry-pick what fits your needs.
+Clone the repo, open it with pi, and explore interactively:
 
 ```bash
-# Copy a single extension
-cp oh-pi/extensions/done-sound.ts ~/.pi/agent/extensions/
+git clone https://github.com/ohlulu/oh-pi.git
+cd oh-pi
+pi
+```
 
-# Copy a skill
+Use `/dig` to understand any extension, skill, or prompt before adopting it:
+
+```
+/dig @skills/swift-concurrency
+/dig @extensions/ralph-wiggum
+```
+
+> `/dig` outputs in Chinese by default. Non-Chinese speakers: just ask pi to translate it to your language first, or append your language preference (e.g. `/dig @skills/bdd in English`).
+
+Once you find something useful, ask pi to copy it to your user-level config:
+
+```
+Help me copy swift-concurrency skill to ~/.pi/agent/skills/
+```
+
+Or do it manually:
+
+```bash
 cp -r oh-pi/skills/swift-concurrency ~/.pi/agent/skills/
-
-# Copy a prompt template
+cp oh-pi/extensions/done-sound.ts ~/.pi/agent/extensions/
 cp oh-pi/prompts/handoff.md ~/.pi/agent/prompts/
 ```
 
