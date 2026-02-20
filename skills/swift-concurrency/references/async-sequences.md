@@ -1,3 +1,4 @@
+<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
 # Async Sequences and Streams
 
 Patterns for iterating over values that arrive over time.
@@ -667,4 +668,3 @@ for await value in stream {
 ## Further Learning
 
 For real-world migration examples, performance patterns, and advanced stream techniques, see [Swift Concurrency Course](https://www.swiftconcurrencycourse.com).
-

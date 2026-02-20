@@ -1,6 +1,6 @@
 ---
 name: ralph-wiggum
-description: Long-running iterative development loops with pacing control and verifiable progress. Use when tasks require multiple iterations, many discrete steps, or periodic reflection with clear checkpoints; avoid for simple one-shot tasks or quick fixes.
+description: Long-running iterative development loops with pacing control and verifiable progress. Use ONLY when you expect ≥3 build→fix→verify cycles where each iteration's output determines the next step (e.g., migrating a large codebase, debugging flaky tests, exploratory refactors). Do NOT use for tasks that can be planned upfront and executed in one pass — even if they involve many files or steps. Multi-file features with clear specs → direct execution, not Ralph.
 ---
 
 # Ralph Wiggum v3 — Long-Running Development Loops

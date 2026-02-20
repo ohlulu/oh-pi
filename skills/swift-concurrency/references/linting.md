@@ -1,3 +1,4 @@
+<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
 # Linting & Concurrency
 
 Guidance for handling lint rules and compiler warnings related to Swift Concurrency.

@@ -1,3 +1,4 @@
+<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
 # Glossary
 
 Concise definitions of key Swift Concurrency terms used throughout this skill.
@@ -125,4 +126,3 @@ Like AsyncChannel but can emit errors through the stream. Stable operator.
 ## AsyncTimerSequence
 
 An AsyncSequence that emits a value at regular intervals. Replaces timer-based publishers and manual sleep loops. Stable operator.
-

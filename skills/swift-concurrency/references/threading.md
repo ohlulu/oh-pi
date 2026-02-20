@@ -1,3 +1,4 @@
+<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
 # Threading
 
 Understanding how Swift Concurrency manages threads and execution contexts.
@@ -449,4 +450,3 @@ Seeing Sendable warnings?
 ## Further Learning
 
 For migration strategies, real-world examples, and advanced threading patterns, see [Swift Concurrency Course](https://www.swiftconcurrencycourse.com).
-

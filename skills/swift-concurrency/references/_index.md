@@ -1,3 +1,4 @@
+<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
 # Reference Index
 
 Quick navigation for Swift Concurrency topics.
@@ -27,6 +28,13 @@ Quick navigation for Swift Concurrency topics.
 | `memory-management.md` | Retain cycles in tasks, cleanup patterns |
 | `performance.md` | Profiling with Instruments, optimization strategies |
 
+## SwiftUI & Swift 6.2
+
+| File | Description |
+|------|-------------|
+| `swiftui-concurrency.md` | Main-actor defaults, off-main-thread APIs, Sendable closures, Task bridging in SwiftUI |
+| `approachable-concurrency.md` | Swift 6.2 approachable concurrency mode: detect settings, fix patterns, pitfalls |
+
 ## Integration & Migration
 
 | File | Description |
@@ -51,6 +59,8 @@ Quick navigation for Swift Concurrency topics.
 - **Migrate to Swift 6** → `migration.md`
 - **Test async code** → `testing.md`
 - **Optimize performance** → `performance.md`
+- **SwiftUI concurrency issues** → `swiftui-concurrency.md`
+- **Use Swift 6.2 approachable concurrency** → `approachable-concurrency.md`
 
 ### "I'm getting an error about..."
 
@@ -59,6 +69,8 @@ Quick navigation for Swift Concurrency topics.
 - **"async_without_await"** → `linting.md`
 - **Core Data warnings** → `core-data.md`
 - **XCTest async errors** → `testing.md`
+- **Sendable closure in Shape / Layout / visualEffect / onGeometryChange** → `swiftui-concurrency.md`
+- **Swift 6.2 / approachable concurrency / main-actor-by-default** → `approachable-concurrency.md`
 
 ### "I want to migrate..."
 
@@ -82,3 +94,5 @@ Quick navigation for Swift Concurrency topics.
 | `async-await-basics.md` | ~250 | URLSession patterns |
 | `linting.md` | ~200 | SwiftLint config |
 | `glossary.md` | ~130 | Term definitions |
+| `swiftui-concurrency.md` | ~40 | SwiftUI + concurrency (Dimillian/Skills) |
+| `approachable-concurrency.md` | ~50 | Swift 6.2 approachable concurrency (Dimillian/Skills) |

@@ -1,3 +1,4 @@
+<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
 # AsyncAlgorithms Package
 
 Patterns for combining, transforming, and managing asynchronous sequences beyond standard library. Provides time-based operators, stream combination tools, and multi-consumer primitives for Swift Concurrency.

@@ -1,3 +1,4 @@
+<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
 # Performance
 
 Optimizing Swift Concurrency code for speed and efficiency.
@@ -571,4 +572,3 @@ actor Store {
 ## Further Learning
 
 For real-world optimization examples, profiling techniques, and advanced performance patterns, see [Swift Concurrency Course](https://www.swiftconcurrencycourse.com).
-

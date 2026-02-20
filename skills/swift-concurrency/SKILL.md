@@ -1,6 +1,6 @@
 ---
 name: swift-concurrency
-description: 'Expert guidance on Swift Concurrency best practices, patterns, and implementation. Use when developers mention: (1) Swift Concurrency, async/await, actors, or tasks, (2) "use Swift Concurrency" or "modern concurrency patterns", (3) migrating to Swift 6, (4) data races or thread safety issues, (5) refactoring closures to async/await, (6) @MainActor, Sendable, or actor isolation, (7) concurrent code architecture or performance optimization, (8) concurrency-related linter warnings (SwiftLint or similar; e.g. async_without_await, Sendable/actor isolation/MainActor lint).'
+description: 'Expert guidance on Swift Concurrency best practices, patterns, and implementation. Use when developers mention: (1) Swift Concurrency, async/await, actors, or tasks, (2) "use Swift Concurrency" or "modern concurrency patterns", (3) migrating to Swift 6, (4) data races or thread safety issues, (5) refactoring closures to async/await, (6) @MainActor, Sendable, or actor isolation, (7) concurrent code architecture or performance optimization, (8) concurrency-related linter warnings (SwiftLint or similar; e.g. async_without_await, Sendable/actor isolation/MainActor lint), (9) SwiftUI concurrency issues (e.g. Sendable closures in Shape/Layout/visualEffect, Task bridging in SwiftUI, approachable concurrency / Swift 6.2 main-actor-by-default).'
 ---
 # Swift Concurrency
 
@@ -89,6 +89,12 @@ When a developer needs concurrency guidance, follow this decision tree:
 7. **Memory issues with tasks?**
    - Read `references/memory-management.md` for retain cycle prevention
 
+8. **SwiftUI concurrency issues?**
+   - View/Shape/Layout isolation, Sendable closures → `references/swiftui-concurrency.md`
+
+9. **Project using Swift 6.2 approachable concurrency / main-actor-by-default?**
+   - Read `references/approachable-concurrency.md` for mode detection, fix patterns, and pitfalls
+
 ## Triage-First Playbook (Common Errors -> Next Best Move)
 
 - SwiftLint concurrency-related warnings
@@ -105,6 +111,10 @@ When a developer needs concurrency guidance, follow this decision tree:
   - Use `references/threading.md` to avoid thread-centric debugging and rely on isolation + Instruments
 - XCTest async errors like "wait(...) is unavailable from asynchronous contexts"
   - Use `references/testing.md` (`await fulfillment(of:)` and Swift Testing patterns)
+- SwiftUI Sendable closure errors (Shape, Layout, visualEffect, onGeometryChange)
+  - These APIs run off main thread; capture value copies instead of `self` → `references/swiftui-concurrency.md`
+- SwiftUI + approachable concurrency / Swift 6.2 main-actor-by-default confusion
+  - Use `references/approachable-concurrency.md` to detect mode and apply correct fix pattern
 - Core Data concurrency warnings/errors
   - Use `references/core-data.md` (DAO/`NSManagedObjectID`, default isolation conflicts)
 - Thinking `async` means background execution
@@ -239,6 +249,8 @@ Load these files as needed for specific topics:
 - **`performance.md`** - Profiling with Instruments, reducing suspension points, execution strategies
 - **`testing.md`** - XCTest async patterns, Swift Testing, concurrency testing utilities
 - **`migration.md`** - Swift 6 migration strategy, closure-to-async conversion, @preconcurrency, FRP migration
+- **`approachable-concurrency.md`** - Swift 6.2 approachable concurrency mode: detect settings, fix patterns, common pitfalls (source: Dimillian/Skills MIT)
+- **`swiftui-concurrency.md`** - SwiftUI-specific concurrency: main-actor defaults, off-main-thread APIs, Sendable closures, Task bridging (source: Dimillian/Skills MIT)
 
 ## Best Practices Summary
 
