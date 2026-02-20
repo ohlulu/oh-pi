@@ -112,7 +112,7 @@ pi
 /dig @extensions/ralph-wiggum
 ```
 
-> `/dig` 預設輸出中文。非中文使用者：可以先請 pi 翻譯成你熟悉的語言，或直接在後面加語言（例如 `/dig @skills/bdd in English`）。
+> `/dig` 預設輸出中文。非中文使用者：請 pi 把 `./prompts/dig.md` 翻譯成你熟悉的語言，複製到 `~/.pi/agent/prompts/`，之後 `/dig` 就會用你的語言輸出。
 
 找到想用的東西後，直接請 pi 幫你搬到 user-level 設定：
 

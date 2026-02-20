@@ -112,7 +112,7 @@ Use `/dig` to understand any extension, skill, or prompt before adopting it:
 /dig @extensions/ralph-wiggum
 ```
 
-> `/dig` outputs in Chinese by default. Non-Chinese speakers: just ask pi to translate it to your language first, or append your language preference (e.g. `/dig @skills/bdd in English`).
+> `/dig` outputs in Chinese by default. Non-Chinese speakers: ask pi to translate `./prompts/dig.md` to your language and copy it to `~/.pi/agent/prompts/` — then `/dig` will work in your language everywhere.
 
 Once you find something useful, ask pi to copy it to your user-level config:
 
