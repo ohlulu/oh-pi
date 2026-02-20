@@ -6,7 +6,7 @@
 
 > **⚠️ 這是個人化配置。**
 > 圍繞我的習慣、工具和技術棧（Swift / SwiftUI / macOS）設計。
-> 建議瀏覽內容後**挑選**適合你的部分 — 手動複製個別檔案，而非透過 `pi install` 整包安裝。
+> 建議瀏覽內容後**挑選**適合你的部分 — 手動複製個別檔案到你自己的設定中。
 
 ## 目錄
 
@@ -97,7 +97,7 @@
 
 ## 使用方式
 
-**建議：挑選你需要的部分。**
+瀏覽內容，挑選你需要的部分。
 
 ```bash
 # 複製單一 extension
@@ -108,12 +108,6 @@ cp -r oh-pi/skills/swift-concurrency ~/.pi/agent/skills/
 
 # 複製一個 prompt template
 cp oh-pi/prompts/handoff.md ~/.pi/agent/prompts/
-```
-
-如果仍想整包安裝（不建議用於個人配置）：
-
-```bash
-pi install /path/to/oh-pi
 ```
 
 ## 致謝

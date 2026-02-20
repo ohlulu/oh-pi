@@ -6,7 +6,7 @@ A curated collection of personal [pi](https://github.com/badlogic/pi) agent reso
 
 > **⚠️ This is a personal configuration.**
 > It is designed around my specific habits, tools, and tech stack (Swift / SwiftUI / macOS).
-> I recommend browsing the contents and **cherry-picking** what fits your needs — copy individual files rather than installing the whole package via `pi install`.
+> I recommend browsing the contents and **cherry-picking** what fits your needs — copy individual files into your own config.
 
 ## Table of Contents
 
@@ -97,7 +97,7 @@ Reusable prompt fragments referenced by extensions or other prompts.
 
 ## Usage
 
-**Recommended: cherry-pick what you need.**
+Browse the contents and cherry-pick what fits your needs.
 
 ```bash
 # Copy a single extension
@@ -108,12 +108,6 @@ cp -r oh-pi/skills/swift-concurrency ~/.pi/agent/skills/
 
 # Copy a prompt template
 cp oh-pi/prompts/handoff.md ~/.pi/agent/prompts/
-```
-
-If you still want to install as a package (not recommended for personal configs):
-
-```bash
-pi install /path/to/oh-pi
 ```
 
 ## Acknowledgments
