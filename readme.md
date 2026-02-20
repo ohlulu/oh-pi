@@ -15,6 +15,8 @@ A curated collection of personal [pi](https://github.com/badlogic/pi) agent reso
 - [Skills](#skills)
 - [Prompt Templates](#prompt-templates)
 - [Shared Prompts](#shared-prompts)
+- [Shared Scripts](#shared-scripts)
+- [Docs](#docs)
 - [AGENTS.md](#agentsmd)
 
 ## Usage
@@ -99,6 +101,23 @@ Reusable prompt fragments referenced by extensions or other prompts.
 | Name | Description |
 |------|-------------|
 | [review-rubric](https://github.com/ohlulu/oh-pi/blob/main/shared/prompts/review-rubric.md) | Code review scoring guidelines — what to flag, severity levels, and review structure. |
+
+## Shared Scripts
+
+Utility scripts used by skills and extensions.
+
+| Name | Description |
+|------|-------------|
+| [committer](https://github.com/ohlulu/oh-pi/blob/main/shared/scripts/committer) | Safe git commit wrapper — stages only listed files, validates inputs. |
+| [docs-list](https://github.com/ohlulu/oh-pi/blob/main/shared/scripts/docs-list.ts) | Lists and validates `docs/` directory with front-matter enforcement. |
+
+## Docs
+
+Reference documents for agent coordination and workflows.
+
+| Name | Description |
+|------|-------------|
+| [subagent](https://github.com/ohlulu/oh-pi/blob/main/docs/subagent.md) | Subagent coordination via tmux + Claude Code CLI — one-shot, interactive, and supervisor patterns. |
 
 ## AGENTS.md
 

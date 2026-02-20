@@ -15,6 +15,8 @@
 - [Skills](#skills)
 - [Prompt Templates](#prompt-templates)
 - [Shared Prompts](#shared-prompts)
+- [Shared Scripts](#shared-scripts)
+- [Docs](#docs)
 - [AGENTS.md](#agentsmd)
 
 ## 使用方式
@@ -99,6 +101,23 @@ pi
 | 名稱 | 說明 |
 |------|------|
 | [review-rubric](https://github.com/ohlulu/oh-pi/blob/main/shared/prompts/review-rubric.md) | Code review 評分準則 — 要標記什麼、嚴重程度、review 結構。 |
+
+## Shared Scripts
+
+skills 和 extensions 使用的工具腳本。
+
+| 名稱 | 說明 |
+|------|------|
+| [committer](https://github.com/ohlulu/oh-pi/blob/main/shared/scripts/committer) | 安全的 git commit 包裝器 — 僅 stage 指定檔案，驗證輸入。 |
+| [docs-list](https://github.com/ohlulu/oh-pi/blob/main/shared/scripts/docs-list.ts) | 列出並驗證 `docs/` 目錄，強制 front-matter 格式。 |
+
+## Docs
+
+Agent 協作與工作流的參考文件。
+
+| 名稱 | 說明 |
+|------|------|
+| [subagent](https://github.com/ohlulu/oh-pi/blob/main/docs/subagent.md) | 透過 tmux + Claude Code CLI 協調 subagent — 涵蓋一次性、互動式和監督者模式。 |
 
 ## AGENTS.md
 
