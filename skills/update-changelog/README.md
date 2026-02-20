@@ -2,6 +2,15 @@
 
 Curate user-facing changes from git history and write them into `CHANGELOG.md`.
 
+## Usage
+
+Ask the agent to update the changelog:
+
+```
+Update the changelog
+Prepare release notes since the last tag
+```
+
 ## What It Does
 
 - Finds the latest tag, collects commits since then

@@ -2,6 +2,15 @@
 
 Coding conventions for writing, reviewing, or refactoring `.swift` files.
 
+## Usage
+
+Ask the agent to write or review Swift code:
+
+```
+Review this Swift file
+Write this in idiomatic Swift
+```
+
 ## What It Does
 
 - Guides type design, protocol usage, error handling, and API naming

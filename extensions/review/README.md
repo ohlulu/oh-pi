@@ -2,6 +2,18 @@
 
 Code review tool. Opens a fresh session branch, runs a focused review, then returns you to where you were.
 
+## Usage
+
+Type `/review` to open the interactive selector and pick what to review. Or jump straight to a sub-command:
+
+```
+/review uncommitted
+/review pr 123
+/review branch main
+```
+
+Type `/end-review` when done to summarize findings and return to your original session.
+
 ## How It Works
 
 1. `/review` opens a selector — pick what to review

@@ -2,6 +2,23 @@
 
 Drives long-running, multi-iteration development loops. The agent works in cycles: do a chunk → call `ralph_done` → Ralph injects the next prompt → repeat until done.
 
+## Usage
+
+Start a loop:
+
+```
+/ralph start <name>
+/ralph start <name> --mode plan --reflect-every 5 --max-iterations 20
+```
+
+Check status, inject hints, or stop mid-loop:
+
+```
+/ralph status
+/ralph hint "focus on error handling"
+/ralph stop
+```
+
 ## How It Works
 
 1. You start a loop (`/ralph start my-feature` or agent calls `ralph_start`)

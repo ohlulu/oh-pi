@@ -2,6 +2,16 @@
 
 Git worktree management via `/wt` command. Create isolated workspaces for features without juggling branches or stashing.
 
+## Usage
+
+On first use in a project, run `/wt init` to configure the sync command and parent directory. Then:
+
+```
+/wt create <name>    — create a worktree + feature branch
+/wt list             — list all worktrees
+/wt remove <name>    — remove a worktree
+```
+
 ## How It Works
 
 - Creates worktrees in a sibling directory (`<project>.worktrees/` by default)

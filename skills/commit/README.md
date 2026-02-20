@@ -2,6 +2,16 @@
 
 Walks through a structured commit workflow: analyze changes → write a Conventional Commits message → commit via the `committer` script.
 
+## Usage
+
+Ask the agent to commit changes:
+
+```
+Commit my changes
+```
+
+Or the agent loads this skill automatically when it detects a commit is needed.
+
 ## What It Does
 
 - Scans `git diff` / `git status` to understand what changed

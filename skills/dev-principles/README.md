@@ -2,6 +2,16 @@
 
 Language-agnostic guidelines for writing clean, maintainable code. No specific architecture enforced — just solid fundamentals.
 
+## Usage
+
+Ask the agent to review code quality or design decisions:
+
+```
+Review this code for quality and design
+Is this over-engineered?
+How should I structure this module?
+```
+
 ## What It Does
 
 - Provides a checklist of design principles to follow

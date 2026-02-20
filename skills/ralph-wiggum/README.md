@@ -2,6 +2,17 @@
 
 Teaches the agent how to work inside a Ralph loop — long-running, multi-iteration development tasks.
 
+## Usage
+
+Start a loop via the `/ralph` extension command:
+
+```
+/ralph start my-feature
+/ralph start migration --mode plan --reflect-every 5
+```
+
+Or let the agent call `ralph_start` directly when it decides a loop is appropriate.
+
 ## What It Does
 
 - Tells the agent when and how to use Ralph loops

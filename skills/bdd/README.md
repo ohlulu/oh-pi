@@ -2,6 +2,15 @@
 
 Helps you write clean, business-readable Gherkin `.feature` files.
 
+## Usage
+
+Ask the agent to write or review Gherkin:
+
+```
+Write a feature file for user login
+Review this .feature file
+```
+
 ## What It Does
 
 - Turns requirements / user stories into proper Given/When/Then scenarios

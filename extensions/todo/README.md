@@ -2,6 +2,12 @@
 
 File-based todo management in `.pi/todos/`. Each todo is a markdown file with YAML front matter. Works both as an agent tool and an interactive TUI command.
 
+## Usage
+
+Type `/todos` in the pi editor to open the interactive todo browser.
+
+The agent can also manage todos autonomously — it calls the `todo` tool when it needs to create, update, or query tasks.
+
 ## How It Works
 
 - Todos are stored as individual files in `.pi/todos/`

@@ -2,6 +2,16 @@
 
 A thinking framework for where code should live and which way dependencies should point. Not a folder convention or pattern catalog.
 
+## Usage
+
+Ask the agent to evaluate architecture or placement decisions:
+
+```
+Where should this code live?
+Review the layer boundaries in this module
+Is this abstraction worth it?
+```
+
 ## What It Does
 
 - Guides decisions about layer boundaries and dependency direction
