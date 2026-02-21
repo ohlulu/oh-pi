@@ -144,7 +144,11 @@ Reference documents for agent coordination and workflows.
 
 Both commit correctly. The difference is context, quality, and cost.
 
-#### 1. Quality
+#### 1. Safety
+
+**Safety gap: negligible.** The core guardrail is the `committer` script — both use it.
+
+#### 2. Quality
 
 | | `skill:commit` (current session) | `/commit` (empty branch + Haiku) |
 |---|---|---|
@@ -155,17 +159,6 @@ Both commit correctly. The difference is context, quality, and cost.
 | Model capability | Opus/Sonnet — richer language | Haiku — functional but plainer |
 
 **Quality gap: moderate.** Rename/format commits are fine either way. Complex bugfix messages degrade noticeably.
-
-#### 2. Safety
-
-| | `skill:commit` | `/commit` |
-|---|---|---|
-| Committer script | ✅ Same | ✅ Same |
-| No `git commit` directly | ✅ Enforced | ✅ Enforced |
-| No `.` staging | ✅ Enforced | ✅ Enforced |
-| Wrong/missing files | Low risk (context knows what changed) | Slightly higher (but `git diff` lists everything) |
-
-**Safety gap: negligible.** The core guardrail is the `committer` script — both use it.
 
 #### 3. Cost
 

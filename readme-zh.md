@@ -144,7 +144,11 @@ Agent 協作與工作流的參考文件。
 
 兩個都能正確提交。差距在於上下文、品質、成本。
 
-#### 1. 品質
+#### 1. 安全性
+
+**安全性差距：幾乎沒有。** 核心護欄是 committer script，兩邊都用。
+
+#### 2. 品質
 
 | | `skill:commit`（當前 session） | `/commit`（empty branch + Haiku） |
 |---|---|---|
@@ -155,17 +159,6 @@ Agent 協作與工作流的參考文件。
 | Model 能力 | Opus/Sonnet 語言能力強 | Haiku 夠用但措辭較平 |
 
 **品質差距：中等。** 單純 rename/format 類的 commit 沒差，但複雜 bugfix 的 commit message 品質會明顯下降。
-
-#### 2. 安全性
-
-| | `skill:commit` | `/commit` |
-|---|---|---|
-| Committer script | ✅ 同一個 | ✅ 同一個 |
-| 不用 `git commit` | ✅ skill 有寫 | ✅ prompt 有寫 |
-| 不用 `.` staging | ✅ skill 有寫 | ✅ prompt 有寫 |
-| 漏 file / 多 file | 低風險（有 context 知道改了什麼） | 稍高（但 `git diff` 列得出來） |
-
-**安全性差距：幾乎沒有。** 核心護欄是 committer script，兩邊都用。
 
 #### 3. 成本
 
