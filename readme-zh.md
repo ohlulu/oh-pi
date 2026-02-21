@@ -18,6 +18,7 @@
 - [Shared Scripts](#shared-scripts)
 - [Docs](#docs)
 - [AGENTS.md](#agentsmd)
+- [FAQ](#faq)
 
 ## 使用方式
 
@@ -136,6 +137,51 @@ Agent 協作與工作流的參考文件。
 > # 專案
 > cp AGENTS.md .pi/agent/AGENTS.md
 > ```
+
+## FAQ
+
+### `skill:commit` vs `/commit` — 哪個更好？
+
+兩個都能正確提交。差距在於上下文、品質、成本。
+
+#### 1. 品質
+
+| | `skill:commit`（當前 session） | `/commit`（empty branch + Haiku） |
+|---|---|---|
+| 上下文 | ✅ 完整對話歷史 — 知道為什麼改 | ❌ 只看到 diff — 只知道改了什麼 |
+| Commit type 判斷 | 準確（知道是 fix bug 還是 refactor） | 靠猜（從 diff 推斷） |
+| Subject 品質 | `fix(auth): prevent token refresh loop` | `fix(auth): update token logic` |
+| Body 品質 | 能解釋 WHY | 只能描述 WHAT |
+| Model 能力 | Opus/Sonnet 語言能力強 | Haiku 夠用但措辭較平 |
+
+**品質差距：中等。** 單純 rename/format 類的 commit 沒差，但複雜 bugfix 的 commit message 品質會明顯下降。
+
+#### 2. 安全性
+
+| | `skill:commit` | `/commit` |
+|---|---|---|
+| Committer script | ✅ 同一個 | ✅ 同一個 |
+| 不用 `git commit` | ✅ skill 有寫 | ✅ prompt 有寫 |
+| 不用 `.` staging | ✅ skill 有寫 | ✅ prompt 有寫 |
+| 漏 file / 多 file | 低風險（有 context 知道改了什麼） | 稍高（但 `git diff` 列得出來） |
+
+**安全性差距：幾乎沒有。** 核心護欄是 committer script，兩邊都用。
+
+#### 3. 成本
+
+假設 session 累積 30k input tokens，commit 產生 ~3k output tokens：
+
+| | Input tokens | Output tokens | 估算成本 |
+|---|---|---|---|
+| `skill:commit` on Opus | ~31k（context + skill） | ~3k | ~$0.69 |
+| `skill:commit` on Sonnet | ~31k | ~3k | ~$0.14 |
+| `/commit` on Haiku（empty branch） | ~2k（prompt + diff only） | ~3k | ~$0.004 |
+
+**成本差距：Opus → Haiku 省 ~99%。**
+
+---
+
+**使用原則：** 重要 commit（複雜 bugfix、非顯而易見的 refactor）用 `skill:commit`，讓 context 發揮價值。機械性變更（format、rename、chore）或使用高費模型時用 `/commit`。
 
 ## 致謝
 

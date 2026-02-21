@@ -18,6 +18,7 @@ A curated collection of personal [pi](https://github.com/badlogic/pi) agent reso
 - [Shared Scripts](#shared-scripts)
 - [Docs](#docs)
 - [AGENTS.md](#agentsmd)
+- [FAQ](#faq)
 
 ## Usage
 
@@ -136,6 +137,51 @@ Reference documents for agent coordination and workflows.
 > # Project
 > cp AGENTS.md .pi/agent/AGENTS.md
 > ```
+
+## FAQ
+
+### `skill:commit` vs `/commit` — which to use?
+
+Both commit correctly. The difference is context, quality, and cost.
+
+#### 1. Quality
+
+| | `skill:commit` (current session) | `/commit` (empty branch + Haiku) |
+|---|---|---|
+| Context | ✅ Full conversation history — knows *why* you changed | ❌ Diff only — knows *what* changed |
+| Commit type | Accurate (knows if it's a bug fix or refactor) | Best-guess from diff |
+| Subject quality | `fix(auth): prevent token refresh loop` | `fix(auth): update token logic` |
+| Body quality | Can explain WHY | Can only describe WHAT |
+| Model capability | Opus/Sonnet — richer language | Haiku — functional but plainer |
+
+**Quality gap: moderate.** Rename/format commits are fine either way. Complex bugfix messages degrade noticeably.
+
+#### 2. Safety
+
+| | `skill:commit` | `/commit` |
+|---|---|---|
+| Committer script | ✅ Same | ✅ Same |
+| No `git commit` directly | ✅ Enforced | ✅ Enforced |
+| No `.` staging | ✅ Enforced | ✅ Enforced |
+| Wrong/missing files | Low risk (context knows what changed) | Slightly higher (but `git diff` lists everything) |
+
+**Safety gap: negligible.** The core guardrail is the `committer` script — both use it.
+
+#### 3. Cost
+
+Assuming 30k accumulated input tokens, ~3k output tokens for the commit:
+
+| | Input tokens | Output tokens | Estimated cost |
+|---|---|---|---|
+| `skill:commit` on Opus | ~31k (context + skill) | ~3k | ~$0.69 |
+| `skill:commit` on Sonnet | ~31k | ~3k | ~$0.14 |
+| `/commit` on Haiku (empty branch) | ~2k (prompt + diff only) | ~3k | ~$0.004 |
+
+**Cost gap: Opus → Haiku saves ~99%.**
+
+---
+
+**Rule of thumb:** Use `skill:commit` for commits where *why* matters (complex bugfixes, non-obvious refactors). Use `/commit` for mechanical changes (format, rename, chore) or when on an expensive model.
 
 ## Acknowledgments
 
