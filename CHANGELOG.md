@@ -2,6 +2,34 @@
 
 ## Unreleased
 
+## 2026.02.20-1
+
+### Extensions
+
+- Added `commit` — `/commit` and `/end-commit` commands; auto-branches to a cheap model (Haiku/Flash) when running on an expensive model to save tokens.
+- Added `mpd` — `/mpd` Merge-Push-Delete: merges current feature branch into default, pushes, and deletes local branch in one shot.
+- Updated `review` — added file/path review (aliases: `file`, `path`); quote-aware path parsing (single/double quotes, backslash escapes); tilde expansion; works outside git repos.
+
+### Skills
+
+- Added `google-sheets` — Google Sheets API via curl; reads, writes, appends, and batch-updates spreadsheet data without an SDK.
+- Updated `ralph-wiggum` — refined trigger criteria: start with direct execution by default; escalate to Ralph only after 2+ failed hypotheses or repeated blockers.
+- Updated `swift-concurrency` — added `approachable-concurrency` reference doc (Swift 6.2 main-actor-by-default); expanded `swiftui-concurrency` reference; added reference index.
+- Added `swiftui-ui-patterns` — SKILL.md with 20+ component reference docs (list, navigation, sheets, forms, grids, controls, haptics, menu bar, and more).
+
+### Prompts
+
+- Removed `/mcp` template.
+
+### Shared
+
+- Added `shared/scripts/committer` — safe `git commit` wrapper; enforces Conventional Commits format and explicit file listing.
+- Added `shared/scripts/docs-list.ts` — lists project `docs/` with front-matter validation.
+
+### Docs
+
+- Added `docs/subagent.md` — subagent coordination via tmux + Claude Code CLI; covers one-shot, interactive, and supervisor patterns.
+
 ## 2026.02.19-1
 
 Initial release — personal pi agent resources collection.
