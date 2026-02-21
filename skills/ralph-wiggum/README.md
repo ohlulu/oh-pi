@@ -1,6 +1,6 @@
 # Ralph Wiggum (Skill)
 
-Teaches the agent how to work inside a Ralph loop — long-running, multi-iteration development tasks.
+Teaches the agent when and how to run long-running iterative development loops. Default: start with direct execution; escalate to Ralph only when uncertainty persists.
 
 ## Usage
 

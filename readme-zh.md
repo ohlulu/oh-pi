@@ -52,8 +52,10 @@ pi
 | [lazygit](https://github.com/ohlulu/oh-pi/blob/main/extensions/lazygit.ts) | `/lazygit` 指令 — 在 TUI 內啟動 lazygit。 |
 | [notify](https://github.com/ohlulu/oh-pi/blob/main/extensions/notify.ts) | Agent 完成時發送 macOS 桌面原生通知。 |
 | [open-with](https://github.com/ohlulu/oh-pi/blob/main/extensions/open-with.ts) | `/finder`、`/cursor` 指令 — 在 Finder 或 Cursor 編輯器中開啟當前目錄。 |
+| [commit](https://github.com/ohlulu/oh-pi/tree/main/extensions/commit) | `/commit` 指令 — 智慧提交，使用高費模型時自動切換至低費模型執行 commit 工作流。 |
+| [mpd](https://github.com/ohlulu/oh-pi/tree/main/extensions/mpd) | `/mpd` 指令 — 一鍵將 feature branch 合併至預設分支、push 並刪除本地分支。 |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/extensions/ralph-wiggum) | 長時間迭代開發循環 — plan → execute → verify，含節奏控制和 checkpoint。 |
-| [review](https://github.com/ohlulu/oh-pi/tree/main/extensions/review) | `/review` 指令 — 基於 git diff / PR 的互動式 code review。 |
+| [review](https://github.com/ohlulu/oh-pi/tree/main/extensions/review) | `/review` 指令 — 基於 git diff / PR / 檔案路徑的互動式 code review。 |
 | [tab-status](https://github.com/ohlulu/oh-pi/blob/main/extensions/tab-status.ts) | 終端 tab title 即時顯示 agent 狀態（☘️ 閒置 · 🔄 工作中 · 🛑 錯誤）。 |
 | [todo](https://github.com/ohlulu/oh-pi/tree/main/extensions/todo) | 檔案式 todo 管理工具 — agent 可建立、更新和查詢待辦事項。 |
 | [worktree](https://github.com/ohlulu/oh-pi/tree/main/extensions/worktree) | `/wt` 指令 — git worktree 管理。 |
@@ -69,6 +71,7 @@ pi
 | [clean-architecture](https://github.com/ohlulu/oh-pi/tree/main/skills/clean-architecture) | Clean Architecture 思維 — 依賴方向、層級邊界、抽象決策。 |
 | [commit](https://github.com/ohlulu/oh-pi/tree/main/skills/commit) | 結構化 Conventional Commits 工作流 — 分析變更、撰寫訊息、提交。 |
 | [dev-principles](https://github.com/ohlulu/oh-pi/tree/main/skills/dev-principles) | 語言無關的開發原則與設計指引。 |
+| [google-sheets](https://github.com/ohlulu/oh-pi/tree/main/skills/google-sheets) | 透過 curl 呼叫 Google Sheets API — 以程式方式讀取、寫入和管理試算表資料。 |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/skills/ralph-wiggum) | ralph-wiggum extension 的 skill 搭檔 — 迭代循環節奏控制。 |
 | [swift-coding-style](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-coding-style) | Swift 編碼風格 — opaque vs existential types、命名、結構。 |
 | [swift-concurrency](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-concurrency) | Swift Concurrency 最佳實踐 — async/await、actors、Sendable、遷移至 Swift 6。 |

@@ -30,9 +30,10 @@ Type `/end-review` when done to summarize findings and return to your original s
 | `/review uncommitted` | Review uncommitted changes |
 | `/review branch <name>` | Review current branch vs a base branch |
 | `/review commit <sha>` | Review a specific commit |
-| `/review folder <paths>` | Review specific files/folders |
+| `/review folder <paths>` | Review specific files/folders (alias: `file`, `path`) |
 | `/review custom <text>` | Review with custom instructions |
 | `/review pr <number\|url>` | Checkout and review a PR |
+| `/review <path>` | Pass a path directly — auto-detected if it exists on disk |
 | `/end-review` | Finish review, optionally summarize, return to origin |
 
 ## Review Presets
@@ -41,6 +42,13 @@ The interactive selector auto-detects a smart default:
 - Has uncommitted changes → suggests "uncommitted"
 - On a feature branch → suggests "base branch"
 - Otherwise → suggests "commit"
+
+## File & Folder Reviews
+
+- Works **outside git repos** — no `.git` directory required
+- Paths support quoting (`"path with spaces"`, `'another'`) and backslash-escaped spaces
+- Tilde (`~/`) is expanded to `$HOME`
+- Pass paths directly without a subcommand: `/review ./src ~/project` — if all paths exist on disk, treated as folder review
 
 ## PR Reviews
 

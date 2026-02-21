@@ -52,8 +52,10 @@ Reusable pi extensions that add tools, commands, and event hooks to the agent.
 | [lazygit](https://github.com/ohlulu/oh-pi/blob/main/extensions/lazygit.ts) | `/lazygit` command — launches lazygit inside the TUI. |
 | [notify](https://github.com/ohlulu/oh-pi/blob/main/extensions/notify.ts) | Sends a native macOS desktop notification when the agent finishes. |
 | [open-with](https://github.com/ohlulu/oh-pi/blob/main/extensions/open-with.ts) | `/finder` and `/cursor` commands — open cwd in Finder or Cursor editor. |
+| [commit](https://github.com/ohlulu/oh-pi/tree/main/extensions/commit) | `/commit` command — smart commit that auto-branches to a cheap model when on an expensive one. |
+| [mpd](https://github.com/ohlulu/oh-pi/tree/main/extensions/mpd) | `/mpd` command — merge feature branch into default, push, and delete local branch in one shot. |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/extensions/ralph-wiggum) | Long-running iterative dev loops with plan → execute → verify cycles, pacing, and checkpoints. |
-| [review](https://github.com/ohlulu/oh-pi/tree/main/extensions/review) | `/review` command — interactive code review based on git diff / PR. |
+| [review](https://github.com/ohlulu/oh-pi/tree/main/extensions/review) | `/review` command — interactive code review based on git diff / PR / files. |
 | [tab-status](https://github.com/ohlulu/oh-pi/blob/main/extensions/tab-status.ts) | Updates terminal tab title with agent status (☘️ idle · 🔄 working · 🛑 error). |
 | [todo](https://github.com/ohlulu/oh-pi/tree/main/extensions/todo) | File-based todo management tool — the agent can create, update, and query todos. |
 | [worktree](https://github.com/ohlulu/oh-pi/tree/main/extensions/worktree) | `/wt` command — git worktree management. |
@@ -69,6 +71,7 @@ On-demand capability packages loaded by the agent when a task matches.
 | [clean-architecture](https://github.com/ohlulu/oh-pi/tree/main/skills/clean-architecture) | Clean Architecture mindset — dependency direction, layer boundaries, abstraction decisions. |
 | [commit](https://github.com/ohlulu/oh-pi/tree/main/skills/commit) | Structured Conventional Commits workflow — analyze changes, craft message, commit. |
 | [dev-principles](https://github.com/ohlulu/oh-pi/tree/main/skills/dev-principles) | Language-agnostic development principles and design guidelines. |
+| [google-sheets](https://github.com/ohlulu/oh-pi/tree/main/skills/google-sheets) | Google Sheets API via curl — read, write, and manage spreadsheet data programmatically. |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/skills/ralph-wiggum) | Skill companion for the ralph-wiggum extension — iterative loop pacing. |
 | [swift-coding-style](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-coding-style) | Swift coding conventions — opaque vs existential types, naming, structure. |
 | [swift-concurrency](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-concurrency) | Swift Concurrency best practices — async/await, actors, Sendable, migration to Swift 6. |
