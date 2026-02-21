@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 2026.02.21-1
+
+### Docs
+
+- Added `docs/tools.md` — CLI tools reference for Ohlulu's machines (peekaboo, gh, oracle, mcporter, xcp, tuist, lldb, axe, tmux).
+
+### Config
+
+- Cleaned up `AGENTS.md`: removed outdated shortcuts; consolidated TCC signing warning into Agent Protocol; added pointer to `docs/tools.md`.
+
 ## 2026.02.20-1
 
 ### Extensions
