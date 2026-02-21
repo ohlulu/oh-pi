@@ -7,7 +7,6 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 - Workspace: `~/Developer`. Folder pattern: `~/Developer/<owner>/<project-name>`.
 - "MacBook" / "Mac Studio" => SSH there; find hosts/IPs via `tailscale status`.
 - PRs: use `gh pr view/diff` (no URLs).
-- "Make a note" => edit AGENTS.md (shortcut; not a blocker).
 - Guardrails: use `trash` for deletes (never `rm -rf`).
 - Need upstream file: stage in `/tmp/`, then cherry-pick; never overwrite tracked.
 - Bugs: add regression test when it fits.
@@ -15,14 +14,12 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 - Commits: Conventional Commits (`feat|fix|refactor|build|ci|chore|docs|style|perf|test`).
 - Subagents: read `~/.pi/agent/docs/subagent.md`.
 - Editor: `cursor <path>`.
-- CI: `gh run list/view` (rerun/fix til green).
 - Prefer end-to-end verify; if blocked, say what's missing.
 - New deps: quick health check (recent releases/commits, adoption).
-- Slash cmds: `~/.pi/agent/prompts/`.
 - Decisions: `ask_me`/`ask_me_batch`; no assumptions pre-result; post-result update decision log. ✍️ custom input always on — no "Other/其他" option.
 - Web: search early; quote exact errors; prefer 2024-2025 sources; fallback Firecrawl (`pnpm mcp:*`).
-- Oracle: run `npx -y @steipete/oracle --help` once/session before first use.
 - Style: telegraph. Drop filler/grammar. Min tokens (global AGENTS + replies).
+- Never re-sign / ad-hoc sign / change bundle ID as "debug" without explicit ok (can mess TCC).
 
 ## Screenshots ("use a screenshot")
 - Pick newest PNG in `~/Desktop` or `~/Downloads`.
@@ -30,9 +27,6 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 - Size: `sips -g pixelWidth -g pixelHeight <file>` (prefer 2×).
 - Optimize: `imageoptim <file>` (install: `brew install imageoptim-cli`).
 - Replace asset; keep dimensions; commit; run gate; verify CI.
-
-## Important Locations
-- Sparkle keys: ~/Library/CloudStorage/Dropbox/Backup/Sparkle
 
 ## Docs
 - docs-list extension auto-injects project doc index on first turn (if `docs/` exists); read matching docs before coding.
@@ -78,9 +72,6 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 - Swift: use workspace helper/daemon; validate `swift build` + tests; keep concurrency attrs right.
 - TypeScript: use repo PM; run `docs:list`; keep files small; follow existing patterns.
 
-## macOS Permissions / Signing (TCC)
-- Never re-sign / ad-hoc sign / change bundle ID as "debug" without explicit ok (can mess TCC).
-
 ## Critical Thinking
 - Fix root cause (not band-aid).
 - Unsure: read more code; if still stuck, ask w/ short options.
@@ -90,51 +81,7 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 - Before declaring done: ask "what else tracks or depends on what I just changed?" — find and update all dependents (indexes, registries, cross-refs, manifests, docs). Primary task done ≠ done.
 
 ## Tools
-
-Read ~/.pi/agent/tools.md for the full tool catalog if it exists.
-
-
-
-### peekaboo
-Screen tools: `peekaboo`. Cmds: capture, see, click, list, tools, permissions status.
-Needs Screen Recording + Accessibility. Docs: `peekaboo --help`.
-
-### trash
-- Move files to Trash: `trash …` (system command).
-
-### bin/docs-list / scripts/docs-list.ts
-- Optional. Lists `docs/` + enforces front-matter. Ignore if `bin/docs-list` not installed. Rebuild: `bun build scripts/docs-list.ts --compile --outfile bin/docs-list`.
-
-### xcp
-- Xcode project/workspace helper for managing targets, groups, files, build settings, and assets; run `xcp --help`.
-
-### tuist
-- Generates Xcode projects from manifest files; run `tuist --help`.
-
-### lldb
-- Use `lldb` inside tmux to debug native apps; attach to the running app to inspect state.
-
-### axe
-- Simulator automation CLI for describing UI (`axe describe-ui --udid …`), tapping (`axe tap --udid … -x … -y …`), typing, and hardware buttons. Use `axe list-simulators` to enumerate devices.
-
-### oracle
-- Bundle prompt+files for 2nd model. Use when stuck/buggy/review.
-- Run `npx -y @steipete/oracle --help` once/session (before first use).
-
-### mcporter / iterm / firecrawl / XcodeBuildMCP
-- MCP launcher: `npx mcporter <server>` (see `npx mcporter --help`). Common: `iterm`, `firecrawl`, `XcodeBuildMCP`.
-
-### gh
-- GitHub CLI for PRs/CI/releases. Given issue/PR URL (or `/pull/5`): use `gh`, not web search.
-- Examples: `gh issue view <url> --comments -R owner/repo`, `gh pr view <url> --comments --files -R owner/repo`.
-
-### Prompt Templates (Slash Commands)
-- Global: `~/.pi/agent/prompts/`. Project-local: `.pi/prompts/`.
-- Common: `/handoff`, `/pickup`.
-
-### tmux
-- Use only when you need persistence/interaction (debugger/server).
-- Quick refs: `tmux new -d -s codex-shell`, `tmux attach -t codex-shell`, `tmux list-sessions`, `tmux kill-session -t codex-shell`.
+- Full catalog: `docs/tools.md`.
 
 <frontend_aesthetics>
 Avoid "AI slop" UI. Be opinionated + distinctive.
