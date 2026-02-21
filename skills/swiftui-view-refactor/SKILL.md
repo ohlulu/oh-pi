@@ -1,4 +1,3 @@
-<!-- Source: https://github.com/Dimillian/Skills (MIT License) — synced 2026-02-19 -->
 ---
 name: swiftui-view-refactor
 description: Refactor and review SwiftUI view files for consistent structure, dependency injection, and Observation usage. Use when asked to clean up a SwiftUI view’s layout/ordering, handle view models safely (non-optional when possible), or standardize how dependencies and @Observable state are initialized and passed.
@@ -168,3 +167,4 @@ init(dependency: Dependency) {
 ## Large-view handling
 
 - When a SwiftUI view file exceeds ~300 lines, split it using extensions to group related helpers. Move async functions and helper functions into dedicated `private` extensions, separated with `// MARK: -` comments that describe their purpose (e.g., `// MARK: - Actions`, `// MARK: - Subviews`, `// MARK: - Helpers`). Keep the main `struct` focused on stored properties, init, and `body`, with view-building computed vars also grouped via marks when the file is long.
+<!-- Source: https://github.com/Dimillian/Skills (MIT License) — synced 2026-02-19 -->

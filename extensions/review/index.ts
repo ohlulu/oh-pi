@@ -7,6 +7,9 @@
 import type { ExtensionAPI, ExtensionContext, ExtensionCommandContext } from "@mariozechner/pi-coding-agent";
 import { DynamicBorder, BorderedLoader } from "@mariozechner/pi-coding-agent";
 import { Container, type SelectItem, SelectList, Text, Key } from "@mariozechner/pi-tui";
+import path from "node:path";
+import { homedir } from "node:os";
+import { promises as fs } from "node:fs";
 
 import {
   getMergeBase,
@@ -372,11 +375,69 @@ export default function reviewExtension(pi: ExtensionAPI) {
     return { type: "custom", instructions: result.trim() };
   }
 
+  /**
+   * Parse space-separated paths, respecting single/double quotes and backslash-escaped spaces.
+   * Examples:
+   *   `"/path/with spaces/file.ts" './another one'`  → ['/path/with spaces/file.ts', './another one']
+   *   `/path/no\ spaces/here`                        → ['/path/no spaces/here']
+   *   `a b c`                                        → ['a', 'b', 'c']
+   */
   function parseReviewPaths(value: string): string[] {
-    return value
-      .split(/\s+/)
-      .map((item) => item.trim())
-      .filter((item) => item.length > 0);
+    const results: string[] = [];
+    let current = "";
+    let quote: string | null = null;
+    let escaped = false;
+
+    for (const ch of value) {
+      if (escaped) {
+        current += ch;
+        escaped = false;
+        continue;
+      }
+
+      if (ch === "\\") {
+        escaped = true;
+        continue;
+      }
+
+      if (quote) {
+        if (ch === quote) {
+          quote = null;
+        } else {
+          current += ch;
+        }
+        continue;
+      }
+
+      if (ch === '"' || ch === "'") {
+        quote = ch;
+        continue;
+      }
+
+      if (/\s/.test(ch)) {
+        if (current.length > 0) {
+          results.push(current);
+          current = "";
+        }
+        continue;
+      }
+
+      current += ch;
+    }
+
+    if (current.length > 0) {
+      results.push(current);
+    }
+
+    // Strip leading '@' only when it's pi file-mention syntax (token starts with
+    // '@' followed by a path-like char). Preserve '@' inside path segments
+    // (e.g. 'packages/@scope/lib' stays intact).
+    return results.map((p) => {
+      if (p.startsWith("@") && p.length > 1 && (p[1] === "/" || p[1] === "." || p[1] === "~")) {
+        return p.slice(1);
+      }
+      return p;
+    });
   }
 
   /**
@@ -389,7 +450,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
     const paths = parseReviewPaths(result);
     if (paths.length === 0) return null;
 
-    return { type: "folder", paths };
+    return { type: "folder", paths: normalizeReviewPaths(paths, ctx.cwd) };
   }
 
   /**
@@ -528,10 +589,37 @@ export default function reviewExtension(pi: ExtensionAPI) {
     pi.sendUserMessage(fullPrompt);
   }
 
+  function resolvePathToken(token: string, cwd: string): string {
+    if (token === "~") return homedir();
+    if (token.startsWith("~/")) return path.join(homedir(), token.slice(2));
+    return path.resolve(cwd, token);
+  }
+
+  function normalizeReviewPaths(paths: string[], cwd: string): string[] {
+    return paths.map((p) => {
+      if (p === "~" || p.startsWith("~/")) {
+        return resolvePathToken(p, cwd);
+      }
+      return p;
+    });
+  }
+
+  async function allPathsExist(paths: string[], cwd: string): Promise<boolean> {
+    const checks = await Promise.all(
+      paths.map(async (p) => {
+        const resolved = resolvePathToken(p, cwd);
+        const stats = await fs.stat(resolved).catch(() => null);
+        return Boolean(stats?.isFile() || stats?.isDirectory());
+      }),
+    );
+
+    return checks.every(Boolean);
+  }
+
   /**
    * Parse command arguments for direct invocation
    */
-  function parseArgs(args: string | undefined): ReviewTarget | { type: "pr"; ref: string } | null {
+  async function parseArgs(args: string | undefined, cwd: string): Promise<ReviewTarget | { type: "pr"; ref: string } | null> {
     if (!args?.trim()) return null;
 
     const parts = args.trim().split(/\s+/);
@@ -560,10 +648,12 @@ export default function reviewExtension(pi: ExtensionAPI) {
         return { type: "custom", instructions };
       }
 
-      case "folder": {
+      case "folder":
+      case "file":
+      case "path": {
         const paths = parseReviewPaths(parts.slice(1).join(" "));
         if (paths.length === 0) return null;
-        return { type: "folder", paths };
+        return { type: "folder", paths: normalizeReviewPaths(paths, cwd) };
       }
 
       case "pr": {
@@ -572,8 +662,16 @@ export default function reviewExtension(pi: ExtensionAPI) {
         return { type: "pr", ref };
       }
 
-      default:
+      default: {
+        const paths = parseReviewPaths(args);
+        if (paths.length === 0) return null;
+
+        if (await allPathsExist(paths, cwd)) {
+          return { type: "folder", paths: normalizeReviewPaths(paths, cwd) };
+        }
+
         return null;
+      }
     }
   }
 
@@ -623,7 +721,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
   // ---------------------------------------------------------------------------
 
   pi.registerCommand("review", {
-    description: "Review code changes (PR, uncommitted, branch, commit, folder, or custom)",
+    description: "Review code changes (PR, uncommitted, branch, commit, file/folder, or custom)",
     handler: async (args, ctx) => {
       if (!ctx.hasUI) {
         ctx.ui.notify("Review requires interactive mode", "error");
@@ -635,15 +733,9 @@ export default function reviewExtension(pi: ExtensionAPI) {
         return;
       }
 
-      const { code } = await pi.exec("git", ["rev-parse", "--git-dir"]);
-      if (code !== 0) {
-        ctx.ui.notify("Not a git repository", "error");
-        return;
-      }
-
       let target: ReviewTarget | null = null;
       let fromSelector = false;
-      const parsed = parseArgs(args);
+      const parsed = await parseArgs(args, ctx.cwd);
 
       if (parsed) {
         if (parsed.type === "pr") {
@@ -653,6 +745,15 @@ export default function reviewExtension(pi: ExtensionAPI) {
           }
         } else {
           target = parsed;
+        }
+      }
+
+      // folder/file review doesn't require a git repo; everything else does
+      if (!target || target.type !== "folder") {
+        const { code } = await pi.exec("git", ["rev-parse", "--git-dir"]);
+        if (code !== 0) {
+          ctx.ui.notify("Not a git repository", "error");
+          return;
         }
       }
 
@@ -788,16 +889,14 @@ export default function reviewExtension(pi: ExtensionAPI) {
           return;
         }
 
-        setReviewWidget(ctx, false);
-        reviewOriginId = undefined;
-        pi.appendEntry(REVIEW_STATE_TYPE, { active: false });
-
         if (result.cancelled) {
-          await restoreOriginalModel(ctx, savedProvider, savedModelId);
-          ctx.ui.notify("Navigation cancelled", "info");
+          ctx.ui.notify("Navigation cancelled. Use /end-review to try again.", "info");
           return;
         }
 
+        setReviewWidget(ctx, false);
+        reviewOriginId = undefined;
+        pi.appendEntry(REVIEW_STATE_TYPE, { active: false });
         await restoreOriginalModel(ctx, savedProvider, savedModelId);
 
         if (!ctx.ui.getEditorText().trim()) {

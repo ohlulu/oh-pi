@@ -1,4 +1,3 @@
-<!-- Source: https://github.com/Dimillian/Skills (MIT License) — synced 2026-02-19 -->
 
 # Approachable Concurrency (Swift 6.2) - project mode quick guide
 
@@ -63,3 +62,4 @@ For SwiftPM, inspect Package.swift swiftSettings for the same flags.
 ## Source
 
 https://fuckingapproachableswiftconcurrency.com/en/
+<!-- Source: https://github.com/Dimillian/Skills (MIT License) — synced 2026-02-19 -->

@@ -1,4 +1,3 @@
-<!-- Source: https://github.com/Dimillian/Skills (MIT License) — synced 2026-02-19 -->
 ---
 name: swiftui-liquid-glass
 description: "iOS 26+ Liquid Glass expert: .glassEffect, GlassEffectContainer, .buttonStyle(.glass), .buttonStyle(.glassProminent), glassEffectID, glass morphing transitions. Use when writing/reviewing any SwiftUI code involving glass effects, frosted glass surfaces, glass buttons, glass tint, interactive glass, or adopting Liquid Glass design. Also use when migrating from .ultraThinMaterial/.blur to native glass APIs."
@@ -91,3 +90,4 @@ Button("Confirm") { }
 ## Resources
 - Reference guide: `references/liquid-glass.md`
 - Prefer Apple docs for up-to-date API details.
+<!-- Source: https://github.com/Dimillian/Skills (MIT License) — synced 2026-02-19 -->

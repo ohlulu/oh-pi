@@ -91,10 +91,10 @@ export async function hasPendingChanges(pi: ExtensionAPI): Promise<boolean> {
 export function parsePrReference(ref: string): number | null {
     const trimmed = ref.trim();
 
-    // Try as a number first
-    const num = parseInt(trimmed, 10);
-    if (!isNaN(num) && num > 0) {
-        return num;
+    // Try as a strict numeric PR number (reject partial matches like "123abc")
+    if (/^\d+$/.test(trimmed)) {
+        const num = parseInt(trimmed, 10);
+        if (num > 0) return num;
     }
 
     // Try to extract from GitHub URL

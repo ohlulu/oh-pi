@@ -1,4 +1,3 @@
-<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
 # Reference Index
 
 Quick navigation for Swift Concurrency topics.
@@ -96,3 +95,4 @@ Quick navigation for Swift Concurrency topics.
 | `glossary.md` | ~130 | Term definitions |
 | `swiftui-concurrency.md` | ~40 | SwiftUI + concurrency (Dimillian/Skills) |
 | `approachable-concurrency.md` | ~50 | Swift 6.2 approachable concurrency (Dimillian/Skills) |
+<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->

@@ -1,4 +1,3 @@
-<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
 # Core Data and Swift Concurrency
 
 Thread-safe patterns for using Core Data with Swift Concurrency.
@@ -531,3 +530,4 @@ func save() async {
 For Core Data best practices, migration strategies, and advanced patterns:
 - [Core Data Best Practices](https://github.com/avanderlee/CoreDataBestPractices)
 - [Swift Concurrency Course](https://www.swiftconcurrencycourse.com)
+<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->

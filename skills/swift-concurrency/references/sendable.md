@@ -1,4 +1,3 @@
-<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
 # Sendable
 
 Type safety patterns for sharing data across concurrency boundaries.
@@ -576,3 +575,4 @@ class ViewModel: ObservableObject {
 ## Further Learning
 
 For migration strategies, real-world examples, and actor patterns, see [Swift Concurrency Course](https://www.swiftconcurrencycourse.com).
+<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->

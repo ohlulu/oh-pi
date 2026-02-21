@@ -229,7 +229,7 @@ export function getUserFacingHint(target: ReviewTarget): string {
 
         case "folder": {
             const joined = target.paths.join(", ");
-            return joined.length > 40 ? `folders: ${joined.slice(0, 37)}...` : `folders: ${joined}`;
+            return joined.length > 40 ? `paths: ${joined.slice(0, 37)}...` : `paths: ${joined}`;
         }
     }
 }
@@ -243,7 +243,7 @@ export const REVIEW_PRESETS = [
     { value: "baseBranch", label: "Review against a base branch", description: "(local)" },
     { value: "uncommitted", label: "Review uncommitted changes", description: "" },
     { value: "commit", label: "Review a commit", description: "" },
-    { value: "folder", label: "Review a folder (or more)", description: "(snapshot, not diff)" },
+    { value: "folder", label: "Review files/folders", description: "(snapshot, not diff)" },
     { value: "custom", label: "Custom review instructions", description: "" },
 ] as const;
 

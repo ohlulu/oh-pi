@@ -1,4 +1,3 @@
-<!-- Source: https://github.com/Dimillian/Skills (MIT License) — synced 2026-02-19 -->
 ---
 name: swiftui-ui-patterns
 description: Best practices and example-driven guidance for building SwiftUI views and components. Use when creating or refactoring SwiftUI UI, designing tab architecture with TabView, composing screens, or needing component-specific patterns and examples.
@@ -94,3 +93,4 @@ struct EditItemSheet: View {
 - Create `references/<component>.md`.
 - Keep it short and actionable; link to concrete files in the current repo.
 - Update `references/components-index.md` with the new entry.
+<!-- Source: https://github.com/Dimillian/Skills (MIT License) — synced 2026-02-19 -->

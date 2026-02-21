@@ -1,6 +1,13 @@
 ---
 name: ralph-wiggum
-description: Long-running iterative development loops with pacing control and verifiable progress. Use ONLY when you expect ≥3 build→fix→verify cycles where each iteration's output determines the next step (e.g., migrating a large codebase, debugging flaky tests, exploratory refactors). Do NOT use for tasks that can be planned upfront and executed in one pass — even if they involve many files or steps. Multi-file features with clear specs → direct execution, not Ralph.
+description: >-
+  Long-running iterative development loops with pacing control and verifiable progress.
+  Use ONLY when execution is discovery-driven: you expect multiple hypothesis→test→adjust
+  loops where new findings materially change the plan (e.g., flaky/root-cause debugging,
+  exploratory refactors, high-risk migrations). Start with direct execution by default.
+  Escalate to Ralph only if uncertainty persists (e.g., 2+ failed hypotheses or repeated
+  blockers). Do NOT use when end state and implementation path are mostly clear: small
+  features, routine build-fix cycles, or multi-file work with stable specs.
 ---
 
 # Ralph Wiggum v3 — Long-Running Development Loops

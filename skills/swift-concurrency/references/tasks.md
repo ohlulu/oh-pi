@@ -1,4 +1,3 @@
-<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
 # Tasks
 
 Core patterns for creating, managing, and controlling concurrent work in Swift.
@@ -602,3 +601,4 @@ let profile = Profile(
 ## Further Learning
 
 For hands-on examples, advanced patterns, and migration strategies, see [Swift Concurrency Course](https://www.swiftconcurrencycourse.com).
+<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->

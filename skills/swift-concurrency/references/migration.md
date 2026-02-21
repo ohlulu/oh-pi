@@ -1,4 +1,3 @@
-<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
 # Migration to Swift 6 and Strict Concurrency
 
 A practical guide to migrating existing Swift codebases to Swift 6's strict concurrency model, including strategies, habits, tooling, and common patterns.
@@ -1074,3 +1073,4 @@ The result is **compile-time thread safety**, more maintainable code, and a futu
 - [Approachable Concurrency Video](https://youtu.be/y_Qc8cT-O_g?si=y4C1XQDGtyIOLW81)
 - [Migration Tooling Video](https://youtu.be/FK9XFxSWZPg?si=2z_ybn1t1YCJow5k)
 - [Swift Concurrency Course](https://www.swiftconcurrencycourse.com) for in-depth migration strategies
+<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->

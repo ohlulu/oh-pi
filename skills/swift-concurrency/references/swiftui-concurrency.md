@@ -1,4 +1,3 @@
-<!-- Source: https://github.com/Dimillian/Skills (MIT License) — synced 2026-02-19 -->
 
 # SwiftUI Concurrency Tour (Summary)
 
@@ -33,3 +32,4 @@ Context: SwiftUI-focused concurrency overview covering actor isolation, Sendable
 - Offload expensive work from the main actor to avoid hitches.
 - Keep time-sensitive UI logic (animations, gesture responses) synchronous.
 - Separate UI code from long-running async work to improve responsiveness and testability.
+<!-- Source: https://github.com/Dimillian/Skills (MIT License) — synced 2026-02-19 -->
