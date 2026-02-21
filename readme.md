@@ -123,6 +123,7 @@ Reference documents for agent coordination and workflows.
 | Name | Description |
 |------|-------------|
 | [subagent](https://github.com/ohlulu/oh-pi/blob/main/docs/subagent.md) | Subagent coordination via tmux + Claude Code CLI — one-shot, interactive, and supervisor patterns. |
+| [tools](https://github.com/ohlulu/oh-pi/blob/main/docs/tools.md) | CLI tools reference — peekaboo, gh, oracle, mcporter, xcp, tuist, lldb, axe, tmux, and more. |
 
 ## AGENTS.md
 

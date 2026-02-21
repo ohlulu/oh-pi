@@ -123,6 +123,7 @@ Agent 協作與工作流的參考文件。
 | 名稱 | 說明 |
 |------|------|
 | [subagent](https://github.com/ohlulu/oh-pi/blob/main/docs/subagent.md) | 透過 tmux + Claude Code CLI 協調 subagent — 涵蓋一次性、互動式和監督者模式。 |
+| [tools](https://github.com/ohlulu/oh-pi/blob/main/docs/tools.md) | CLI 工具參考 — peekaboo、gh、oracle、mcporter、xcp、tuist、lldb、axe、tmux 等。 |
 
 ## AGENTS.md
 
