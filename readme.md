@@ -94,7 +94,6 @@ Slash-command prompt templates — type `/name` in the editor to expand.
 |---------|-------------|
 | [/dig](https://github.com/ohlulu/oh-pi/blob/main/prompts/dig.md) | Deep-dive into a topic — research and explain in a teaching style. |
 | [/handoff](https://github.com/ohlulu/oh-pi/blob/main/prompts/handoff.md) | Package current state into a handoff report for the next agent. |
-| [/mcp](https://github.com/ohlulu/oh-pi/blob/main/prompts/mcp.md) | Quick flow: merge → close branch → push. |
 | [/pickup](https://github.com/ohlulu/oh-pi/blob/main/prompts/pickup.md) | Rehydrate context when starting or resuming work. |
 | [/spec-workshop](https://github.com/ohlulu/oh-pi/blob/main/prompts/spec-workshop.md) | Requirements spec workshop — structured discussion before implementation (Chinese). |
 | [/tech-stack-decision](https://github.com/ohlulu/oh-pi/blob/main/prompts/tech-stack-decision.md) | Tech stack decision workshop — architecture, packages, toolchain evaluation (Chinese). |
