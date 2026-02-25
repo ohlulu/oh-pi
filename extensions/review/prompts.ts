@@ -181,9 +181,9 @@ export async function buildReviewPrompt(pi: ExtensionAPI, target: ReviewTarget):
 
         case "commit":
             if (target.title) {
-                return COMMIT_PROMPT_WITH_TITLE.replace("{sha}", target.sha).replace("{title}", target.title);
+                return COMMIT_PROMPT_WITH_TITLE.replace(/{sha}/g, target.sha).replace(/{title}/g, target.title);
             }
-            return COMMIT_PROMPT.replace("{sha}", target.sha);
+            return COMMIT_PROMPT.replace(/{sha}/g, target.sha);
 
         case "custom":
             return target.instructions;
@@ -202,7 +202,7 @@ export async function buildReviewPrompt(pi: ExtensionAPI, target: ReviewTarget):
         }
 
         case "folder":
-            return FOLDER_REVIEW_PROMPT.replace("{paths}", target.paths.join(", "));
+            return FOLDER_REVIEW_PROMPT.replace(/{paths}/g, target.paths.join(", "));
     }
 }
 
@@ -246,6 +246,8 @@ export const REVIEW_PRESETS = [
     { value: "folder", label: "Review files/folders", description: "(snapshot, not diff)" },
     { value: "custom", label: "Custom review instructions", description: "" },
 ] as const;
+
+export type ReviewPresetValue = (typeof REVIEW_PRESETS)[number]["value"];
 
 // ---------------------------------------------------------------------------
 // Summary prompt for /end-review

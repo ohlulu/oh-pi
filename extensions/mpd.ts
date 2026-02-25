@@ -74,11 +74,12 @@ export default function mpdExtension(pi: ExtensionAPI) {
         return;
       }
 
-      // 3. Merge feature branch
+      // 3. Merge feature branch (--no-ff preserves branch history)
       const { code: mergeCode, stderr: mergeErr } = await pi.exec("git", [
         "merge",
-        currentBranch,
+        "--no-ff",
         "--no-edit",
+        currentBranch,
       ]);
       if (mergeCode !== 0) {
         // Abort the failed merge to leave a clean state
@@ -111,7 +112,7 @@ export default function mpdExtension(pi: ExtensionAPI) {
       }
 
       ctx.ui.notify(
-        `✓ ${currentBranch} → ${defaultBranch} merged, pushed, local branch deleted`,
+        `✓ ${currentBranch} → ${defaultBranch} merged (--no-ff), pushed, local branch deleted`,
         "info",
       );
     },

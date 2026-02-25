@@ -1,346 +1,166 @@
 /**
  * Smart Commit Extension
  *
- * Registers `/commit` and `/end-commit` commands.
- * When using an expensive model, automatically branches to an empty context,
- * switches to a cheap model, runs the commit workflow, then returns to
- * the original position and restores the model.
+ * Spawns an isolated `pi --mode json` subprocess with haiku + bash-only to
+ * handle git analysis and committing. No branching, no model switching,
+ * no state machine.
  *
- * Flow (expensive model detected):
- *   1. Save current leaf + model
- *   2. navigateTree → first user message (near-empty context)
- *   3. setModel → cheap model (Haiku / Flash)
- *   4. sendUserMessage with commit prompt
- *   5. Queue `/end-commit` as followUp
- *   6. /end-commit navigates back + restores model
- *
- * Flow (cheap model or user declines):
- *   Sends commit prompt in-place, no branch switching.
+ * Flow:
+ *   1. Check git repo + has changes
+ *   2. Snapshot HEAD
+ *   3. spawn pi subprocess (haiku, bash-only, no-extensions)
+ *   4. On exit: compare HEAD to count new commits
+ *   5. notify dim gray with result
  */
-import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-agent";
-import { Text } from "@mariozechner/pi-tui";
+import { spawn } from "node:child_process";
+import { mkdtempSync, writeFileSync, rmSync, readFileSync } from "node:fs";
+import { tmpdir, homedir } from "node:os";
+import { join } from "node:path";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
-const COMMIT_STATE_TYPE = "commit-session";
-const COMMITTER_PATH = "~/.pi/agent/shared/scripts/committer";
-
-/** Models considered "cheap enough" to skip branching (cost ≤ threshold $/M output). */
-const CHEAP_OUTPUT_COST_THRESHOLD = 5;
-
-/** Preferred cheap models in priority order: [provider, modelId]. */
-const CHEAP_MODEL_CANDIDATES: [string, string][] = [
-  ["anthropic", "claude-haiku-3-5"],
-  ["google", "gemini-2.5-flash"],
-  ["anthropic", "claude-sonnet-4-5"],
-];
+const COMMIT_MODEL = "anthropic/claude-haiku-4-5";
+const SKILL_PATH = join(homedir(), ".pi/agent/skills/commit/SKILL.md");
 
 // ---------------------------------------------------------------------------
-// State
+// Skill loader
 // ---------------------------------------------------------------------------
 
-type CommitSessionState = {
-  active: boolean;
-  originId?: string;
-  originalProvider?: string;
-  originalModelId?: string;
-};
-
-let commitOriginId: string | undefined;
-let commitOriginalProvider: string | undefined;
-let commitOriginalModelId: string | undefined;
+function loadCommitSkill(): string {
+  const raw = readFileSync(SKILL_PATH, "utf-8");
+  // Strip YAML frontmatter (--- ... ---)
+  const end = raw.indexOf("\n---", 3);
+  return end !== -1 ? raw.slice(end + 4).trim() : raw.trim();
+}
 
 // ---------------------------------------------------------------------------
-// Helpers
+// Spawn
 // ---------------------------------------------------------------------------
 
-function isExpensiveModel(ctx: ExtensionContext): boolean {
-  const model = ctx.model;
-  if (!model) return false;
-  return (model.cost?.output ?? 0) > CHEAP_OUTPUT_COST_THRESHOLD;
-}
+async function spawnCommitAgent(
+  cwd: string,
+  hint: string | undefined,
+  signal: AbortSignal | undefined,
+): Promise<{ exitCode: number; stderr: string }> {
+  return new Promise((resolve) => {
+    // Write system prompt to a temp file
+    const tmpDir = mkdtempSync(join(tmpdir(), "pi-commit-"));
+    const promptPath = join(tmpDir, "prompt.txt");
+    writeFileSync(promptPath, loadCommitSkill());
 
-function getCommitState(ctx: ExtensionContext): CommitSessionState | undefined {
-  let state: CommitSessionState | undefined;
-  for (const entry of ctx.sessionManager.getBranch()) {
-    if (entry.type === "custom" && entry.customType === COMMIT_STATE_TYPE) {
-      state = entry.data as CommitSessionState | undefined;
-    }
-  }
-  return state;
-}
+    const task = hint?.trim()
+      ? `Analyze the current git changes and create appropriate commits using the committer script. Additional context: ${hint.trim()}`
+      : "Analyze the current git changes and create appropriate commits using the committer script.";
 
-function applyCommitState(ctx: ExtensionContext) {
-  const state = getCommitState(ctx);
-  if (state?.active && state.originId) {
-    commitOriginId = state.originId;
-    commitOriginalProvider = state.originalProvider;
-    commitOriginalModelId = state.originalModelId;
-    setCommitWidget(ctx, true);
-    return;
-  }
-  clearState(ctx);
-}
+    const args = [
+      "--mode", "json",
+      "-p",
+      "--no-session",
+      "--models", COMMIT_MODEL,
+      "--tools", "bash",
+      "--no-extensions",
+      "--append-system-prompt", promptPath,
+      task,
+    ];
 
-function clearState(ctx: ExtensionContext) {
-  commitOriginId = undefined;
-  commitOriginalProvider = undefined;
-  commitOriginalModelId = undefined;
-  setCommitWidget(ctx, false);
-}
+    const proc = spawn("pi", args, {
+      cwd,
+      env: { ...process.env },
+      stdio: ["ignore", "ignore", "pipe"],
+    });
 
-function setCommitWidget(ctx: ExtensionContext, active: boolean) {
-  if (!ctx.hasUI) return;
-  if (!active) {
-    ctx.ui.setWidget("commit", undefined);
-    return;
-  }
+    let stderr = "";
+    proc.stderr.on("data", (d: Buffer) => { stderr += d.toString(); });
 
-  ctx.ui.setWidget("commit", (_tui, theme) => {
-    const text = new Text(
-      theme.fg("warning", "Commit session active, return with /end-commit"),
-      0,
-      0,
-    );
-    return {
-      render(width: number) {
-        return text.render(width);
-      },
-      invalidate() {
-        text.invalidate();
-      },
+    const cleanup = () => {
+      try { rmSync(tmpDir, { recursive: true, force: true }); } catch { /* ignore */ }
     };
+
+    proc.on("close", (code: number | null) => {
+      cleanup();
+      resolve({ exitCode: code ?? 1, stderr: stderr.trim() });
+    });
+
+    proc.on("error", (err: Error) => {
+      cleanup();
+      resolve({ exitCode: 1, stderr: err.message });
+    });
+
+    if (signal) {
+      const kill = () => {
+        proc.kill("SIGTERM");
+        setTimeout(() => { if (!proc.killed) proc.kill("SIGKILL"); }, 3000);
+      };
+      if (signal.aborted) kill();
+      else signal.addEventListener("abort", kill, { once: true });
+    }
   });
 }
-
-// ---------------------------------------------------------------------------
-// Prompt
-// ---------------------------------------------------------------------------
-
-const COMMIT_SYSTEM_PROMPT = `You are a commit assistant. Your ONLY job is to:
-
-1. Run \`git status\` and \`git diff\` / \`git diff --staged\` to understand changes.
-2. Classify the commit type (feat|fix|refactor|docs|style|test|perf|build|ci|chore).
-3. Write a Conventional Commits message: imperative mood, lowercase, ≤72 chars subject.
-4. List every file explicitly — never use "." as a path.
-5. Commit using: ${COMMITTER_PATH} "<message>" file1 file2 ...
-6. If changes serve different purposes, split into separate commits.
-
-Rules:
-- NEVER run \`git commit\` directly — always use ${COMMITTER_PATH}.
-- Subject: imperative mood, lowercase start, no trailing period, ≤72 chars.
-- Body (optional): explain WHY, not what. Wrap at 72 chars.
-- One commit = one logical unit of work.
-- Verify no unrelated files are staged.`;
 
 // ---------------------------------------------------------------------------
 // Extension
 // ---------------------------------------------------------------------------
 
 export default function commitExtension(pi: ExtensionAPI) {
-  // Restore state on session lifecycle events
-  pi.on("session_start", (_event, ctx) => applyCommitState(ctx));
-  pi.on("session_switch", (_event, ctx) => applyCommitState(ctx));
-  pi.on("session_tree", (_event, ctx) => applyCommitState(ctx));
-
-  // -------------------------------------------------------------------------
-  // /commit
-  // -------------------------------------------------------------------------
-
   pi.registerCommand("commit", {
-    description: "Smart commit: auto-switches to a cheap model when on an expensive one",
+    description: "Commit changes using an isolated haiku subprocess",
     handler: async (args, ctx) => {
-      if (!ctx.hasUI) {
-        ctx.ui.notify("Commit requires interactive mode", "error");
-        return;
-      }
-
-      if (commitOriginId) {
-        ctx.ui.notify("Already in a commit session. Use /end-commit to finish.", "warning");
-        return;
-      }
-
-      // Check if git repo
-      const { code } = await pi.exec("git", ["rev-parse", "--git-dir"]);
-      if (code !== 0) {
+      // Must be git repo
+      const gitCheck = await pi.exec("git", ["rev-parse", "--git-dir"]);
+      if (gitCheck.code !== 0) {
         ctx.ui.notify("Not a git repository", "error");
         return;
       }
 
-      const expensive = isExpensiveModel(ctx);
-
-      // If cheap model or user opts to stay, just send prompt in-place
-      if (!expensive) {
-        pi.sendUserMessage(buildCommitPrompt(args));
+      // Must have something to commit
+      const statusCheck = await pi.exec("git", ["status", "--porcelain"]);
+      if (statusCheck.code !== 0) {
+        ctx.ui.notify(`git status failed (exit ${statusCheck.code})`, "error");
+        return;
+      }
+      if (!statusCheck.stdout?.trim()) {
+        ctx.ui.notify("Nothing to commit", "info");
         return;
       }
 
-      // Expensive model — offer branch switch
-      const choice = await ctx.ui.select(
-        `Current model is expensive (${ctx.model?.name}). Switch to cheap model for commit?`,
-        ["Switch model (save tokens)", "Use current model"],
-      );
+      // Snapshot HEAD before (to count new commits after)
+      const headBefore = await pi.exec("git", ["rev-parse", "HEAD"]);
+      const headBeforeSha = headBefore.stdout?.trim();
 
-      if (choice === undefined) {
-        ctx.ui.notify("Commit cancelled", "info");
+      ctx.ui.notify(`Committing with cheaper model (${COMMIT_MODEL})…`, "info");
+
+      const { exitCode, stderr } = await spawnCommitAgent(ctx.cwd, args, undefined);
+
+      if (exitCode !== 0) {
+        const msg = stderr || `Subprocess exited with code ${exitCode}`;
+        ctx.ui.notify(`Commit failed: ${msg}`, "error");
         return;
       }
 
-      if (choice === "Use current model") {
-        pi.sendUserMessage(buildCommitPrompt(args));
+      // Count what was actually committed
+      const logArgs = headBeforeSha
+        ? ["log", "--oneline", `${headBeforeSha}..HEAD`]
+        : ["log", "--oneline", "-1"];
+
+      const logResult = await pi.exec("git", logArgs);
+      if (logResult.code !== 0) {
+        ctx.ui.notify(`Committed, but git log failed (exit ${logResult.code})`, "warning");
         return;
       }
+      const newCommits = logResult.stdout?.trim().split("\n").filter(Boolean) ?? [];
 
-      // --- Branch + switch flow ---
-      const originId = ctx.sessionManager.getLeafId() ?? undefined;
-      if (!originId) {
-        ctx.ui.notify("Cannot determine session position. Try again.", "error");
-        return;
+      if (newCommits.length === 0) {
+        ctx.ui.notify("No commits made", "info");
+      } else if (newCommits.length === 1) {
+        // Strip the short SHA prefix (7 chars + space)
+        const subject = newCommits[0]!.replace(/^[0-9a-f]{7} /, "");
+        ctx.ui.notify(`✓ ${subject}`, "info");
+      } else {
+        ctx.ui.notify(`✓ ${newCommits.length} commits`, "info");
       }
-
-      const entries = ctx.sessionManager.getEntries();
-      const firstUserMessage = entries.find(
-        (e) => e.type === "message" && e.message.role === "user",
-      );
-
-      if (!firstUserMessage) {
-        ctx.ui.notify("No user message found in session", "error");
-        return;
-      }
-
-      // Navigate to empty branch
-      try {
-        const result = await ctx.navigateTree(firstUserMessage.id, {
-          summarize: false,
-          label: "smart-commit",
-        });
-        if (result.cancelled) return;
-      } catch (error) {
-        ctx.ui.notify(
-          `Failed to branch: ${error instanceof Error ? error.message : String(error)}`,
-          "error",
-        );
-        return;
-      }
-
-      // Save original model
-      commitOriginId = originId;
-      if (ctx.model) {
-        commitOriginalProvider = ctx.model.provider;
-        commitOriginalModelId = ctx.model.id;
-      }
-
-      // Switch to cheap model
-      let switched = false;
-      for (const [provider, modelId] of CHEAP_MODEL_CANDIDATES) {
-        const cheapModel = ctx.modelRegistry.find(provider, modelId);
-        if (cheapModel) {
-          const ok = await pi.setModel(cheapModel);
-          if (ok) {
-            ctx.ui.notify(`Switched to ${cheapModel.name} for commit`, "info");
-            switched = true;
-            break;
-          }
-        }
-      }
-
-      if (!switched) {
-        ctx.ui.notify("No cheap model available, using current model", "warning");
-      }
-
-      // Persist state
-      setCommitWidget(ctx, true);
-      pi.appendEntry(COMMIT_STATE_TYPE, {
-        active: true,
-        originId,
-        originalProvider: commitOriginalProvider,
-        originalModelId: commitOriginalModelId,
-      } satisfies CommitSessionState);
-
-      ctx.ui.setEditorText("");
-
-      // Send commit prompt + queue auto-return
-      pi.sendUserMessage(buildCommitPrompt(args));
-      pi.sendUserMessage("/end-commit", { deliverAs: "followUp" });
     },
   });
-
-  // -------------------------------------------------------------------------
-  // /end-commit
-  // -------------------------------------------------------------------------
-
-  pi.registerCommand("end-commit", {
-    description: "Return from commit branch and restore original model",
-    handler: async (_args, ctx) => {
-      if (!ctx.hasUI) {
-        ctx.ui.notify("end-commit requires interactive mode", "error");
-        return;
-      }
-
-      // Try module state first, then persisted state
-      if (!commitOriginId) {
-        const state = getCommitState(ctx);
-        if (state?.active && state.originId) {
-          commitOriginId = state.originId;
-          commitOriginalProvider = state.originalProvider;
-          commitOriginalModelId = state.originalModelId;
-        } else {
-          ctx.ui.notify("Not in a commit session", "info");
-          return;
-        }
-      }
-
-      const originId = commitOriginId;
-      const savedProvider = commitOriginalProvider;
-      const savedModelId = commitOriginalModelId;
-
-      // Navigate back — no summary needed, commit result lives in git
-      try {
-        const result = await ctx.navigateTree(originId!, { summarize: false });
-        if (result.cancelled) {
-          ctx.ui.notify("Navigation cancelled. Use /end-commit to try again.", "info");
-          return;
-        }
-      } catch (error) {
-        ctx.ui.notify(
-          `Failed to return: ${error instanceof Error ? error.message : String(error)}`,
-          "error",
-        );
-        return;
-      }
-
-      // Clear state
-      clearState(ctx);
-      pi.appendEntry(COMMIT_STATE_TYPE, { active: false } satisfies CommitSessionState);
-
-      // Restore model
-      if (savedProvider && savedModelId) {
-        const originalModel = ctx.modelRegistry.find(savedProvider, savedModelId);
-        if (originalModel) {
-          const ok = await pi.setModel(originalModel);
-          if (ok) {
-            ctx.ui.notify(`Restored model to ${originalModel.name}`, "info");
-          }
-        }
-      }
-
-      ctx.ui.notify("Commit complete! Returned to original position.", "info");
-    },
-  });
-}
-
-// ---------------------------------------------------------------------------
-// Prompt builder
-// ---------------------------------------------------------------------------
-
-function buildCommitPrompt(userHint?: string): string {
-  let prompt = COMMIT_SYSTEM_PROMPT + "\n\nPlease analyze the current changes and create appropriate commit(s).";
-
-  if (userHint?.trim()) {
-    prompt += `\n\nAdditional context from user: ${userHint.trim()}`;
-  }
-
-  return prompt;
 }

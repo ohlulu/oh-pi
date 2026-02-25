@@ -1,5 +1,5 @@
 ---
-summary: CLI tools available on Ohlulu's machines — peekaboo, imageoptim, oracle, gh, mcporter, xcp, tuist, lldb, axe, tmux.
+summary: CLI tools available on Ohlulu's machines — peekaboo, imageoptim, oracle, gh, mcporter, xcp, tuist, lldb, axe, tmux, asc.
 read_when: Need to use a CLI tool; unsure about tool syntax or location; setting up dev environment.
 ---
 
@@ -113,3 +113,27 @@ tmux attach -t codex-shell
 tmux list-sessions
 tmux kill-session -t codex-shell
 ```
+
+---
+
+## asc 🛍️
+Unofficial App Store Connect CLI — manage apps, builds, TestFlight, analytics, reviews, and more.
+
+**Source**: https://github.com/rudrankriyam/App-Store-Connect-CLI
+
+**Setup**:
+```bash
+asc auth          # Configure API key authentication
+asc doctor        # Diagnose auth issues
+```
+
+**Common commands**:
+```bash
+asc --help                    # List all commands
+asc builds --help             # List builds subcommands
+asc builds list --help        # Show all flags for a command
+```
+
+Do not memorize commands. Always check --help for the current interface.
+
+**Tip**: Run `asc <subcommand> --help` for full flag reference per command.

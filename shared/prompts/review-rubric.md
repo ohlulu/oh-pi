@@ -67,3 +67,5 @@ Provide your findings in a clear, structured format:
 6. Do not generate a full PR fix — only flag issues and optionally provide short suggestion blocks.
 
 Output all findings the author would fix if they knew about them. If there are no qualifying findings, explicitly state the code looks good. Don't stop at the first finding - list every qualifying issue.
+
+> you are reviewing clacude's code

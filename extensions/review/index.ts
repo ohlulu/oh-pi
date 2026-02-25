@@ -6,7 +6,7 @@
  */
 import type { ExtensionAPI, ExtensionContext, ExtensionCommandContext } from "@mariozechner/pi-coding-agent";
 import { DynamicBorder, BorderedLoader } from "@mariozechner/pi-coding-agent";
-import { Container, type SelectItem, SelectList, Text, Key } from "@mariozechner/pi-tui";
+import { Container, type SelectItem, SelectList, Text } from "@mariozechner/pi-tui";
 import path from "node:path";
 import { homedir } from "node:os";
 import { promises as fs } from "node:fs";
@@ -26,6 +26,7 @@ import {
 
 import {
   type ReviewTarget,
+  type ReviewPresetValue,
   buildReviewPrompt,
   getUserFacingHint,
   loadSharedReviewRubric,
@@ -123,6 +124,21 @@ export default function reviewExtension(pi: ExtensionAPI) {
     applyReviewState(ctx);
   });
 
+  const GIT_DEPENDENT_PRESETS: ReadonlySet<ReviewPresetValue> = new Set<ReviewPresetValue>([
+    "pullRequest",
+    "baseBranch",
+    "uncommitted",
+    "commit",
+  ]);
+
+  const REVIEW_MODEL_PROVIDER = "openai-codex";
+  const REVIEW_MODEL_ID = "gpt-5.3-codex";
+
+  async function isGitRepo(): Promise<boolean> {
+    const { code } = await pi.exec("git", ["rev-parse", "--git-dir"]);
+    return code === 0;
+  }
+
   /**
    * Determine the smart default review type based on git state
    */
@@ -144,8 +160,10 @@ export default function reviewExtension(pi: ExtensionAPI) {
    * Show the review preset selector
    */
   async function showReviewSelector(ctx: ExtensionContext): Promise<ReviewTarget | null> {
-    const smartDefault = await getSmartDefault();
+    const inGitRepo = await isGitRepo();
+    const smartDefault = inGitRepo ? await getSmartDefault() : "folder";
     const items: SelectItem[] = REVIEW_PRESETS.slice()
+      .filter((preset) => inGitRepo || !GIT_DEPENDENT_PRESETS.has(preset.value))
       .sort((a, b) => {
         if (a.value === smartDefault) return -1;
         if (b.value === smartDefault) return 1;
@@ -457,6 +475,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
    * Show PR input and handle checkout
    */
   async function showPrInput(ctx: ExtensionContext): Promise<ReviewTarget | null> {
+    // Fast-fail before opening the editor
     if (await hasPendingChanges(pi)) {
       ctx.ui.notify("Cannot checkout PR: you have uncommitted changes. Please commit or stash them first.", "error");
       return null;
@@ -465,42 +484,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
     const prRef = await ctx.ui.editor("Enter PR number or URL (e.g. 123 or https://github.com/owner/repo/pull/123):", "");
 
     if (!prRef?.trim()) return null;
-
-    const prNumber = parsePrReference(prRef);
-    if (!prNumber) {
-      ctx.ui.notify("Invalid PR reference. Enter a number or GitHub PR URL.", "error");
-      return null;
-    }
-
-    ctx.ui.notify(`Fetching PR #${prNumber} info...`, "info");
-    const prInfo = await getPrInfo(pi, prNumber);
-
-    if (!prInfo) {
-      ctx.ui.notify(`Could not find PR #${prNumber}. Make sure gh is authenticated and the PR exists.`, "error");
-      return null;
-    }
-
-    if (await hasPendingChanges(pi)) {
-      ctx.ui.notify("Cannot checkout PR: you have uncommitted changes. Please commit or stash them first.", "error");
-      return null;
-    }
-
-    ctx.ui.notify(`Checking out PR #${prNumber}...`, "info");
-    const checkoutResult = await checkoutPr(pi, prNumber);
-
-    if (!checkoutResult.success) {
-      ctx.ui.notify(`Failed to checkout PR: ${checkoutResult.error}`, "error");
-      return null;
-    }
-
-    ctx.ui.notify(`Checked out PR #${prNumber} (${prInfo.headBranch})`, "info");
-
-    return {
-      type: "pullRequest",
-      prNumber,
-      baseBranch: prInfo.baseBranch,
-      title: prInfo.title,
-    };
+    return handlePrCheckout(ctx, prRef.trim());
   }
 
   /**
@@ -552,13 +536,13 @@ export default function reviewExtension(pi: ExtensionAPI) {
         reviewOriginalProvider = currentModel.provider;
         reviewOriginalModelId = currentModel.id;
       }
-      const reviewModel = ctx.modelRegistry.find("openai-codex", "gpt-5.3-codex");
+      const reviewModel = ctx.modelRegistry.find(REVIEW_MODEL_PROVIDER, REVIEW_MODEL_ID);
       if (reviewModel) {
         const ok = await pi.setModel(reviewModel);
         if (ok) {
-          ctx.ui.notify("Switched to gpt-5.3-codex for review", "info");
+          ctx.ui.notify(`Switched to ${REVIEW_MODEL_ID} for review`, "info");
         } else {
-          ctx.ui.notify("No API key for gpt-5.3-codex, using current model", "warning");
+          ctx.ui.notify(`No API key for ${REVIEW_MODEL_ID}, using current model`, "warning");
         }
       }
 
@@ -577,7 +561,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
     const projectGuidelines = await loadProjectReviewGuidelines(ctx.cwd);
     const reviewRubric = await loadSharedReviewRubric();
 
-    let fullPrompt = `${reviewRubric}\n\n---\n\nPlease perform a code review with the following focus:\n\n${prompt}`;
+    let fullPrompt = `${reviewRubric}\n\n---\n\nPlease perform a code review with the following focus:\n\n${prompt}\n\nIMPORTANT: Output the entire review report in Traditional Chinese (台灣繁體中文).`;
 
     if (projectGuidelines) {
       fullPrompt += `\n\nThis project has additional instructions for code reviews:\n\n${projectGuidelines}`;
@@ -596,12 +580,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
   }
 
   function normalizeReviewPaths(paths: string[], cwd: string): string[] {
-    return paths.map((p) => {
-      if (p === "~" || p.startsWith("~/")) {
-        return resolvePathToken(p, cwd);
-      }
-      return p;
-    });
+    return paths.map((p) => resolvePathToken(p, cwd));
   }
 
   async function allPathsExist(paths: string[], cwd: string): Promise<boolean> {
@@ -748,15 +727,6 @@ export default function reviewExtension(pi: ExtensionAPI) {
         }
       }
 
-      // folder/file review doesn't require a git repo; everything else does
-      if (!target || target.type !== "folder") {
-        const { code } = await pi.exec("git", ["rev-parse", "--git-dir"]);
-        if (code !== 0) {
-          ctx.ui.notify("Not a git repository", "error");
-          return;
-        }
-      }
-
       if (!target) {
         fromSelector = true;
       }
@@ -769,6 +739,15 @@ export default function reviewExtension(pi: ExtensionAPI) {
         if (!target) {
           ctx.ui.notify("Review cancelled", "info");
           return;
+        }
+
+        // folder/file review doesn't require a git repo; everything else does
+        if (target.type !== "folder") {
+          const { code } = await pi.exec("git", ["rev-parse", "--git-dir"]);
+          if (code !== 0) {
+            ctx.ui.notify("Not a git repository", "error");
+            return;
+          }
         }
 
         const entries = ctx.sessionManager.getEntries();

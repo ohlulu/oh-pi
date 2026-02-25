@@ -1,21 +1,42 @@
 ---
-description: 深入研究一個主題/工具/檔案，用教學方式解釋給我聽。
+description: Deeply research a topic/tool/file and teach it clearly, including mode mapping and practical usage contracts.
 ---
-研究並教學：$@
+Research and teach: $@
 
-流程：
-1. **深挖** — 讀相關 source code、docs、git history，搞清楚完整脈絡。不要只讀表面，追到底層搞懂為什麼這樣設計。
-2. **解釋** — 用以下結構教我：
-   - **是什麼** — 一句話定義，用白話說。
-   - **為什麼存在** — 解決什麼問題？沒有它會怎樣？
-   - **怎麼運作** — 流程圖（用 ASCII）或步驟拆解。
-   - **什麼時候用** — 具體場景 + 觸發條件。
-   - **實際例子** — 對應我的環境，怎麼用、打什麼指令。
-3. **比較**（如果有類似概念）— 用表格對比差異。
-4. **收斂** — 給出結論 + 我該做什麼（或不用做什麼）。
+Before deep dive:
+- Identify target type(s): extension / skill / prompt template / command / tool / SDK API.
+- List assumptions and unknowns first.
+- If behavior may differ by mode, track modes explicitly: command, conversational, and API/RPC.
 
-格式要求：
-- 中文回答。
-- 善用表格、流程圖、code block。
-- 不要一次倒太多文字，分段有節奏。
-- 講白話，不要官方文件翻譯腔。
+Workflow:
+1. **Deep Dive** — Read relevant source code, docs, and git history (if needed) to build full context. Do not stay at surface level; trace implementation details and design intent.
+2. **System Map** — Summarize architecture boundaries: where config comes from, where execution happens, what is persisted, and what is returned.
+3. **Explain** — Teach with this structure:
+   - **What it is** — One-sentence plain-language definition.
+   - **Why it exists** — What problem it solves; what happens without it.
+   - **How it works** — Use an ASCII flowchart or step-by-step breakdown.
+   - **When to use it** — Concrete scenarios and trigger conditions.
+   - **Practical example** — In my environment, what to run and how to use it.
+4. **Interaction Modes (mandatory when applicable)**
+   - **Command mode** — Exact command syntax, who executes, what context/session it uses.
+   - **Conversational mode** — Natural-language trigger behavior and limits.
+   - **Mode mapping** — Conversational behavior maps to which command/tool path?
+   - **Determinism** — What is guaranteed vs best-effort?
+   - **Execution semantics** — Sync vs async, foreground vs background, blocking behavior.
+5. **Usage Contract**
+   - Provide invocation grammar.
+   - Explain each parameter: required/optional, default, valid values, precedence, and side effects.
+   - Include at least one minimal example and one advanced example.
+6. **Compare** (if similar concepts exist) — Use a table to highlight key differences.
+7. **Converge** — Give a clear conclusion + what I should do next (or what I can skip).
+
+Format requirements:
+- Output must be in Taiwanese Traditional Chinese (繁體中文，台灣用語).
+- Start with a short TL;DR (3-5 bullets), then deep dive.
+- Use tables, flowcharts, and code blocks where helpful.
+- For commands/tools, prefer a table: Syntax / Required params / Optional params / Defaults / Common mistakes.
+- Clearly label statements as **Guaranteed**, **Best-effort**, or **Config-dependent**.
+- If uncertain, say what is unconfirmed and how to verify.
+- Avoid dumping too much text at once; structure in paced sections.
+- Use plain language; avoid official-doc translation tone.
+- After output, also write a clean markdown copy to `~/Downloads/<topic>-guide.md`.
