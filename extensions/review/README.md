@@ -30,6 +30,7 @@ Type `/end-review` when done to summarize findings and return to your original s
 | `/review uncommitted` | Review uncommitted changes |
 | `/review branch <name>` | Review current branch vs a base branch |
 | `/review commit <sha>` | Review a specific commit |
+| `/review range <base> <head>` | Review changes between two commits (head defaults to HEAD) |
 | `/review folder <paths>` | Review specific files/folders (alias: `file`, `path`) |
 | `/review custom <text>` | Review with custom instructions |
 | `/review pr <number\|url>` | Checkout and review a PR |
