@@ -15,6 +15,7 @@ export type ReviewTarget =
     | { type: "uncommitted" }
     | { type: "baseBranch"; branch: string }
     | { type: "commit"; sha: string; title?: string }
+    | { type: "commitRange"; baseSha: string; headSha: string; baseTitle?: string; headTitle?: string }
     | { type: "custom"; instructions: string }
     | { type: "pullRequest"; prNumber: number; baseBranch: string; title: string }
     | { type: "folder"; paths: string[] };
@@ -40,6 +41,12 @@ const PULL_REQUEST_PROMPT =
 
 const PULL_REQUEST_PROMPT_FALLBACK =
     "Review pull request #{prNumber} (\"{title}\") against the base branch '{baseBranch}'. Start by finding the merge base between the current branch and {baseBranch} (e.g., `git merge-base HEAD {baseBranch}`), then run `git diff` against that SHA to see the changes that would be merged. Provide prioritized, actionable findings.";
+
+const COMMIT_RANGE_PROMPT =
+    "Review the code changes between commit {baseSha} (\"{baseTitle}\") and commit {headSha} (\"{headTitle}\"). Run `git diff {baseSha}..{headSha}` to inspect the changes. Provide prioritized, actionable findings.";
+
+const COMMIT_RANGE_PROMPT_NO_TITLES =
+    "Review the code changes between commit {baseSha} and commit {headSha}. Run `git diff {baseSha}..{headSha}` to inspect the changes. Provide prioritized, actionable findings.";
 
 const FOLDER_REVIEW_PROMPT =
     "Review the code in the following paths: {paths}. This is a snapshot review (not a diff). Read the files directly in these paths and provide prioritized, actionable findings.";
@@ -185,6 +192,19 @@ export async function buildReviewPrompt(pi: ExtensionAPI, target: ReviewTarget):
             }
             return COMMIT_PROMPT.replace(/{sha}/g, target.sha);
 
+        case "commitRange": {
+            if (target.baseTitle && target.headTitle) {
+                return COMMIT_RANGE_PROMPT
+                    .replace(/{baseSha}/g, target.baseSha)
+                    .replace(/{headSha}/g, target.headSha)
+                    .replace(/{baseTitle}/g, target.baseTitle)
+                    .replace(/{headTitle}/g, target.headTitle);
+            }
+            return COMMIT_RANGE_PROMPT_NO_TITLES
+                .replace(/{baseSha}/g, target.baseSha)
+                .replace(/{headSha}/g, target.headSha);
+        }
+
         case "custom":
             return target.instructions;
 
@@ -219,6 +239,11 @@ export function getUserFacingHint(target: ReviewTarget): string {
             const shortSha = target.sha.slice(0, 7);
             return target.title ? `commit ${shortSha}: ${target.title}` : `commit ${shortSha}`;
         }
+        case "commitRange": {
+            const shortBase = target.baseSha.slice(0, 7);
+            const shortHead = target.headSha.slice(0, 7);
+            return `commit range ${shortBase}..${shortHead}`;
+        }
         case "custom":
             return target.instructions.length > 40 ? target.instructions.slice(0, 37) + "..." : target.instructions;
 
@@ -243,6 +268,7 @@ export const REVIEW_PRESETS = [
     { value: "baseBranch", label: "Review against a base branch", description: "(local)" },
     { value: "uncommitted", label: "Review uncommitted changes", description: "" },
     { value: "commit", label: "Review a commit", description: "" },
+    { value: "commitRange", label: "Review a commit range", description: "(diff between two commits)" },
     { value: "folder", label: "Review files/folders", description: "(snapshot, not diff)" },
     { value: "custom", label: "Custom review instructions", description: "" },
 ] as const;

@@ -129,6 +129,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
     "baseBranch",
     "uncommitted",
     "commit",
+    "commitRange",
   ]);
 
   const REVIEW_MODEL_PROVIDER = "openai-codex";
@@ -224,6 +225,12 @@ export default function reviewExtension(pi: ExtensionAPI) {
 
         case "commit": {
           const target = await showCommitSelector(ctx);
+          if (target) return target;
+          break;
+        }
+
+        case "commitRange": {
+          const target = await showCommitRangeSelector(ctx);
           if (target) return target;
           break;
         }
@@ -381,6 +388,107 @@ export default function reviewExtension(pi: ExtensionAPI) {
 
     if (!result) return null;
     return { type: "commit", sha: result.sha, title: result.title };
+  }
+
+  /**
+   * Show commit range selector (base commit → head commit)
+   */
+  async function showCommitRangeSelector(ctx: ExtensionContext): Promise<ReviewTarget | null> {
+    const commits = await getRecentCommits(pi, 30);
+
+    if (commits.length < 2) {
+      ctx.ui.notify("Need at least 2 commits for a range review", "error");
+      return null;
+    }
+
+    const items: SelectItem[] = commits.map((commit) => ({
+      value: commit.sha,
+      label: `${commit.sha.slice(0, 7)} ${commit.title}`,
+      description: "",
+    }));
+
+    // Step 1: pick base commit
+    const baseResult = await ctx.ui.custom<{ sha: string; title: string } | null>((tui, theme, _kb, done) => {
+      const container = new Container();
+      container.addChild(new DynamicBorder((str) => theme.fg("accent", str)));
+      container.addChild(new Text(theme.fg("accent", theme.bold("Select base commit (older)"))));
+
+      const selectList = new SelectList(items, Math.min(items.length, 10), {
+        selectedPrefix: (text) => theme.fg("accent", text),
+        selectedText: (text) => theme.fg("accent", text),
+        description: (text) => theme.fg("muted", text),
+        scrollInfo: (text) => theme.fg("dim", text),
+        noMatch: (text) => theme.fg("warning", text),
+      });
+      selectList.searchable = true;
+      selectList.onSelect = (item) => {
+        const commit = commits.find((c) => c.sha === item.value);
+        done(commit ?? null);
+      };
+      selectList.onCancel = () => done(null);
+
+      container.addChild(selectList);
+      container.addChild(new Text(theme.fg("dim", "Type to filter • enter to select • esc to cancel")));
+      container.addChild(new DynamicBorder((str) => theme.fg("accent", str)));
+
+      return {
+        render(width: number) { return container.render(width); },
+        invalidate() { container.invalidate(); },
+        handleInput(data: string) { selectList.handleInput(data); tui.requestRender(); },
+      };
+    });
+
+    if (!baseResult) return null;
+
+    // Step 2: pick head commit (default: HEAD = first in list)
+    const headItems: SelectItem[] = [
+      { value: "HEAD", label: "HEAD (current)", description: "" },
+      ...items.filter((i) => i.value !== baseResult.sha),
+    ];
+
+    const headResult = await ctx.ui.custom<{ sha: string; title: string } | null>((tui, theme, _kb, done) => {
+      const container = new Container();
+      container.addChild(new DynamicBorder((str) => theme.fg("accent", str)));
+      container.addChild(new Text(theme.fg("accent", theme.bold(`Select head commit (newer, vs ${baseResult.sha.slice(0, 7)})`))));
+
+      const selectList = new SelectList(headItems, Math.min(headItems.length, 10), {
+        selectedPrefix: (text) => theme.fg("accent", text),
+        selectedText: (text) => theme.fg("accent", text),
+        description: (text) => theme.fg("muted", text),
+        scrollInfo: (text) => theme.fg("dim", text),
+        noMatch: (text) => theme.fg("warning", text),
+      });
+      selectList.searchable = true;
+      selectList.onSelect = (item) => {
+        if (item.value === "HEAD") {
+          done({ sha: "HEAD", title: "HEAD" });
+        } else {
+          const commit = commits.find((c) => c.sha === item.value);
+          done(commit ?? null);
+        }
+      };
+      selectList.onCancel = () => done(null);
+
+      container.addChild(selectList);
+      container.addChild(new Text(theme.fg("dim", "Type to filter • enter to select • esc to cancel")));
+      container.addChild(new DynamicBorder((str) => theme.fg("accent", str)));
+
+      return {
+        render(width: number) { return container.render(width); },
+        invalidate() { container.invalidate(); },
+        handleInput(data: string) { selectList.handleInput(data); tui.requestRender(); },
+      };
+    });
+
+    if (!headResult) return null;
+
+    return {
+      type: "commitRange",
+      baseSha: baseResult.sha,
+      headSha: headResult.sha,
+      baseTitle: baseResult.title,
+      headTitle: headResult.title,
+    };
   }
 
   /**
@@ -619,6 +727,14 @@ export default function reviewExtension(pi: ExtensionAPI) {
         if (!sha) return null;
         const title = parts.slice(2).join(" ") || undefined;
         return { type: "commit", sha, title };
+      }
+
+      case "range": {
+        // /review range <baseSha> <headSha>
+        const baseSha = parts[1];
+        const headSha = parts[2] ?? "HEAD";
+        if (!baseSha) return null;
+        return { type: "commitRange", baseSha, headSha };
       }
 
       case "custom": {
