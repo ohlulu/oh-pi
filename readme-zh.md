@@ -51,10 +51,9 @@ pi
 | [done-sound](https://github.com/ohlulu/oh-pi/blob/main/extensions/done-sound.ts) | Agent 完成時播放系統音效（macOS）。 |
 | [inject-docs](https://github.com/ohlulu/oh-pi/blob/main/extensions/inject-docs.ts) | Session 開始時自動將專案 `docs/` 索引注入第一輪 agent turn。 |
 | [lazygit](https://github.com/ohlulu/oh-pi/blob/main/extensions/lazygit.ts) | `/lazygit` 指令 — 在 TUI 內啟動 lazygit。 |
-| [notify](https://github.com/ohlulu/oh-pi/blob/main/extensions/notify.ts) | Agent 完成時發送 macOS 桌面原生通知。 |
 | [open-with](https://github.com/ohlulu/oh-pi/blob/main/extensions/open-with.ts) | `/finder`、`/cursor` 指令 — 在 Finder 或 Cursor 編輯器中開啟當前目錄。 |
-| [commit](https://github.com/ohlulu/oh-pi/tree/main/extensions/commit) | `/commit` 指令 — 智慧提交，使用高費模型時自動切換至低費模型執行 commit 工作流。 |
-| [mpd](https://github.com/ohlulu/oh-pi/tree/main/extensions/mpd) | `/mpd` 指令 — 一鍵將 feature branch 合併至預設分支、push 並刪除本地分支。 |
+| [commit](https://github.com/ohlulu/oh-pi/tree/main/extensions/commit) | `/commit` 指令 — 啟動獨立 Haiku 子程序分析並提交變更。 |
+| [mpd](https://github.com/ohlulu/oh-pi/blob/main/extensions/mpd.ts) | `/mpd` 指令 — 一鍵將 feature branch 合併至預設分支、push 並刪除本地分支。 |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/extensions/ralph-wiggum) | 長時間迭代開發循環 — plan → execute → verify，含節奏控制和 checkpoint。 |
 | [review](https://github.com/ohlulu/oh-pi/tree/main/extensions/review) | `/review` 指令 — 基於 git diff / PR / 檔案路徑的互動式 code review。 |
 | [tab-status](https://github.com/ohlulu/oh-pi/blob/main/extensions/tab-status.ts) | 終端 tab title 即時顯示 agent 狀態（☘️ 閒置 · 🔄 工作中 · 🛑 錯誤）。 |
@@ -72,10 +71,10 @@ pi
 | [clean-architecture](https://github.com/ohlulu/oh-pi/tree/main/skills/clean-architecture) | Clean Architecture 思維 — 依賴方向、層級邊界、抽象決策。 |
 | [commit](https://github.com/ohlulu/oh-pi/tree/main/skills/commit) | 結構化 Conventional Commits 工作流 — 分析變更、撰寫訊息、提交。 |
 | [dev-principles](https://github.com/ohlulu/oh-pi/tree/main/skills/dev-principles) | 語言無關的開發原則與設計指引。 |
-| [google-sheets](https://github.com/ohlulu/oh-pi/tree/main/skills/google-sheets) | 透過 curl 呼叫 Google Sheets API — 以程式方式讀取、寫入和管理試算表資料。 |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/skills/ralph-wiggum) | ralph-wiggum extension 的 skill 搭檔 — 迭代循環節奏控制。 |
 | [swift-coding-style](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-coding-style) | Swift 編碼風格 — opaque vs existential types、命名、結構。 |
 | [swift-concurrency](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-concurrency) | Swift Concurrency 最佳實踐 — async/await、actors、Sendable、遷移至 Swift 6。 |
+| [swift-testing-expert](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-testing-expert) | Swift Testing 專家 — #expect/#require 巨集、traits、參數化測試、XCTest 遷移。 |
 | [swiftui-expert-skill](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-expert-skill) | SwiftUI 最佳實踐 — 狀態管理、View 組合、效能、現代 API。 |
 | [swiftui-liquid-glass](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-liquid-glass) | iOS 26+ Liquid Glass — `.glassEffect`、glass buttons、morphing transitions。 |
 | [swiftui-performance-audit](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-performance-audit) | SwiftUI 效能審計 — 慢渲染、過度更新、layout thrash 診斷。 |
@@ -94,6 +93,7 @@ pi
 | 指令 | 說明 |
 |------|------|
 | [/dig](https://github.com/ohlulu/oh-pi/blob/main/prompts/dig.md) | 深入研究主題 — 用教學方式研究並解釋。 |
+| [/dig-lite](https://github.com/ohlulu/oh-pi/blob/main/prompts/dig-lite.md) | 快速深入 — 解決歧義，只講影響決策的重點。 |
 | [/handoff](https://github.com/ohlulu/oh-pi/blob/main/prompts/handoff.md) | 將當前狀態打包成交接報告給下一位 agent。 |
 | [/pickup](https://github.com/ohlulu/oh-pi/blob/main/prompts/pickup.md) | 接手或恢復工作時快速恢復上下文。 |
 | [/spec-workshop](https://github.com/ohlulu/oh-pi/blob/main/prompts/spec-workshop.md) | 需求規格工作坊 — 實作前的結構化討論（中文）。 |
@@ -122,7 +122,6 @@ Agent 協作與工作流的參考文件。
 
 | 名稱 | 說明 |
 |------|------|
-| [subagent](https://github.com/ohlulu/oh-pi/blob/main/docs/subagent.md) | 透過 tmux + Claude Code CLI 協調 subagent — 涵蓋一次性、互動式和監督者模式。 |
 | [tools](https://github.com/ohlulu/oh-pi/blob/main/docs/tools.md) | CLI 工具參考 — peekaboo、gh、oracle、mcporter、xcp、tuist、lldb、axe、tmux 等。 |
 
 ## AGENTS.md
@@ -151,7 +150,7 @@ Agent 協作與工作流的參考文件。
 
 #### 2. 品質
 
-| | `skill:commit`（當前 session） | `/commit`（empty branch + Haiku） |
+| | `skill:commit`（當前 session） | `/commit`（獨立子程序 + Haiku） |
 |---|---|---|
 | 上下文 | ✅ 完整對話歷史 — 知道為什麼改 | ❌ 只看到 diff — 只知道改了什麼 |
 | Commit type 判斷 | 準確（知道是 fix bug 還是 refactor） | 靠猜（從 diff 推斷） |
@@ -169,7 +168,7 @@ Agent 協作與工作流的參考文件。
 |---|---|---|---|
 | `skill:commit` on Opus | ~31k（context + skill） | ~3k | ~$0.69 |
 | `skill:commit` on Sonnet | ~31k | ~3k | ~$0.14 |
-| `/commit` on Haiku（empty branch） | ~2k（prompt + diff only） | ~3k | ~$0.004 |
+| `/commit` on Haiku（子程序） | ~2k（prompt + diff only） | ~3k | ~$0.004 |
 
 **成本差距：Opus → Haiku 省 ~99%。**
 

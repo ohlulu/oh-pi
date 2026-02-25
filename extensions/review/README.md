@@ -43,9 +43,15 @@ The interactive selector auto-detects a smart default:
 - On a feature branch → suggests "base branch"
 - Otherwise → suggests "commit"
 
+## Non-Git-Repo Support
+
+The extension works **outside git repos** — when no `.git` directory is found:
+- Git-dependent presets (PR, branch, uncommitted, commit) are hidden from the selector
+- Smart default falls back to "folder"
+- File/folder review is always available
+
 ## File & Folder Reviews
 
-- Works **outside git repos** — no `.git` directory required
 - Paths support quoting (`"path with spaces"`, `'another'`) and backslash-escaped spaces
 - Tilde (`~/`) is expanded to `$HOME`
 - Pass paths directly without a subcommand: `/review ./src ~/project` — if all paths exist on disk, treated as folder review

@@ -1,37 +1,31 @@
 # Commit (Extension)
 
-Smart commit assistant that auto-branches to a cheap model when you're on an expensive one — keeps context clean and saves tokens.
+Spawns an isolated Haiku subprocess to analyze changes and commit — cheap, fast, no context pollution.
 
 ## Usage
 
 ```
 /commit
 /commit <optional hint about what changed>
-/end-commit
 ```
 
-Type `/commit` from any session. If you're on an expensive model (e.g., Opus, GPT-4o), the extension offers to branch to a cheap model (Haiku / Flash) to run the commit workflow there. When done, `/end-commit` returns you to the original session and restores your model.
+Type `/commit` and a lightweight `pi` subprocess handles git analysis and committing. Your current session stays untouched.
 
 ## How It Works
 
-**Expensive model detected:**
-1. Saves current session position + model
-2. Branches to a near-empty context (first user message)
-3. Switches to cheapest available model (Haiku → Flash → Sonnet)
-4. Sends commit prompt; auto-queues `/end-commit` as follow-up
-5. `/end-commit` navigates back + restores original model
-
-**Cheap model / user declines switch:**
-- Sends commit prompt in-place — no branch switching.
+1. Checks you're in a git repo with uncommitted changes
+2. Snapshots current HEAD
+3. Spawns `pi --mode json` with `claude-haiku-4-5`, bash-only, no extensions
+4. Subprocess reads the commit skill and runs the full commit workflow
+5. On exit, compares HEAD to count new commits and notifies you
 
 ## Commands
 
 | Command | What it does |
 |---------|-------------|
-| `/commit` | Start smart commit workflow |
+| `/commit` | Start commit via isolated subprocess |
 | `/commit <hint>` | Pass extra context to the commit agent |
-| `/end-commit` | Return to original session and restore model |
 
 ## Source Files
 
-- `index.ts` — command registration, model switching logic, session state management
+- `index.ts` — subprocess spawning, git snapshot, result reporting

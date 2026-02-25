@@ -51,10 +51,9 @@ Reusable pi extensions that add tools, commands, and event hooks to the agent.
 | [done-sound](https://github.com/ohlulu/oh-pi/blob/main/extensions/done-sound.ts) | Plays a system sound when the agent finishes (macOS). |
 | [inject-docs](https://github.com/ohlulu/oh-pi/blob/main/extensions/inject-docs.ts) | Auto-injects the project `docs/` index into the first agent turn on session start. |
 | [lazygit](https://github.com/ohlulu/oh-pi/blob/main/extensions/lazygit.ts) | `/lazygit` command — launches lazygit inside the TUI. |
-| [notify](https://github.com/ohlulu/oh-pi/blob/main/extensions/notify.ts) | Sends a native macOS desktop notification when the agent finishes. |
 | [open-with](https://github.com/ohlulu/oh-pi/blob/main/extensions/open-with.ts) | `/finder` and `/cursor` commands — open cwd in Finder or Cursor editor. |
-| [commit](https://github.com/ohlulu/oh-pi/tree/main/extensions/commit) | `/commit` command — smart commit that auto-branches to a cheap model when on an expensive one. |
-| [mpd](https://github.com/ohlulu/oh-pi/tree/main/extensions/mpd) | `/mpd` command — merge feature branch into default, push, and delete local branch in one shot. |
+| [commit](https://github.com/ohlulu/oh-pi/tree/main/extensions/commit) | `/commit` command — spawns an isolated Haiku subprocess to analyze and commit changes. |
+| [mpd](https://github.com/ohlulu/oh-pi/blob/main/extensions/mpd.ts) | `/mpd` command — merge feature branch into default, push, and delete local branch in one shot. |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/extensions/ralph-wiggum) | Long-running iterative dev loops with plan → execute → verify cycles, pacing, and checkpoints. |
 | [review](https://github.com/ohlulu/oh-pi/tree/main/extensions/review) | `/review` command — interactive code review based on git diff / PR / files. |
 | [tab-status](https://github.com/ohlulu/oh-pi/blob/main/extensions/tab-status.ts) | Updates terminal tab title with agent status (☘️ idle · 🔄 working · 🛑 error). |
@@ -72,10 +71,10 @@ On-demand capability packages loaded by the agent when a task matches.
 | [clean-architecture](https://github.com/ohlulu/oh-pi/tree/main/skills/clean-architecture) | Clean Architecture mindset — dependency direction, layer boundaries, abstraction decisions. |
 | [commit](https://github.com/ohlulu/oh-pi/tree/main/skills/commit) | Structured Conventional Commits workflow — analyze changes, craft message, commit. |
 | [dev-principles](https://github.com/ohlulu/oh-pi/tree/main/skills/dev-principles) | Language-agnostic development principles and design guidelines. |
-| [google-sheets](https://github.com/ohlulu/oh-pi/tree/main/skills/google-sheets) | Google Sheets API via curl — read, write, and manage spreadsheet data programmatically. |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/skills/ralph-wiggum) | Skill companion for the ralph-wiggum extension — iterative loop pacing. |
 | [swift-coding-style](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-coding-style) | Swift coding conventions — opaque vs existential types, naming, structure. |
 | [swift-concurrency](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-concurrency) | Swift Concurrency best practices — async/await, actors, Sendable, migration to Swift 6. |
+| [swift-testing-expert](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-testing-expert) | Swift Testing expert — #expect/#require macros, traits, parameterized tests, XCTest migration. |
 | [swiftui-expert-skill](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-expert-skill) | SwiftUI best practices — state management, view composition, performance, modern APIs. |
 | [swiftui-liquid-glass](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-liquid-glass) | iOS 26+ Liquid Glass — `.glassEffect`, glass buttons, morphing transitions. |
 | [swiftui-performance-audit](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-performance-audit) | Audit SwiftUI runtime performance — slow rendering, excessive updates, layout thrash. |
@@ -94,6 +93,7 @@ Slash-command prompt templates — type `/name` in the editor to expand.
 | Command | Description |
 |---------|-------------|
 | [/dig](https://github.com/ohlulu/oh-pi/blob/main/prompts/dig.md) | Deep-dive into a topic — research and explain in a teaching style. |
+| [/dig-lite](https://github.com/ohlulu/oh-pi/blob/main/prompts/dig-lite.md) | Fast deep-dive — resolve ambiguity and explain what changes decisions. |
 | [/handoff](https://github.com/ohlulu/oh-pi/blob/main/prompts/handoff.md) | Package current state into a handoff report for the next agent. |
 | [/pickup](https://github.com/ohlulu/oh-pi/blob/main/prompts/pickup.md) | Rehydrate context when starting or resuming work. |
 | [/spec-workshop](https://github.com/ohlulu/oh-pi/blob/main/prompts/spec-workshop.md) | Requirements spec workshop — structured discussion before implementation (Chinese). |
@@ -122,7 +122,6 @@ Reference documents for agent coordination and workflows.
 
 | Name | Description |
 |------|-------------|
-| [subagent](https://github.com/ohlulu/oh-pi/blob/main/docs/subagent.md) | Subagent coordination via tmux + Claude Code CLI — one-shot, interactive, and supervisor patterns. |
 | [tools](https://github.com/ohlulu/oh-pi/blob/main/docs/tools.md) | CLI tools reference — peekaboo, gh, oracle, mcporter, xcp, tuist, lldb, axe, tmux, and more. |
 
 ## AGENTS.md
@@ -151,7 +150,7 @@ Both commit correctly. The difference is context, quality, and cost.
 
 #### 2. Quality
 
-| | `skill:commit` (current session) | `/commit` (empty branch + Haiku) |
+| | `skill:commit` (current session) | `/commit` (isolated subprocess + Haiku) |
 |---|---|---|
 | Context | ✅ Full conversation history — knows *why* you changed | ❌ Diff only — knows *what* changed |
 | Commit type | Accurate (knows if it's a bug fix or refactor) | Best-guess from diff |
@@ -169,7 +168,7 @@ Assuming 30k accumulated input tokens, ~3k output tokens for the commit:
 |---|---|---|---|
 | `skill:commit` on Opus | ~31k (context + skill) | ~3k | ~$0.69 |
 | `skill:commit` on Sonnet | ~31k | ~3k | ~$0.14 |
-| `/commit` on Haiku (empty branch) | ~2k (prompt + diff only) | ~3k | ~$0.004 |
+| `/commit` on Haiku (subprocess) | ~2k (prompt + diff only) | ~3k | ~$0.004 |
 
 **Cost gap: Opus → Haiku saves ~99%.**
 
