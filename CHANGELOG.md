@@ -2,6 +2,36 @@
 
 ## Unreleased
 
+## 2026.02.24-1
+
+### Extensions
+
+- Rewrote `commit` — now spawns an isolated `pi` subprocess with Haiku instead of branching/model-switching; removed `/end-commit` command.
+- Updated `review` — git-dependent presets are hidden when not in a git repo; smart default falls back to "folder" outside git repos; switched review model to `gpt-5.3-codex`.
+- Converted `mpd` from multi-file extension (directory) to single-file extension.
+- Removed `notify` extension.
+- Updated `todo` — formatting cleanup and minor prompt tweaks.
+
+### Skills
+
+- Added `swift-testing-expert` — Swift Testing guidance with 10 reference docs covering #expect/#require macros, traits/tags, parameterized tests, async waiting, parallelization, XCTest migration, and Xcode workflows.
+- Removed `google-sheets` skill (symlink).
+
+### Prompts
+
+- Added `/dig-lite` — fast deep-dive focused on resolving ambiguity and decision-impacting info.
+- Updated `/dig` — revised workflow and output structure.
+- Updated `review-rubric` shared prompt.
+
+### Docs
+
+- Removed `docs/subagent.md` (subagent coordination now handled by pi's built-in features).
+- Updated `docs/tools.md`.
+
+### Config
+
+- Updated `AGENTS.md` — expanded commit guidelines (one per logical unit, each must compile).
+
 ## 2026.02.21-1
 
 ### Docs
