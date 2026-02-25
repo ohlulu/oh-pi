@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 2026.02.25-1
+
+### Extensions
+
+- Updated `review` — added commit range review (`/review range <base> <head>`); interactive two-step selector for picking base and head commits.
+
 ## 2026.02.24-1
 
 ### Extensions
