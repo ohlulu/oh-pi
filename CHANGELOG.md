@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## 2026.02.26-1
+
+### Extensions
+
+- Updated `commit` — real-time progress notifications via JSON event stream (reading diff, staging, committing…); added 2-minute hard timeout with SIGTERM → SIGKILL escalation; added `--no-skills` and `--no-prompt-templates` flags to subprocess.
+- Updated `review` — bumped commit history limit to 100 in commit and range selectors; fixed `@`-prefix stripping to handle all file-mention tokens correctly.
+
+### Shared
+
+- Added `nanobanana` script — image editing via Gemini's image generation API; pass an image path and a text prompt, get an edited image back.
+
+### Docs
+
+- Updated `docs/tools.md` — added `nanobanana` tool reference.
+
 ## 2026.02.25-1
 
 ### Extensions
