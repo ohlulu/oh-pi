@@ -53,7 +53,7 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 
 ## Git
 - Safe by default: `git status/diff/log`. Push only when user asks.
-- Ship small commits — one per logical unit (new types, move logic, migrate callers, delete old…). Each must compile. Don't batch whole task into one.
+- Ship small commits — one per logical unit (new types, fix, move logic, migrate callers, delete old…). Each must compile. Don't batch whole task into one.
 - `git checkout` ok for PR review / explicit request.
 - Branch changes require user consent.
 - Destructive ops forbidden unless explicit (`reset --hard`, `clean`, `restore`, `rm`, …).

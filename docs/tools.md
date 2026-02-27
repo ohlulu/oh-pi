@@ -1,5 +1,5 @@
 ---
-summary: CLI tools available on Ohlulu's machines — peekaboo, imageoptim, oracle, gh, mcporter, xcp, tuist, lldb, axe, tmux, asc.
+summary: CLI tools available on Ohlulu's machines — peekaboo, imageoptim, oracle, gh, mcporter, xcp, tuist, lldb, axe, tmux, asc, nanobanana.
 read_when: Need to use a CLI tool; unsure about tool syntax or location; setting up dev environment.
 ---
 
@@ -137,3 +137,17 @@ asc builds list --help        # Show all flags for a command
 Do not memorize commands. Always check --help for the current interface.
 
 **Tip**: Run `asc <subcommand> --help` for full flag reference per command.
+
+---
+
+## nanobanana 🍌
+Image editing via Gemini's image generation API.
+
+**Location**: `~/.pi/agent/shared/scripts/nanobanana`
+
+**Usage**:
+```bash
+nanobanana <image-path> "<prompt>" [output-path]
+```
+
+**Output**: defaults to `<name>_edited.<ext>` if no output path given.

@@ -330,7 +330,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
    * Show commit selector
    */
   async function showCommitSelector(ctx: ExtensionContext): Promise<ReviewTarget | null> {
-    const commits = await getRecentCommits(pi, 20);
+    const commits = await getRecentCommits(pi, 100);
 
     if (commits.length === 0) {
       ctx.ui.notify("No commits found", "error");
@@ -394,7 +394,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
    * Show commit range selector (base commit → head commit)
    */
   async function showCommitRangeSelector(ctx: ExtensionContext): Promise<ReviewTarget | null> {
-    const commits = await getRecentCommits(pi, 30);
+    const commits = await getRecentCommits(pi, 100);
 
     if (commits.length < 2) {
       ctx.ui.notify("Need at least 2 commits for a range review", "error");
@@ -555,11 +555,11 @@ export default function reviewExtension(pi: ExtensionAPI) {
       results.push(current);
     }
 
-    // Strip leading '@' only when it's pi file-mention syntax (token starts with
-    // '@' followed by a path-like char). Preserve '@' inside path segments
-    // (e.g. 'packages/@scope/lib' stays intact).
+    // Strip leading '@' when it's pi file-mention syntax.
+    // Any token starting with '@' is a file-mention; '@' inside a path
+    // segment (e.g. 'packages/@scope/lib') is never at position 0.
     return results.map((p) => {
-      if (p.startsWith("@") && p.length > 1 && (p[1] === "/" || p[1] === "." || p[1] === "~")) {
+      if (p.startsWith("@") && p.length > 1) {
         return p.slice(1);
       }
       return p;
