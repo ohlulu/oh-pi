@@ -115,6 +115,7 @@ Utility scripts used by skills and extensions.
 |------|-------------|
 | [committer](https://github.com/ohlulu/oh-pi/blob/main/shared/scripts/committer) | Safe git commit wrapper — stages only listed files, validates inputs. |
 | [docs-list](https://github.com/ohlulu/oh-pi/blob/main/shared/scripts/docs-list.ts) | Lists and validates `docs/` directory with front-matter enforcement. |
+| [nanobanana](https://github.com/ohlulu/oh-pi/blob/main/shared/scripts/nanobanana) | Image editing via Gemini's image generation API — pass an image + prompt, get an edited image back. |
 
 ## Docs
 

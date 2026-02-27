@@ -115,6 +115,7 @@ skills 和 extensions 使用的工具腳本。
 |------|------|
 | [committer](https://github.com/ohlulu/oh-pi/blob/main/shared/scripts/committer) | 安全的 git commit 包裝器 — 僅 stage 指定檔案，驗證輸入。 |
 | [docs-list](https://github.com/ohlulu/oh-pi/blob/main/shared/scripts/docs-list.ts) | 列出並驗證 `docs/` 目錄，強制 front-matter 格式。 |
+| [nanobanana](https://github.com/ohlulu/oh-pi/blob/main/shared/scripts/nanobanana) | 透過 Gemini 圖片生成 API 編輯圖片 — 傳入圖片和 prompt，取得編輯後的結果。 |
 
 ## Docs
 
