@@ -34,6 +34,7 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 - Keep notes short; update docs when behavior/API changes (no ship w/o docs).
 - Always add `summary` & `read_when` hints on docs.
 - Front matter format: see `rules/docs-format.md`.
+- **Creating or moving any file under `docs/`**: read `doc-system` skill first for placement, structure, and style rules.
 
 ## Flow & Runtime
 - Use repo's package manager/runtime; no swaps w/o approval.
@@ -53,7 +54,7 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 
 ## Git
 - Safe by default: `git status/diff/log`. Push only when user asks.
-- Ship small commits — one per logical unit (new types, fix, move logic, migrate callers, delete old…). Each must compile. Don't batch whole task into one.
+- **Commit-as-you-go (hard rule).** One logical unit → commit immediately before writing next. Staged diff >~150 lines or crossing module boundary → commit now. 3+ uncommitted logical changes = violation; stop, split, commit each. Never batch a whole task into one commit.
 - `git checkout` ok for PR review / explicit request.
 - Branch changes require user consent.
 - Destructive ops forbidden unless explicit (`reset --hard`, `clean`, `restore`, `rm`, …).

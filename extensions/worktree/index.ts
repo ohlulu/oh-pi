@@ -49,14 +49,19 @@ const HELP_TEXT = [
   '  remove <name>          Remove worktree directory (branch kept, confirms first)',
   '  status                 Show current project / branch / worktree info',
   '  cd <name>              Print worktree path (no args = main repo path)',
+  '  rebase                 Rebase current worktree branch onto local main (--autostash)',
   '  prune                  Clean up stale worktree metadata left by manual deletes',
   '',
-  'Template vars (usable in sync command and parentDir):',
+  'Template vars for sync command:',
   '  {{main}}     Main repo absolute path     /Users/you/Developer/my-app',
   '  {{worktree}} Worktree absolute path      /Users/you/Developer/my-app.worktrees/auth',
   '  {{project}}  Repo directory name         my-app',
   '  {{name}}     Feature name                auth',
   '  {{branch}}   Full branch name            feature/auth',
+  '',
+  'Template vars for parentDir (subset — no per-worktree context):',
+  '  {{main}}     Main repo absolute path',
+  '  {{project}}  Repo directory name',
 ].join('\n');
 
 // ============================================================================
@@ -115,9 +120,30 @@ function getCurrentBranch(cwd: string): string {
   }
 }
 
+function localBranchExists(cwd: string, branch: string): boolean {
+  try {
+    git(['show-ref', '--verify', '--quiet', `refs/heads/${branch}`], cwd);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function isWorktreeDir(cwd: string): boolean {
   const gitPath = join(cwd, '.git');
   return existsSync(gitPath) && statSync(gitPath).isFile();
+}
+
+/** Check if a rebase is in progress (locale/version-independent) */
+function isRebaseInProgress(cwd: string): boolean {
+  try {
+    const gitDir = git(['rev-parse', '--git-dir'], cwd);
+    const absGitDir = resolve(cwd, gitDir);
+    return existsSync(join(absGitDir, 'rebase-merge'))
+      || existsSync(join(absGitDir, 'rebase-apply'));
+  } catch {
+    return false;
+  }
 }
 
 function listWorktrees(cwd: string): WorktreeInfo[] {
@@ -167,6 +193,12 @@ function listWorktrees(cwd: string): WorktreeInfo[] {
 // Template & Path Helpers
 // ============================================================================
 
+/** Escape a string for safe embedding in a single-quoted shell argument */
+function shellEscape(s: string): string {
+  // Wrap in single quotes; escape embedded single quotes as: '"'"'
+  return "'" + s.replace(/'/g, "'\"'\"'") + "'";
+}
+
 function expandTemplate(template: string, ctx: TemplateContext): string {
   return template
     .replace(/\{\{worktree\}\}/g, ctx.path)
@@ -174,6 +206,20 @@ function expandTemplate(template: string, ctx: TemplateContext): string {
     .replace(/\{\{branch\}\}/g, ctx.branch)
     .replace(/\{\{project\}\}/g, ctx.project)
     .replace(/\{\{main\}\}/g, ctx.mainWorktree)
+    .replace(/^~/, homedir());
+}
+
+/**
+ * Like expandTemplate, but shell-escapes variable values.
+ * Use this when the result will be passed to `shell: true`.
+ */
+function expandTemplateForShell(template: string, ctx: TemplateContext): string {
+  return template
+    .replace(/\{\{worktree\}\}/g, shellEscape(ctx.path))
+    .replace(/\{\{name\}\}/g, shellEscape(ctx.name))
+    .replace(/\{\{branch\}\}/g, shellEscape(ctx.branch))
+    .replace(/\{\{project\}\}/g, shellEscape(ctx.project))
+    .replace(/\{\{main\}\}/g, shellEscape(ctx.mainWorktree))
     .replace(/^~/, homedir());
 }
 
@@ -225,7 +271,7 @@ async function runSync(
   ctx: TemplateContext,
   notify: (msg: string, type: 'info' | 'error' | 'warning') => void
 ): Promise<void> {
-  const command = expandTemplate(syncCmd, ctx);
+  const command = expandTemplateForShell(syncCmd, ctx);
   notify(`Running: ${command}`, 'info');
 
   return new Promise((resolve) => {
@@ -311,7 +357,7 @@ async function handleInit(_args: string, ctx: ExtensionCommandContext): Promise<
     parentDir = undefined;
   } else if (dirChoice === DIR_CUSTOM) {
     const custom = await ctx.ui.input(
-      'Enter custom path (supports {{project}}, {{name}}):',
+      'Enter custom path (supports {{project}}, {{main}}):',
       existing.parentDir || ''
     );
     if (custom === undefined) { ctx.ui.notify('Cancelled', 'info'); return; }
@@ -639,6 +685,48 @@ async function handleCd(args: string, ctx: ExtensionCommandContext): Promise<voi
   ctx.ui.notify(`Worktree path: ${target.path}`, 'info');
 }
 
+async function handleRebase(_args: string, ctx: ExtensionCommandContext): Promise<void> {
+  if (!requireGitRepo(ctx)) return;
+
+  if (!isWorktreeDir(ctx.cwd)) {
+    ctx.ui.notify('Not in a worktree. /wt rebase only runs inside a worktree.', 'error');
+    return;
+  }
+
+  const targetBranch = 'main';
+  const currentBranch = getCurrentBranch(ctx.cwd);
+
+  if (!localBranchExists(ctx.cwd, targetBranch)) {
+    ctx.ui.notify(`Local branch not found: ${targetBranch}`, 'error');
+    return;
+  }
+
+  ctx.ui.notify(`Rebasing ${currentBranch} onto ${targetBranch}…`, 'info');
+
+  try {
+    const output = git(['rebase', '--autostash', targetBranch], ctx.cwd);
+    if (output.trim()) ctx.ui.notify(output.trim().slice(0, 300), 'info');
+    ctx.ui.notify(`✓ Rebased onto ${targetBranch}`, 'info');
+  } catch (err) {
+    if (isRebaseInProgress(ctx.cwd)) {
+      ctx.ui.notify(
+        [
+          '⚠ Rebase conflicts detected.',
+          '',
+          'Resolve conflicts, then:',
+          '  git rebase --continue',
+          '',
+          'Or abort:',
+          '  git rebase --abort',
+        ].join('\n'),
+        'warning'
+      );
+    } else {
+      ctx.ui.notify(`Rebase failed: ${(err as Error).message.slice(0, 300)}`, 'error');
+    }
+  }
+}
+
 async function handlePrune(_args: string, ctx: ExtensionCommandContext): Promise<void> {
   if (!requireGitRepo(ctx)) return;
 
@@ -684,6 +772,7 @@ const commands: Record<string, (args: string, ctx: ExtensionCommandContext) => P
   rm: handleRemove,
   status: handleStatus,
   cd: handleCd,
+  rebase: handleRebase,
   prune: handlePrune,
 };
 

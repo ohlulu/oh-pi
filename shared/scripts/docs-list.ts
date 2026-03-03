@@ -1,10 +1,11 @@
 #!/usr/bin/env tsx
 
-// after change execute `bun build scripts/docs-list.ts --compile --outfile bin/docs-list`
+// after change execute:
+//   cd ~/.pi/agent/shared && bun build scripts/docs-list.ts --compile --outfile bin/docs-list && cp bin/docs-list ../bin/docs-list
 
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { homedir } from "node:os";
-import { join, relative, resolve } from "node:path";
+import { join, relative, resolve, basename } from "node:path";
 
 const EXCLUDED_DIRS = new Set(["archive", "research"]);
 
@@ -18,15 +19,16 @@ function compactStrings(values: unknown[]): string[] {
   return result;
 }
 
-function walkMarkdownFiles(dir: string, base: string = dir): string[] {
+function walkMarkdownFiles(dir: string, base: string = dir, excludes: string[] = []): string[] {
   const entries = readdirSync(dir, { withFileTypes: true });
   const files: string[] = [];
   for (const entry of entries) {
     if (entry.name.startsWith(".")) continue;
     const fullPath = join(dir, entry.name);
+    if (excludes.some((ex) => fullPath === ex || fullPath.startsWith(ex + "/"))) continue;
     if (entry.isDirectory()) {
       if (EXCLUDED_DIRS.has(entry.name)) continue;
-      files.push(...walkMarkdownFiles(fullPath, base));
+      files.push(...walkMarkdownFiles(fullPath, base, excludes));
     } else if (entry.isFile() && entry.name.endsWith(".md")) {
       files.push(relative(base, fullPath));
     }
@@ -114,13 +116,33 @@ function extractMetadata(fullPath: string): {
 // Collect problems across all directories
 const allProblems: string[] = [];
 
-function listDocsIn(docsDir: string, label?: string): void {
+function listDocsIn(docsDir: string, label?: string, excludes: string[] = []): void {
   if (!existsSync(docsDir)) return;
+
+  const stat = statSync(docsDir);
+
+  // Single-file mode: path points directly to a .md file
+  if (stat.isFile()) {
+    if (!docsDir.endsWith(".md")) return;
+    const header = label ? `[${label}] ${docsDir}` : docsDir;
+    console.log(`\n${header}`);
+    const { summary, readWhen, error } = extractMetadata(docsDir);
+    if (summary) {
+      console.log(`  ${basename(docsDir)} - ${summary}`);
+      if (readWhen.length > 0) {
+        console.log(`    Read when: ${readWhen.join("; ")}`);
+      }
+    } else {
+      const prefix = label ? `${label}/` : "";
+      allProblems.push(`${prefix}${basename(docsDir)} → ${error}`);
+    }
+    return;
+  }
 
   const header = label ? `[${label}] ${docsDir}` : docsDir;
   console.log(`\n${header}`);
 
-  const markdownFiles = walkMarkdownFiles(docsDir);
+  const markdownFiles = walkMarkdownFiles(docsDir, docsDir, excludes);
 
   if (markdownFiles.length === 0) {
     console.log("  (no markdown files)");
@@ -146,8 +168,10 @@ function listDocsIn(docsDir: string, label?: string): void {
 
 const projectRoot = process.argv[2] || process.cwd();
 const docsPaths: string[] = [];
+const excludePaths: string[] = [];
 
 // 1. Check .pi/docs-paths for explicit paths (relative to project root)
+//    Lines starting with ! are exclude patterns (e.g. !docs/milestones)
 const docsPathsFile = join(projectRoot, ".pi", "docs-paths");
 if (existsSync(docsPathsFile)) {
   const lines = readFileSync(docsPathsFile, "utf8")
@@ -155,7 +179,12 @@ if (existsSync(docsPathsFile)) {
     .map((l) => l.trim())
     .filter((l) => l.length > 0 && !l.startsWith("#"));
   for (const line of lines) {
-    docsPaths.push(resolve(projectRoot, line));
+    if (line.startsWith("!")) {
+      const raw = line.slice(1).replace(/\/+$/, "");
+      if (raw) excludePaths.push(resolve(projectRoot, raw));
+    } else {
+      docsPaths.push(resolve(projectRoot, line));
+    }
   }
 }
 
@@ -180,7 +209,7 @@ if (validPaths.length > 0) {
   console.log("Listing project docs:");
   for (const docsDir of validPaths) {
     const label = validPaths.length > 1 ? relative(projectRoot, docsDir) || "docs" : undefined;
-    listDocsIn(docsDir, label);
+    listDocsIn(docsDir, label, excludePaths);
   }
 }
 

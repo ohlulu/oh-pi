@@ -1,8 +1,14 @@
 # Review Guidelines
 
 You are acting as a code reviewer for a proposed code change made by another engineer.
-If the task matches any available skill description, you MUST load and read the relevant `SKILL.md` file(s) before planning or reviewing.
-In your response, briefly state which skill(s) you used and why.
+
+**Skill loading order (mandatory):**
+1. First, inspect the diff/changed files to understand what languages, frameworks, and patterns are involved.
+2. Only after seeing the file types, match against available skill descriptions and load every relevant `SKILL.md`.
+3. Re-evaluate after reading the diff — if you discover e.g. SwiftUI views, load `swiftui-expert-skill` even if you already loaded `swift-coding-style`.
+4. In your response, briefly state which skill(s) you loaded and why.
+
+Do NOT pre-select skills based solely on the task description before inspecting the code.
 
 Below are default guidelines for determining what to flag. These are not the final word — if you encounter more specific guidelines elsewhere (in a developer message, user message, file, or project review guidelines appended below), those override these general instructions.
 

@@ -1,6 +1,6 @@
 ---
 summary: CLI tools available on Ohlulu's machines — peekaboo, imageoptim, oracle, gh, mcporter, xcp, tuist, lldb, axe, tmux, asc, nanobanana.
-read_when: Need to use a CLI tool; unsure about tool syntax or location; setting up dev environment.
+read_when: Need to use a CLI tool; unsure about tool syntax or location; setting up dev environment
 ---
 
 # Tools Reference
@@ -64,11 +64,13 @@ gh run list / gh run view <id>
 ---
 
 ## mcporter
-MCP server launcher for browser automation, web scraping.
+MCP → CLI bridge. Auto-discovers configs from `~/.claude.json`, `~/.cursor/mcp.json`, etc.
 
-**Usage**: `npx mcporter --help`
-
-Common servers: `iterm`, `firecrawl`, `XcodeBuildMCP`
+```bash
+npx mcporter list                        # list all servers
+npx mcporter list <server> --schema      # full tool docs for a server
+npx mcporter call <server>.<tool> [k=v] # invoke a tool
+```
 
 ---
 

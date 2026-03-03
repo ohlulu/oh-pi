@@ -440,10 +440,12 @@ export default function reviewExtension(pi: ExtensionAPI) {
 
     if (!baseResult) return null;
 
-    // Step 2: pick head commit (default: HEAD = first in list)
+    // Step 2: pick head commit — only commits newer than base (git log is newest-first)
+    const baseIndex = items.findIndex((i) => i.value === baseResult.sha);
+    const newerItems = baseIndex > 0 ? items.slice(0, baseIndex) : [];
     const headItems: SelectItem[] = [
       { value: "HEAD", label: "HEAD (current)", description: "" },
-      ...items.filter((i) => i.value !== baseResult.sha),
+      ...newerItems,
     ];
 
     const headResult = await ctx.ui.custom<{ sha: string; title: string } | null>((tui, theme, _kb, done) => {
@@ -555,11 +557,11 @@ export default function reviewExtension(pi: ExtensionAPI) {
       results.push(current);
     }
 
-    // Strip leading '@' when it's pi file-mention syntax.
-    // Any token starting with '@' is a file-mention; '@' inside a path
-    // segment (e.g. 'packages/@scope/lib') is never at position 0.
+    // Strip leading '@' only when it looks like pi file-mention syntax
+    // (i.e. @/path or @./path — starts with a path separator or dot).
+    // Preserve scoped packages like @scope/pkg where the char after @ is a word char.
     return results.map((p) => {
-      if (p.startsWith("@") && p.length > 1) {
+      if (p.startsWith("@") && p.length > 1 && /^@[./~]/.test(p)) {
         return p.slice(1);
       }
       return p;
@@ -857,8 +859,8 @@ export default function reviewExtension(pi: ExtensionAPI) {
           return;
         }
 
-        // folder/file review doesn't require a git repo; everything else does
-        if (target.type !== "folder") {
+        // folder/file and custom reviews don't require a git repo
+        if (target.type !== "folder" && target.type !== "custom") {
           const { code } = await pi.exec("git", ["rev-parse", "--git-dir"]);
           if (code !== 0) {
             ctx.ui.notify("Not a git repository", "error");
@@ -944,6 +946,10 @@ export default function reviewExtension(pi: ExtensionAPI) {
         }
       }
 
+      const originId = reviewOriginId;
+      const savedProvider = reviewOriginalProvider;
+      const savedModelId = reviewOriginalModelId;
+
       const summaryChoice = await ctx.ui.select("Summarize review branch?", ["Summarize", "No summary"]);
 
       if (summaryChoice === undefined) {
@@ -952,12 +958,11 @@ export default function reviewExtension(pi: ExtensionAPI) {
       }
 
       const wantsSummary = summaryChoice === "Summarize";
-      const originId = reviewOriginId;
-
-      const savedProvider = reviewOriginalProvider;
-      const savedModelId = reviewOriginalModelId;
 
       if (wantsSummary) {
+        // Note: navigateTree does not support cancellation. If the user dismisses
+        // the loader, the tree navigation may still complete in the background.
+        // We keep review state active so /end-review can be retried cleanly.
         const result = await ctx.ui.custom<{ cancelled: boolean; error?: string } | null>((tui, theme, _kb, done) => {
           const loader = new BorderedLoader(tui, theme, "Summarizing review branch...");
           loader.onAbort = () => done(null);
@@ -974,18 +979,15 @@ export default function reviewExtension(pi: ExtensionAPI) {
           return loader;
         });
 
-        if (result === null) {
-          ctx.ui.notify("Summarization cancelled. Use /end-review to try again.", "info");
+        if (result === null || result.cancelled) {
+          const reason = result === null ? "Summarization cancelled" : "Navigation cancelled";
+          // navigateTree may still be running — keep review state active for retry
+          ctx.ui.notify(`${reason}. Use /end-review to try again.`, "info");
           return;
         }
 
         if (result.error) {
           ctx.ui.notify(`Summarization failed: ${result.error}`, "error");
-          return;
-        }
-
-        if (result.cancelled) {
-          ctx.ui.notify("Navigation cancelled. Use /end-review to try again.", "info");
           return;
         }
 

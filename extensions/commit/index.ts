@@ -60,9 +60,6 @@ function inferPhase(event: Record<string, unknown>): string | null {
     return `Running: ${truncate(cmd, 50)}`;
   }
 
-  // LLM thinking (first turn after tool results → model is deciding)
-  if (event.type === "turn_start") return "Thinking…";
-
   return null;
 }
 
