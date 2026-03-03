@@ -67,11 +67,12 @@ On-demand capability packages loaded by the agent when a task matches.
 
 | Name | Description |
 |------|-------------|
-| [bdd](https://github.com/ohlulu/oh-pi/tree/main/skills/bdd) | Write and review BDD specifications using Gherkin. |
 | [clean-architecture](https://github.com/ohlulu/oh-pi/tree/main/skills/clean-architecture) | Clean Architecture mindset — dependency direction, layer boundaries, abstraction decisions. |
 | [commit](https://github.com/ohlulu/oh-pi/tree/main/skills/commit) | Structured Conventional Commits workflow — analyze changes, craft message, commit. |
 | [dev-principles](https://github.com/ohlulu/oh-pi/tree/main/skills/dev-principles) | Language-agnostic development principles and design guidelines. |
+| [doc-system](https://github.com/ohlulu/oh-pi/tree/main/skills/doc-system) | Product documentation system — on-demand loading, single source of truth, open-closed structure. |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/skills/ralph-wiggum) | Skill companion for the ralph-wiggum extension — iterative loop pacing. |
+| [sdd](https://github.com/ohlulu/oh-pi/tree/main/skills/sdd) | Spec-Driven Development — Requirements → Design → Tasks → Verification, with approval gates. |
 | [swift-coding-style](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-coding-style) | Swift coding conventions — opaque vs existential types, naming, structure. |
 | [swift-concurrency](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-concurrency) | Swift Concurrency best practices — async/await, actors, Sendable, migration to Swift 6. |
 | [swift-testing-expert](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-testing-expert) | Swift Testing expert — #expect/#require macros, traits, parameterized tests, XCTest migration. |
@@ -92,12 +93,14 @@ Slash-command prompt templates — type `/name` in the editor to expand.
 
 | Command | Description |
 |---------|-------------|
+| [/brainstorming](https://github.com/ohlulu/oh-pi/blob/main/prompts/brainstorming.md) | Turn ideas into fully formed designs through Diverge → Converge → Reflect dialogue before any implementation. |
+| [/dev-loop](https://github.com/ohlulu/oh-pi/blob/main/prompts/dev-loop.md) | Automated dev loop — claim todo, branch, develop, code review, merge, repeat. |
 | [/dig](https://github.com/ohlulu/oh-pi/blob/main/prompts/dig.md) | Deep-dive into a topic — research and explain in a teaching style. |
 | [/dig-lite](https://github.com/ohlulu/oh-pi/blob/main/prompts/dig-lite.md) | Fast deep-dive — resolve ambiguity and explain what changes decisions. |
 | [/handoff](https://github.com/ohlulu/oh-pi/blob/main/prompts/handoff.md) | Package current state into a handoff report for the next agent. |
 | [/pickup](https://github.com/ohlulu/oh-pi/blob/main/prompts/pickup.md) | Rehydrate context when starting or resuming work. |
 | [/spec-workshop](https://github.com/ohlulu/oh-pi/blob/main/prompts/spec-workshop.md) | Requirements spec workshop — structured discussion before implementation (Chinese). |
-| [/tech-stack-decision](https://github.com/ohlulu/oh-pi/blob/main/prompts/tech-stack-decision.md) | Tech stack decision workshop — architecture, packages, toolchain evaluation (Chinese). |
+| [/tech-stack-decision](https://github.com/ohlulu/oh-pi/blob/main/prompts/tech-stack-decision.md) | Tech stack decision workshop — architecture, packages, compiler, and toolchain evaluation. |
 
 ## Shared Prompts
 

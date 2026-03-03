@@ -67,11 +67,12 @@ pi
 
 | 名稱 | 說明 |
 |------|------|
-| [bdd](https://github.com/ohlulu/oh-pi/tree/main/skills/bdd) | 使用 Gherkin 撰寫和審查 BDD 規格。 |
 | [clean-architecture](https://github.com/ohlulu/oh-pi/tree/main/skills/clean-architecture) | Clean Architecture 思維 — 依賴方向、層級邊界、抽象決策。 |
 | [commit](https://github.com/ohlulu/oh-pi/tree/main/skills/commit) | 結構化 Conventional Commits 工作流 — 分析變更、撰寫訊息、提交。 |
 | [dev-principles](https://github.com/ohlulu/oh-pi/tree/main/skills/dev-principles) | 語言無關的開發原則與設計指引。 |
+| [doc-system](https://github.com/ohlulu/oh-pi/tree/main/skills/doc-system) | 文件系統設計與維護 — 按需載入、單一來源、開放封閉原則。 |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/skills/ralph-wiggum) | ralph-wiggum extension 的 skill 搭檔 — 迭代循環節奏控制。 |
+| [sdd](https://github.com/ohlulu/oh-pi/tree/main/skills/sdd) | 規格驅動開發 — 需求 → 設計 → 任務 → 驗證，每階段需確認才繼續。 |
 | [swift-coding-style](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-coding-style) | Swift 編碼風格 — opaque vs existential types、命名、結構。 |
 | [swift-concurrency](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-concurrency) | Swift Concurrency 最佳實踐 — async/await、actors、Sendable、遷移至 Swift 6。 |
 | [swift-testing-expert](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-testing-expert) | Swift Testing 專家 — #expect/#require 巨集、traits、參數化測試、XCTest 遷移。 |
@@ -92,12 +93,14 @@ pi
 
 | 指令 | 說明 |
 |------|------|
+| [/brainstorming](https://github.com/ohlulu/oh-pi/blob/main/prompts/brainstorming.md) | 用 Diverge → Converge → Reflect 對話將想法轉化為完整設計，實作前必跑。 |
+| [/dev-loop](https://github.com/ohlulu/oh-pi/blob/main/prompts/dev-loop.md) | 自動化開發循環 — 認領 todo、建立分支、開發、code review、合併，周而復始。 |
 | [/dig](https://github.com/ohlulu/oh-pi/blob/main/prompts/dig.md) | 深入研究主題 — 用教學方式研究並解釋。 |
 | [/dig-lite](https://github.com/ohlulu/oh-pi/blob/main/prompts/dig-lite.md) | 快速深入 — 解決歧義，只講影響決策的重點。 |
 | [/handoff](https://github.com/ohlulu/oh-pi/blob/main/prompts/handoff.md) | 將當前狀態打包成交接報告給下一位 agent。 |
 | [/pickup](https://github.com/ohlulu/oh-pi/blob/main/prompts/pickup.md) | 接手或恢復工作時快速恢復上下文。 |
 | [/spec-workshop](https://github.com/ohlulu/oh-pi/blob/main/prompts/spec-workshop.md) | 需求規格工作坊 — 實作前的結構化討論（中文）。 |
-| [/tech-stack-decision](https://github.com/ohlulu/oh-pi/blob/main/prompts/tech-stack-decision.md) | 技術選型工作坊 — 架構、套件、工具鏈評估（中文）。 |
+| [/tech-stack-decision](https://github.com/ohlulu/oh-pi/blob/main/prompts/tech-stack-decision.md) | 技術選型工作坊 — 架構、套件、編譯器與工具鏈評估。 |
 
 ## Shared Prompts
 

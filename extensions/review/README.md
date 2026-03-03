@@ -49,7 +49,7 @@ The interactive selector auto-detects a smart default:
 The extension works **outside git repos** — when no `.git` directory is found:
 - Git-dependent presets (PR, branch, uncommitted, commit) are hidden from the selector
 - Smart default falls back to "folder"
-- File/folder review is always available
+- File/folder and custom reviews are always available (no git repo required)
 
 ## File & Folder Reviews
 

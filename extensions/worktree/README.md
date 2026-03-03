@@ -30,12 +30,13 @@ On first use in a project, run `/wt init` to configure the sync command and pare
 | `/wt list` | List all worktrees |
 | `/wt status` | Show current project/branch/worktree info |
 | `/wt cd <name>` | Print worktree path |
+| `/wt rebase` | Rebase current worktree branch onto local `main` (--autostash) |
 | `/wt remove <name>` | Remove worktree (confirms first, keeps branch) |
 | `/wt prune` | Clean stale worktree metadata |
 
 ## Template Variables
 
-Usable in sync command and parentDir settings:
+**Sync command** — all variables available:
 
 | Variable | Example |
 |----------|---------|
@@ -44,6 +45,13 @@ Usable in sync command and parentDir settings:
 | `{{project}}` | `my-app` |
 | `{{name}}` | `auth` |
 | `{{branch}}` | `feature/auth` |
+
+**parentDir setting** — subset only (no per-worktree context at config time):
+
+| Variable | Example |
+|----------|---------|
+| `{{main}}` | `/Users/you/Developer/my-app` |
+| `{{project}}` | `my-app` |
 
 ## Typical Setup
 
