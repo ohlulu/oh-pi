@@ -2,6 +2,32 @@
 
 ## Unreleased
 
+## 2026.03.03-1
+
+### Extensions
+
+- Updated `worktree` — added `/wt rebase` command (rebases current worktree branch onto local `main` with `--autostash`, detects and reports conflicts); added shell-escaping for template variables in sync command; clarified template variable availability (`parentDir` only supports `{{main}}` and `{{project}}`).
+- Updated `review` — head commit selector now filters to commits strictly newer than the selected base; fixed scoped package path stripping (e.g. `@scope/pkg` preserved, only pi file-mention `@`-paths are stripped); custom review type no longer requires a git repo.
+- Updated `commit` — removed spurious "Thinking…" progress phase on `turn_start` events.
+
+### Skills
+
+- Added `doc-system` — product documentation system design and maintenance principles: on-demand loading, single source of truth, open-closed structure, mockup screen index management.
+- Added `sdd` — Spec-Driven Development: structured feature planning through Requirements → Design → Tasks → Verification, with approval gates between phases.
+- Removed `bdd` skill.
+
+### Prompts
+
+- Added `/brainstorming` — turns ideas into fully formed designs through Diverge → Converge → Reflect dialogue; hard-gates implementation until design is approved.
+- Added `/dev-loop` — automated development loop: claim todo, branch, develop, code review, merge, repeat.
+- Updated `/tech-stack-decision` — translated from Chinese to English; now language-agnostic.
+
+### Config
+
+- Updated `AGENTS.md` — strengthened commit-as-you-go rule (staged diff >~150 lines or 3+ uncommitted logical changes = violation); added rule to read `doc-system` skill before creating or moving any file under `docs/`.
+- Updated `shared/scripts/docs-list.ts` — improved front-matter validation and listing logic.
+- Added `shared/bin/docs-list` — compiled binary wrapper for the docs-list script.
+
 ## 2026.02.26-1
 
 ### Extensions
