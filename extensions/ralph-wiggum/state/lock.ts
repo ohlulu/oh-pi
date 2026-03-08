@@ -2,7 +2,7 @@
  * Ralph Wiggum v3 — State write serialization.
  *
  * Simple per-name async mutex to prevent concurrent read-modify-write
- * races on `.ralph/<name>.state.json`.
+ * races on `.pi/ralph/<name>.state.json`.
  */
 
 /** Per-name async mutex for state file writes. */

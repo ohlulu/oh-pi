@@ -41,7 +41,10 @@ export const BUILDING_TEMPLATE = `\
 2. Before making changes, search the codebase (don't assume not implemented)
 3. Implement the item
 4. Run tests/validation to verify
-5. Update the task file: mark completed items, note any discoveries
+5. **MANDATORY — Update the task file ({{taskFile}}) before calling ralph_done:**
+   - Use the edit tool to change \`- [ ]\` to \`- [x]\` for every completed item
+   - Add notes under ## Notes for any discoveries or decisions
+   - The checklist widget tracks your progress from the task file — if you skip this step, progress will appear stuck at 0
 6. When ALL items are complete, output on its own line: <promise>COMPLETE</promise>
 7. If a precondition fails or the task is IMPOSSIBLE, output on its own line: <promise>ABORT</promise>
 8. Otherwise: call ralph_done to proceed to the next iteration
@@ -65,10 +68,11 @@ export const PLANNING_TEMPLATE = `\
 1. Study the task file: {{taskFile}}
 2. Study the existing codebase to understand current state
 3. Compare requirements against existing implementation (gap analysis)
-4. Update the task file with a prioritized plan:
+4. **MANDATORY — Update the task file ({{taskFile}}) before calling ralph_done:**
+   - Use the edit tool to change \`- [ ]\` to \`- [x]\` for completed analysis items
    - Items yet to be implemented, sorted by priority
-   - Mark completed items as [x]
    - Note any discovered issues or missing elements
+   - The checklist widget tracks your progress from the task file — if you skip this step, progress will appear stuck at 0
 
 IMPORTANT: Plan only. Do NOT implement anything. Do NOT write code. Do NOT commit.
 Do NOT assume functionality is missing — confirm with code search first.

@@ -50,8 +50,8 @@ ralph_start({
 
 ## Core Iteration Flow
 
-1. Ralph keeps a state file at `.ralph/<name>.state.json`.
-2. Task markdown lives at `.ralph/<name>.md` (or provided path).
+1. Ralph keeps a state file at `.pi/ralph/<name>.state.json`.
+2. Task markdown lives at `.pi/ralph/<name>.md` (or provided path).
 3. Agent does work, updates checklist/task notes, then calls `ralph_done`.
 4. Ralph advances to next iteration and injects next prompt.
 5. Loop ends via completion marker, abort marker, manual stop, or max-iteration cap.
@@ -122,5 +122,5 @@ If checklist completed count does not increase for 3+ iterations:
 - ESC interrupts streaming; send a normal message to continue.
 - Use `/ralph-stop` only when idle if you want to end immediately.
 - History/log files are additive:
-  - `.ralph/<name>.history.json`
-  - `.ralph/<name>.log`
+  - `.pi/ralph/<name>.history.json`
+  - `.pi/ralph/<name>.log`

@@ -231,6 +231,16 @@ That version's milestone overview. Mark as Released and freeze when complete.
 
 ### Milestone Files
 
+**When to create a separate milestone file vs. _index row only:**
+
+| Situation | Approach |
+|-----------|----------|
+| Feature has an SDD spec (with tasks.md) | NO separate milestone file. The `_index.md` row links directly to the spec. tasks.md is the single checklist. |
+| Feature has a standalone spec (no tasks.md) | Milestone file OK — use it for scope summary + checklist. |
+| Legacy / pre-spec features (e.g., v1.0) | Milestone file OK — serves as the primary record. |
+
+Milestone file template (only when no SDD spec exists):
+
 ```markdown
 # Feature Name
 
@@ -249,6 +259,8 @@ What to build (reference specs — never duplicate rule content)
 ## Completion Criteria
 Definition of done
 ```
+
+**Never duplicate checklists.** If the spec already has a tasks.md or checklist, the milestone file must NOT create another one. This is the most common source of doc drift.
 
 ### Naming Conventions
 - v1.0 waterfall phase: sequential IDs are fine (m0-foundation, m1-shell...)
@@ -291,6 +303,7 @@ Undecided requirements go in `drafts/`. Move to `specs/` and create a milestone 
 
 - Changing one rule requires editing two files' body text → single source of truth violated
 - Milestone describes business logic in detail instead of referencing specs → will drift
+- Milestone file has a checklist AND the spec has tasks.md → duplicate checklist, will drift
 - AI needs to load entire doc library to start working → INDEX or splitting is insufficient
 - Spec contains version numbers → turns into a mini changelog, readability collapses
 - Mockup updated but spec not synced (or vice versa) → process issue

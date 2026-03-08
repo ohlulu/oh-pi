@@ -10,7 +10,7 @@
 // ---------------------------------------------------------------------------
 
 /** Directory name for ralph state/task files (relative to cwd). */
-export const RALPH_DIR = ".ralph";
+export const RALPH_DIR = ".pi/ralph";
 
 /** Strict completion marker — must appear on its own line. */
 export const COMPLETE_MARKER = "<promise>COMPLETE</promise>";
@@ -51,7 +51,7 @@ export const STATUS_ICONS: Record<LoopStatus, string> = {
 // State — v3 (current)
 // ---------------------------------------------------------------------------
 
-/** Full loop state persisted to `.ralph/<name>.state.json`. */
+/** Full loop state persisted to `.pi/ralph/<name>.state.json`. */
 export interface LoopStateV3 {
 	schemaVersion: 3;
 
@@ -96,6 +96,9 @@ export interface LoopStateV3 {
 	iterationStartedAt?: string;
 	currentIterationToolCalls: number;
 	currentIterationFiles: string[];
+
+	// checklist guard (soft warning before allowing zero-progress advance)
+	checklistGuardWarned?: boolean;
 }
 
 // ---------------------------------------------------------------------------

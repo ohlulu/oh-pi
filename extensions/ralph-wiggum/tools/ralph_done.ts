@@ -68,6 +68,33 @@ export function createRalphDoneTool(pi: ExtensionAPI, shared: SharedContext) {
 			const iterStartedAt = state.iterationStartedAt || state.startedAt;
 			const toolCalls = state.currentIterationToolCalls;
 
+			// --- Soft guard: warn once if checklist unchanged, allow on retry ---
+			const currentTaskContent = tryRead(path.resolve(ctx.cwd, state.taskFile)) ?? "";
+			const { done: currentDone, total: currentTotal } = countChecklist(currentTaskContent);
+
+			if (currentTotal > 0 && currentDone === prevDone && prevIteration > 1) {
+				if (!state.checklistGuardWarned) {
+					// First attempt with no progress — warn but don't block
+					state.checklistGuardWarned = true;
+					saveStateSync(ctx, state);
+					return {
+						content: [
+							{
+								type: "text" as const,
+								text:
+									`⚠️ Checklist unchanged (${currentDone}/${currentTotal}). ` +
+									`Update the task file (${state.taskFile}): change \`- [ ]\` to \`- [x]\` for completed items, then call ralph_done again. ` +
+									`If no items were completable this iteration, call ralph_done again to proceed anyway.`,
+							},
+						],
+						details: {},
+					};
+				}
+				// Second attempt — reset flag and allow through
+			}
+			// Reset flag on successful progress or after pass-through
+			state.checklistGuardWarned = false;
+
 			// Advance iteration (handles checkpoint, max-iter, prompt building)
 			const result = advanceIteration(ctx, state, shared, pi);
 

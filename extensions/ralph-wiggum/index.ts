@@ -74,7 +74,7 @@ Commands:
   /ralph hints                        List active hints
   /ralph mode plan|build               Switch execution mode
   /ralph rotate                       Force session rotation
-  /ralph nuke [--yes]                 Delete all .ralph data
+  /ralph nuke [--yes]                 Delete all .pi/ralph data
   /ralph-stop                         Stop active loop (idle only)
 
 Options:
@@ -225,12 +225,12 @@ export default function (pi: ExtensionAPI) {
 		nuke(rest, ctx) {
 			const force = rest.trim() === "--yes";
 			const warning =
-				"This deletes all .ralph state, task, and archive files. External task files are not removed.";
+				"This deletes all .pi/ralph state, task, and archive files. External task files are not removed.";
 
 			const run = () => {
 				const dir = ralphDir(ctx);
 				if (!fs.existsSync(dir)) {
-					if (ctx.hasUI) ctx.ui.notify("No .ralph directory found.", "info");
+					if (ctx.hasUI) ctx.ui.notify("No .pi/ralph directory found.", "info");
 					return;
 				}
 				shared.currentLoop = null;
@@ -238,8 +238,8 @@ export default function (pi: ExtensionAPI) {
 				if (ctx.hasUI) {
 					ctx.ui.notify(
 						ok
-							? "Removed .ralph directory."
-							: "Failed to remove .ralph directory.",
+							? "Removed .pi/ralph directory."
+							: "Failed to remove .pi/ralph directory.",
 						ok ? "info" : "error",
 					);
 				}

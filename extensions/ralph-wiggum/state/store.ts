@@ -1,7 +1,7 @@
 /**
  * Ralph Wiggum v3 — State persistence, migration, and file helpers.
  *
- * All `.ralph/` filesystem access goes through this module.
+ * All `.pi/ralph/` filesystem access goes through this module.
  * Handles v1 → v3 state migration transparently on load.
  */
 
@@ -77,12 +77,12 @@ export function tryRemoveDir(dirPath: string): boolean {
 // Path helpers
 // ---------------------------------------------------------------------------
 
-/** Resolve `.ralph/` directory for the current working directory. */
+/** Resolve `.pi/ralph/` directory for the current working directory. */
 export function ralphDir(ctx: ExtensionContext): string {
 	return path.resolve(ctx.cwd, RALPH_DIR);
 }
 
-/** Resolve `.ralph/archive/` directory. */
+/** Resolve `.pi/ralph/archive/` directory. */
 export function archiveDir(ctx: ExtensionContext): string {
 	return path.join(ralphDir(ctx), "archive");
 }
@@ -279,7 +279,7 @@ export async function withLockedState<T>(
 }
 
 /**
- * List all loop states in `.ralph/` (or archive).
+ * List all loop states in `.pi/ralph/` (or archive).
  * Emits warnings for any corrupt/unparseable state files.
  */
 export function listLoops(

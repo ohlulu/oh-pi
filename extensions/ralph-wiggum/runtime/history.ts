@@ -2,8 +2,8 @@
  * Ralph Wiggum v3 — Iteration history and log recording.
  *
  * Persists lightweight iteration records to:
- * - `.ralph/<name>.history.json` — structured JSON array (max 500 entries)
- * - `.ralph/<name>.log` — human-readable append-only log (max 1MB)
+ * - `.pi/ralph/<name>.history.json` — structured JSON array (max 500 entries)
+ * - `.pi/ralph/<name>.log` — human-readable append-only log (max 1MB)
  */
 
 import * as fs from "node:fs";

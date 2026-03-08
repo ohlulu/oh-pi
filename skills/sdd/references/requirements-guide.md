@@ -79,6 +79,16 @@ EARS and Given/When/Then serve different purposes:
 
 Use EARS for the requirement declaration. Use Given/When/Then for the acceptance criteria.
 
+## WHAT vs HOW Litmus Test
+
+Swap out the technology noun (D1→Postgres, HMAC→JWT, cron→webhook).
+If the requirement's meaning changes, you're describing HOW, not WHAT — move it to Plan.
+
+- ❌ "Vote data MUST be stored in D1" → swap D1→Postgres → meaning changes → **HOW → Plan**
+- ✅ "Vote count MUST be accurate and durable" → swap anything → meaning intact → **WHAT → Requirements**
+
+Apply this to every statement: summary, scenarios, and NFRs alike.
+
 ## Scenario Writing Rules
 
 ### Core Semantics

@@ -1,5 +1,5 @@
 ---
-summary: CLI tools available on Ohlulu's machines — peekaboo, imageoptim, oracle, gh, mcporter, xcp, tuist, lldb, axe, tmux, asc, nanobanana.
+summary: CLI tools available on Ohlulu's machines — peekaboo, imageoptim, oracle, gh, mcporter, xcp, tuist, lldb, axe, tmux, asc, nanobanana, wrangler.
 read_when: Need to use a CLI tool; unsure about tool syntax or location; setting up dev environment
 ---
 
@@ -153,3 +153,16 @@ nanobanana <image-path> "<prompt>" [output-path]
 ```
 
 **Output**: defaults to `<name>_edited.<ext>` if no output path given.
+
+---
+
+## wrangler ☁️
+Cloudflare Workers CLI — dev, deploy, KV, secrets, D1, R2, etc.
+
+**Usage**: `wrangler --help` / `wrangler <command> --help`
+
+**Key knowledge**:
+- `wrangler dev` binds local KV/D1; add `--remote` for real Cloudflare infra.
+- `wrangler tail` streams live production logs — essential for debugging deployed Workers.
+- Secrets are set interactively: `wrangler secret put <NAME>` (never in wrangler.toml).
+- KV commands need `--namespace-id`; get IDs from `wrangler kv namespace list`.

@@ -40,9 +40,9 @@ Status values:
 - **MISSING** — no implementation evidence found
 - **DEVIATED** — implemented differently than spec (may be valid improvement)
 
-### Step 3: Design Decision Adherence
+### Step 3: Plan Decision Adherence
 
-For each decision in design.md, check if the choice was followed:
+For each decision in plan.md, check if the choice was followed:
 
 | Decision | Followed? | Notes |
 |----------|-----------|-------|
@@ -50,7 +50,7 @@ For each decision in design.md, check if the choice was followed:
 | Repository pattern | Deviated | Used direct Core Data access; see note |
 
 Deviations are not automatically bad. But they must be documented.
-If a deviation is justified, update the design doc.
+If a deviation is justified, update the plan doc.
 
 ### Step 4: Issue Classification
 
@@ -63,7 +63,7 @@ Classify findings by severity:
 
 **WARNING** — Should fix. Spec compliance is incomplete.
 - Partial scenario coverage
-- Design deviation without justification
+- Plan deviation without justification
 - Missing edge case handling
 
 **SUGGESTION** — Nice to have. Not blocking.
@@ -96,7 +96,7 @@ Classify findings by severity:
 
 **Compliance: {N}/{total} scenarios compliant**
 
-### Design Adherence
+### Plan Adherence
 
 | Decision | Followed? | Notes |
 |---|---|---|
@@ -121,7 +121,7 @@ Classify findings by severity:
 ## Rules
 
 - Read actual source code — don't trust summaries or assumptions
-- Compare against requirements first (behavioral), design second (structural)
+- Compare against requirements first (behavioral), plan second (structural)
 - Be objective — report what IS, not what should be
 - Do NOT fix issues — only report them. The developer decides what to do.
 - If a deviation from spec is actually an improvement, note it as DEVIATED, not MISSING

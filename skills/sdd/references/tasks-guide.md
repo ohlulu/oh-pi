@@ -1,6 +1,6 @@
 # Tasks Guide
 
-How to break down a design into actionable implementation steps.
+How to break down a plan into actionable implementation steps.
 
 ## Document Template
 
@@ -16,26 +16,23 @@ How to break down a design into actionable implementation steps.
 
 ## Phase 2: {Phase Name} (e.g., Core Implementation)
 
-- [ ] 2.1 {Concrete action}
+- [ ] 2.1 Write tests for {component} — {specific scenarios}
+  - Tests MUST fail (RED)
   - _Requirements: {req reference}_
-- [ ] 2.2 {Concrete action}
+- [ ] 2.2 Implement {component} — make tests pass (GREEN)
   - _Requirements: {req reference}_
+- [ ] 2.3 Refactor if needed (REFACTOR)
 
 ## Phase 3: {Phase Name} (e.g., Integration / Wiring)
 
-- [ ] 3.1 {Concrete action}
+- [ ] 3.1 Write tests for {integration scenario}
+  - _Requirements: {req reference}_
+- [ ] 3.2 Wire components — make tests pass
   - _Requirements: {req reference}_
 
-## Phase 4: {Phase Name} (e.g., Testing)
+## Phase 4: {Phase Name} (e.g., Cleanup / Polish)
 
-- [ ] 4.1 Write tests for {specific scenario from requirements}
-  - _Requirements: {req reference}_
-- [ ] 4.2 Write tests for {specific scenario}
-  - _Requirements: {req reference}_
-
-## Phase 5: {Phase Name} (e.g., Cleanup / Polish)
-
-- [ ] 5.1 {Update docs / remove temporary code}
+- [ ] 4.1 {Update docs / remove temporary code}
 ```
 
 ## Phase Organization
@@ -47,10 +44,21 @@ Organize tasks into phases by dependency order:
 | Foundation | Things other tasks depend on | New types, protocols, config, DB schema |
 | Core | Main business logic | Services, domain rules, data transformations |
 | Integration | Connect components | Routes, UI wiring, dependency injection |
-| Testing | Verify against spec scenarios | Unit tests, integration tests |
 | Cleanup | Polish and documentation | Remove dead code, update docs, lint fixes |
 
-Not every feature needs all 5 phases. Use as many as the change warrants.
+Not every feature needs all 4 phases. Use as many as the change warrants.
+
+## Test-First Rule (TDD)
+
+**Tests are NOT a separate phase.** Every implementation phase follows RED → GREEN → REFACTOR:
+
+1. **RED** — Write tests first. They must fail (proves the test is meaningful).
+2. **GREEN** — Write the minimum implementation to make tests pass.
+3. **REFACTOR** — Clean up while tests stay green.
+
+Within each phase, test tasks MUST appear before their corresponding implementation tasks. A phase that produces testable logic without tests is incomplete.
+
+**Exception**: Pure config tasks (xcconfig, .gitignore, Info.plist keys) and UI-only tasks (SwiftUI views with no logic) may skip test-first when there's nothing meaningful to assert. Preview snapshots should still be added for UI tasks.
 
 ## Task Quality Criteria
 
@@ -117,3 +125,5 @@ When all phases are complete, the feature is ready for verification.
 - [ ] No vague tasks ("implement feature", "add tests")
 - [ ] Each task is completable in one session
 - [ ] Testing tasks reference specific scenarios from requirements
+- [ ] Every phase with testable logic has test tasks BEFORE implementation tasks
+- [ ] No standalone "Testing" phase at the end (tests are co-located with implementation)

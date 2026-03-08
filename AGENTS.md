@@ -14,8 +14,8 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 - Commits: Conventional Commits (`feat|fix|refactor|build|ci|chore|docs|style|perf|test`).
 - Subagents: read `~/.pi/agent/docs/subagent.md`.
 - Editor: `cursor <path>`.
-- Prefer end-to-end verify; if blocked, say what's missing.
 - New deps: quick health check (recent releases/commits, adoption).
+- Blocked on a bug: trace root cause first (read code → check logs → reproduce). Workaround only with explicit user approval.
 - Decisions: `ask_me`/`ask_me_batch`; no assumptions pre-result; post-result update decision log. ✍️ custom input always on — no "Other/其他" option.
 - Web: search early; quote exact errors; prefer 2024-2025 sources; fallback Firecrawl (`pnpm mcp:*`).
 - Style: telegraph. Drop filler/grammar. Min tokens (global AGENTS + replies).
@@ -36,6 +36,11 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 - Front matter format: see `rules/docs-format.md`.
 - **Creating or moving any file under `docs/`**: read `doc-system` skill first for placement, structure, and style rules.
 
+## Skills
+- Turn 1: scan `<available_skills>` descriptions/trigger words against user intent BEFORE reading any project file.
+- Match found → `Read` SKILL.md first → follow skill's workflow.
+- Multiple matches → load all; skill-specific flow takes priority over ad-hoc.
+
 ## Flow & Runtime
 - Use repo's package manager/runtime; no swaps w/o approval.
 - Use subagents background for long jobs.
@@ -54,7 +59,7 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 
 ## Git
 - Safe by default: `git status/diff/log`. Push only when user asks.
-- **Commit-as-you-go (hard rule).** One logical unit → commit immediately before writing next. Staged diff >~150 lines or crossing module boundary → commit now. 3+ uncommitted logical changes = violation; stop, split, commit each. Never batch a whole task into one commit.
+- **Commit-as-you-go.** One logical unit → commit before starting next. Crossing module boundary → good time to commit. 3+ uncommitted logical changes = stop, split, commit each. Never batch a whole task into one commit.
 - `git checkout` ok for PR review / explicit request.
 - Branch changes require user consent.
 - Destructive ops forbidden unless explicit (`reset --hard`, `clean`, `restore`, `rm`, …).
@@ -74,8 +79,8 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 - TypeScript: use repo PM; run `docs:list`; keep files small; follow existing patterns.
 
 ## Critical Thinking
-- Fix root cause (not band-aid).
-- Unsure: read more code; if still stuck, ask w/ short options.
+- **Root-cause mandate**: before writing ANY fix, articulate the root cause in 1-2 sentences (to self or user). If you can't explain WHY, you haven't investigated enough — read more code, trace the flow, check logs. A fix without understood cause = workaround = rejected.
+- Unsure after investigation: ask w/ short options. Never guess-fix.
 - Conflicts: call out; pick safer path.
 - Unrecognized changes: assume other agent; keep going; focus your changes. If it causes issues, stop + ask user.
 - Leave breadcrumb notes in thread.
