@@ -42,6 +42,8 @@ Organize the docs/ folder
 - No emoji, no ASCII wireframe diagrams in specs
 - Specs carry no version numbers — they reflect current truth
 - Milestones reference specs; never duplicate rule content
+- **No separate milestone file when SDD spec exists** — link milestone `_index.md` row to the spec; `tasks.md` is the single checklist
+- Milestone file with its own checklist AND a `tasks.md` = duplicate checklist = doc drift
 - INDEX.md must fit on one screen — routing only, no business content
 
 ## References

@@ -22,7 +22,7 @@ Check status, inject hints, or stop mid-loop:
 ## How It Works
 
 1. You start a loop (`/ralph start my-feature` or agent calls `ralph_start`)
-2. Ralph creates a task file (`.ralph/<name>.md`) and state file (`.ralph/<name>.state.json`)
+2. Ralph creates a task file (`.pi/ralph/<name>.md`) and state file (`.pi/ralph/<name>.state.json`)
 3. Each iteration: agent works → updates checklist → calls `ralph_done`
 4. Ralph advances iteration, injects next prompt, agent continues
 5. Loop ends via `<promise>COMPLETE</promise>`, `<promise>ABORT</promise>`, `/ralph stop`, or hitting max iterations
@@ -30,7 +30,7 @@ Check status, inject hints, or stop mid-loop:
 ## File Structure
 
 ```
-.ralph/
+.pi/ralph/
 ├── my-feature.md              ← task description + checklist
 ├── my-feature.state.json      ← iteration count, mode, hints, etc.
 ├── my-feature.history.json    ← structured history (JSON array)
@@ -55,7 +55,7 @@ Check status, inject hints, or stop mid-loop:
 | `/ralph cancel <name>` | Delete loop state |
 | `/ralph archive <name>` | Archive a paused loop |
 | `/ralph clean [--all]` | Clean completed loops |
-| `/ralph nuke [--yes]` | Delete entire .ralph/ |
+| `/ralph nuke [--yes]` | Delete entire .pi/ralph/ |
 | `/ralph-stop` | Hard stop when idle |
 
 ### Start Options
@@ -93,6 +93,14 @@ Inject guidance while the loop is running:
 ```
 
 Max 20 hints, 300 chars each.
+
+## Checklist Guard
+
+When `ralph_done` is called but the checklist count hasn't changed since the previous iteration (and it's not the first iteration), Ralph issues a **soft warning** instead of advancing:
+
+> ⚠️ Checklist unchanged (N/M). Update the task file: change `- [ ]` to `- [x]` for completed items, then call `ralph_done` again. If nothing was completable this iteration, call `ralph_done` again to proceed anyway.
+
+On the second consecutive call with no progress, Ralph allows through and resets the guard. This prevents silent zero-progress iterations without hard-blocking legitimate "no items completable" cases.
 
 ## Struggle Detection
 

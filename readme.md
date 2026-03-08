@@ -72,7 +72,7 @@ On-demand capability packages loaded by the agent when a task matches.
 | [dev-principles](https://github.com/ohlulu/oh-pi/tree/main/skills/dev-principles) | Language-agnostic development principles and design guidelines. |
 | [doc-system](https://github.com/ohlulu/oh-pi/tree/main/skills/doc-system) | Product documentation system — on-demand loading, single source of truth, open-closed structure. |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/skills/ralph-wiggum) | Skill companion for the ralph-wiggum extension — iterative loop pacing. |
-| [sdd](https://github.com/ohlulu/oh-pi/tree/main/skills/sdd) | Spec-Driven Development — Requirements → Design → Tasks → Verification, with approval gates. |
+| [sdd](https://github.com/ohlulu/oh-pi/tree/main/skills/sdd) | Spec-Driven Development — Requirements → Plan → Tasks → Verification, with approval gates and doc-system handoff. |
 | [swift-coding-style](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-coding-style) | Swift coding conventions — opaque vs existential types, naming, structure. |
 | [swift-concurrency](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-concurrency) | Swift Concurrency best practices — async/await, actors, Sendable, migration to Swift 6. |
 | [swift-testing-expert](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-testing-expert) | Swift Testing expert — #expect/#require macros, traits, parameterized tests, XCTest migration. |

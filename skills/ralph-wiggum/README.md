@@ -56,4 +56,5 @@ Or via tool: call `ralph_start` with `name`, `taskContent`, and optional flags.
 ## Related
 
 - Extension: `~/.pi/agent/extensions/ralph-wiggum/` — the runtime that drives the loop
+- State files stored under `.pi/ralph/` in the project's cwd
 - Full guide: see the extension's README for lifecycle, architecture, and internals

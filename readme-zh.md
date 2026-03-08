@@ -72,7 +72,7 @@ pi
 | [dev-principles](https://github.com/ohlulu/oh-pi/tree/main/skills/dev-principles) | 語言無關的開發原則與設計指引。 |
 | [doc-system](https://github.com/ohlulu/oh-pi/tree/main/skills/doc-system) | 文件系統設計與維護 — 按需載入、單一來源、開放封閉原則。 |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/skills/ralph-wiggum) | ralph-wiggum extension 的 skill 搭檔 — 迭代循環節奏控制。 |
-| [sdd](https://github.com/ohlulu/oh-pi/tree/main/skills/sdd) | 規格驅動開發 — 需求 → 設計 → 任務 → 驗證，每階段需確認才繼續。 |
+| [sdd](https://github.com/ohlulu/oh-pi/tree/main/skills/sdd) | 規格驅動開發 — 需求 → 規劃 → 任務 → 驗證，每階段需確認才繼續，含 doc-system 交接。 |
 | [swift-coding-style](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-coding-style) | Swift 編碼風格 — opaque vs existential types、命名、結構。 |
 | [swift-concurrency](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-concurrency) | Swift Concurrency 最佳實踐 — async/await、actors、Sendable、遷移至 Swift 6。 |
 | [swift-testing-expert](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-testing-expert) | Swift Testing 專家 — #expect/#require 巨集、traits、參數化測試、XCTest 遷移。 |
