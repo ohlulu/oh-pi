@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+## 2026.03.08-1
+
+### Extensions
+
+- Updated `ralph-wiggum` — moved state storage from `.ralph/` to `.pi/ralph/`; added checklist guard: `ralph_done` now issues a soft warning when the checklist count is unchanged since the previous iteration, prompting the agent to update the task file before advancing (second consecutive call without progress passes through automatically); strengthened prompt templates with mandatory task-file update instructions and clearer consequence notes.
+
+### Skills
+
+- Updated `sdd` — renamed "Design" phase to "Plan" (`design.md` → `plan.md`, `design-guide.md` → `plan-guide.md`); added Chinese trigger words; added approval gate presentation note (explain each phase in plain Chinese before user approves); added Handoff to doc-system section (INDEX.md entry + milestone `_index.md` link after Tasks approval); expanded Spec Evolution section with explicit edit-in-place vs. delta workflow decision tree; added Small Change and Large Change (delta) sub-workflows; strengthened anti-patterns and quality gates.
+- Updated `doc-system` — added decision table for when to create a separate milestone file vs. index-row-only entry; added anti-pattern for duplicate checklists (milestone file with checklist when `tasks.md` already exists).
+- Updated `ralph-wiggum` — updated file path references from `.ralph/` to `.pi/ralph/`.
+
+### Config
+
+- Updated `AGENTS.md` — added Skills section: agents must scan `<available_skills>` descriptions on turn 1 before reading any project file; strengthened root-cause mandate (articulate root cause in 1–2 sentences before writing any fix); relaxed commit-as-you-go wording to crossing-module-boundary heuristic.
+
 ## 2026.03.03-1
 
 ### Extensions
