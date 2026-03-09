@@ -64,13 +64,20 @@ gh run list / gh run view <id>
 ---
 
 ## mcporter
-MCP → CLI bridge. Auto-discovers configs from `~/.claude.json`, `~/.cursor/mcp.json`, etc.
+MCP → CLI bridge. Auto-discovers configs from `~/.claude.json`.
 
 ```bash
 npx mcporter list                        # list all servers
 npx mcporter list <server> --schema      # full tool docs for a server
 npx mcporter call <server>.<tool> [k=v] # invoke a tool
 ```
+
+### Configured MCP Servers
+
+| Server | Source | Description |
+|---|---|---|
+| **XcodeBuildMCP** | `~/.claude.json` (user-global) | 82 tools — build, test, debug, log capture, coverage, simulator mgmt, scaffold for Xcode projects. [Docs](https://github.com/getsentry/XcodeBuildMCP/blob/main/docs/TOOLS.md) |
+| **pencil** | `~/.claude.json` (user-global) | Pencil design tool MCP |
 
 ---
 

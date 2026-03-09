@@ -54,6 +54,7 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 - Before handoff: run full gate (lint/typecheck/tests/docs).
 - CI red: `gh run list/view`, rerun, fix, push, repeat til green.
 - Keep it observable (logs, panes, tails, MCP/browser tools).
+- Xcode build/test/debug: prefer `npx mcporter call XcodeBuildMCP.<tool>`. First call `npx mcporter list XcodeBuildMCP --schema` to discover tools.
 - Release: read `docs/RELEASING.md` (or find best checklist if missing).
 - Reminder: check ~/.profile for missing env keys (e.g. SPARKLE_PRIVATE_KEY_FILE); Sparkle keys live in ~/Library/CloudStorage/Dropbox/Backup/Sparkle.
 
