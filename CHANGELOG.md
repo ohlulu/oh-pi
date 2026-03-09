@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## 2026.03.09-1
+
+### Docs
+
+- Updated `docs/tools.md` — clarified `mcporter` config discovery and listed configured MCP servers.
+- Added `docs/tuist.md` — documented Tuist's binary xcframework transitive dependency pitfall and the `-ObjC` workaround.
+
+### Config
+
+- Updated `AGENTS.md` — prefer `npx mcporter call XcodeBuildMCP.<tool>` for Xcode build/test/debug; discover available MCP tools first with `npx mcporter list XcodeBuildMCP --schema`.
+
 ## 2026.03.08-1
 
 ### Extensions
