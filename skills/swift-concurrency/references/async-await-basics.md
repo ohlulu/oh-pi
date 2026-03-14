@@ -246,4 +246,4 @@ let profile = Profile(
 ## Further Learning
 
 For in-depth coverage of async/await patterns, error handling strategies, and real-world migration scenarios, see [Swift Concurrency Course](https://www.swiftconcurrencycourse.com).
-<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
+

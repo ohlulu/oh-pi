@@ -140,4 +140,3 @@ final class ThreadSafeCache: @unchecked Sendable {
     private var storage: [String: Data] = [:]
 }
 ```
-<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->

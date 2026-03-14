@@ -42,6 +42,7 @@ export function resumeCommand(
 	}
 
 	state.status = "active";
+	state.statusDetail = "active"; // command-based resume: prompt delivered immediately
 	state.iteration++;
 	state.iterationStartedAt = new Date().toISOString();
 	state.currentIterationToolCalls = 0;

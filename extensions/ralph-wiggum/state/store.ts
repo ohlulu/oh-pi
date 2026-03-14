@@ -207,6 +207,12 @@ function applyDefaults(obj: Record<string, unknown>): LoopStateV3 {
 		iterationStartedAt: obj.iterationStartedAt as string | undefined,
 		currentIterationToolCalls: (obj.currentIterationToolCalls as number) ?? 0,
 		currentIterationFiles: (obj.currentIterationFiles as string[]) ?? [],
+		// checklist guard
+		checklistGuardWarned: (obj.checklistGuardWarned as boolean) ?? false,
+		// deferred done
+		doneRequested: (obj.doneRequested as boolean) ?? undefined,
+		// lifecycle detail
+		statusDetail: obj.statusDetail as LoopStateV3["statusDetail"],
 	};
 }
 

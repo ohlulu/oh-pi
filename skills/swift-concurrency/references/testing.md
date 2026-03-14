@@ -562,4 +562,4 @@ For advanced testing patterns, real-world examples, and migration strategies:
 - [Swift Testing Documentation](https://developer.apple.com/documentation/testing)
 - [Swift Concurrency Extras](https://github.com/pointfreeco/swift-concurrency-extras)
 - [Swift Concurrency Course](https://www.swiftconcurrencycourse.com)
-<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
+

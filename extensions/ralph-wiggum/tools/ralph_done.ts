@@ -51,15 +51,22 @@ export function createRalphDoneTool(pi: ExtensionAPI, shared: SharedContext) {
 			}
 
 			if (ctx.hasPendingMessages()) {
+				state.doneRequested = true;
+				saveStateSync(ctx, state);
 				return {
 					content: [
 						{
 							type: "text" as const,
-							text: "Pending messages already queued. Skipping ralph_done.",
+							text: "Pending messages queued — iteration completion deferred. It will execute automatically when the queue drains.",
 						},
 					],
 					details: {},
 				};
+			}
+
+			// Clear deferred flag if we're executing normally
+			if (state.doneRequested) {
+				state.doneRequested = false;
 			}
 
 			// --- Collect iteration stats before advancing ---

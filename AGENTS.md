@@ -86,6 +86,7 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 - Unrecognized changes: assume other agent; keep going; focus your changes. If it causes issues, stop + ask user.
 - Leave breadcrumb notes in thread.
 - Before declaring done: ask "what else tracks or depends on what I just changed?" — find and update all dependents (indexes, registries, cross-refs, manifests, docs). Primary task done ≠ done.
+- Codex will review your code.
 
 ## Tools
 - Full catalog: `docs/tools.md`.

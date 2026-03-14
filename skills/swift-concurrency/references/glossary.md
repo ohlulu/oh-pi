@@ -125,4 +125,4 @@ Like AsyncChannel but can emit errors through the stream. Stable operator.
 ## AsyncTimerSequence
 
 An AsyncSequence that emits a value at regular intervals. Replaces timer-based publishers and manual sleep loops. Stable operator.
-<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
+

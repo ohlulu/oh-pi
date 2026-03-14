@@ -637,4 +637,4 @@ Need thread-safe mutable state?
 ## Further Learning
 
 For migration strategies, advanced patterns, and real-world examples, see [Swift Concurrency Course](https://www.swiftconcurrencycourse.com).
-<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
+

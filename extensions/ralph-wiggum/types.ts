@@ -37,6 +37,9 @@ export const SCHEMA_VERSION = 3;
 /** Loop lifecycle status. */
 export type LoopStatus = "active" | "paused" | "completed";
 
+/** Fine-grained lifecycle phase within an active loop. */
+export type StatusDetail = "starting" | "active" | "completing";
+
 /** Execution mode: plan-only vs full build. */
 export type LoopMode = "plan" | "build";
 
@@ -99,6 +102,12 @@ export interface LoopStateV3 {
 
 	// checklist guard (soft warning before allowing zero-progress advance)
 	checklistGuardWarned?: boolean;
+
+	// deferred done: set when ralph_done called while pending messages exist
+	doneRequested?: boolean;
+
+	// fine-grained lifecycle phase: "starting" → "active" → "completing"
+	statusDetail?: StatusDetail;
 }
 
 // ---------------------------------------------------------------------------

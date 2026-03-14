@@ -278,6 +278,7 @@ Before advancing to the next phase, check:
 - [ ] Tasks are specific, actionable, and verifiable
 - [ ] Dependency order is correct
 - [ ] No task is too vague ("implement feature") or too large
+- [ ] **Handoff audit** — pretend you are a new session with ONLY these 3 docs and zero prior context. Read Plan + Tasks linearly and at every decision point ask: "are there two or more valid ways to implement this?" If yes, the spec is ambiguous — add the concrete choice to Plan (decision or code snippet) and pin it in the Task description. Common traps: model read/write path divergence, SQL column alias conventions, how state flows across layer boundaries (who holds it, who passes it), file format differences between variants of the same schema, quality/process expectations for generated content.
 
 **Verification:**
 - [ ] Every scenario has implementation evidence
@@ -295,6 +296,7 @@ Before advancing to the next phase, check:
 | Vibe tasking | "Implement the feature" as a task | Break into file-level actions |
 | Spec drift | Code diverges from spec silently | Run verification after implementation |
 | Over-specification | Specifying internal implementation details | Spec describes behavior, not internals |
+| Handoff-blind spec | Spec reads fine to the author but a fresh reader can interpret decisions 2+ ways | Run handoff audit: read as a stranger, pin every fork |
 
 ## References
 

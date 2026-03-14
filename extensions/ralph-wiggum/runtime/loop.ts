@@ -8,11 +8,12 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-agent";
-import type { LoopStateV3 } from "../types.js";
+import type { LoopStateV3, IterationRecord } from "../types.js";
 import { saveStateSync, loadState, tryRead } from "../state/store.js";
 import { validateCheckpoint, snapshotTaskFile } from "./checkpoint.js";
 import { buildIterationPrompt } from "../prompt/renderer.js";
-import { appendLogEvent } from "./history.js";
+import { appendLogEvent, appendHistory, appendLog } from "./history.js";
+import { updateStruggleState } from "./struggle.js";
 
 // ---------------------------------------------------------------------------
 // Shared context type (passed from index.ts)
@@ -58,7 +59,7 @@ export function pauseLoop(
 	if (message && ctx.hasUI) ctx.ui.notify(message, "info");
 }
 
-/** Complete a loop — set completed, save, send banner. */
+/** Complete a loop — record final iteration accounting, set completed, save, send banner. */
 export function completeLoop(
 	ctx: ExtensionContext,
 	state: LoopStateV3,
@@ -66,6 +67,33 @@ export function completeLoop(
 	pi: ExtensionAPI,
 	banner: string,
 ): void {
+	// --- Final iteration accounting ---
+	try {
+		const taskContent = tryRead(path.resolve(ctx.cwd, state.taskFile)) ?? "";
+		const { done } = countChecklist(taskContent);
+		const prevDone = state.lastChecklistCount;
+		const checklistDelta = done - prevDone;
+		const iterStartedAt = state.iterationStartedAt || state.startedAt;
+
+		const record: IterationRecord = {
+			iteration: state.iteration,
+			startedAt: iterStartedAt,
+			endedAt: new Date().toISOString(),
+			durationMs: Date.now() - new Date(iterStartedAt).getTime(),
+			toolCalls: state.currentIterationToolCalls,
+			checklistDelta,
+			wasReflection: false,
+		};
+
+		appendHistory(ctx, state.name, record);
+		appendLog(ctx, state.name, record);
+
+		state.lastChecklistCount = done;
+	} catch {
+		// Non-fatal — don't block completion
+	}
+
+	state.statusDetail = "completing";
 	state.status = "completed";
 	state.completedAt = new Date().toISOString();
 	saveStateSync(ctx, state);
@@ -79,13 +107,40 @@ export function completeLoop(
 	pi.sendUserMessage(banner);
 }
 
-/** Stop a loop — set completed, save, notify. */
+/** Stop a loop — record final accounting, set completed, save, notify. */
 export function stopLoop(
 	ctx: ExtensionContext,
 	state: LoopStateV3,
 	shared: SharedContext,
 	message?: string,
 ): void {
+	// --- Final iteration accounting ---
+	try {
+		const taskContent = tryRead(path.resolve(ctx.cwd, state.taskFile)) ?? "";
+		const { done } = countChecklist(taskContent);
+		const prevDone = state.lastChecklistCount;
+		const checklistDelta = done - prevDone;
+		const iterStartedAt = state.iterationStartedAt || state.startedAt;
+
+		const record: IterationRecord = {
+			iteration: state.iteration,
+			startedAt: iterStartedAt,
+			endedAt: new Date().toISOString(),
+			durationMs: Date.now() - new Date(iterStartedAt).getTime(),
+			toolCalls: state.currentIterationToolCalls,
+			checklistDelta,
+			wasReflection: false,
+		};
+
+		appendHistory(ctx, state.name, record);
+		appendLog(ctx, state.name, record);
+
+		state.lastChecklistCount = done;
+	} catch {
+		// Non-fatal — don't block stop
+	}
+
+	state.statusDetail = "completing";
 	state.status = "completed";
 	state.completedAt = new Date().toISOString();
 	saveStateSync(ctx, state);
@@ -206,6 +261,7 @@ export function advanceIteration(
 	state.currentIterationToolCalls = 0;
 	state.currentIterationFiles = [];
 	state.iterationStartedAt = new Date().toISOString();
+	state.statusDetail = "active";
 
 	// Save and build prompt
 	saveStateSync(ctx, state);
@@ -213,4 +269,64 @@ export function advanceIteration(
 
 	const prompt = buildIterationPrompt(state, taskContent, needsReflection);
 	return { action: "next", prompt };
+}
+
+// ---------------------------------------------------------------------------
+// Deferred done drain
+// ---------------------------------------------------------------------------
+
+/**
+ * Drain a deferred `doneRequested` flag.
+ *
+ * Called from `agent_end` when `state.doneRequested` is true and no
+ * completion/abort marker was detected. Mirrors the accounting logic
+ * from `ralph_done` tool, then advances the iteration.
+ *
+ * Returns the `AdvanceResult` so the caller can send the next prompt.
+ */
+export function drainDoneRequest(
+	ctx: ExtensionContext,
+	state: LoopStateV3,
+	shared: SharedContext,
+	pi: ExtensionAPI,
+): AdvanceResult {
+	state.doneRequested = false;
+
+	const prevIteration = state.iteration;
+	const prevDone = state.lastChecklistCount;
+	const iterStartedAt = state.iterationStartedAt || state.startedAt;
+	const toolCalls = state.currentIterationToolCalls;
+
+	const result = advanceIteration(ctx, state, shared, pi);
+
+	if (result.action === "next" || result.action === "complete") {
+		const taskContent = tryRead(path.resolve(ctx.cwd, state.taskFile)) ?? "";
+		const { done: newDone } = countChecklist(taskContent);
+		const checklistDelta = newDone - prevDone;
+
+		const record: IterationRecord = {
+			iteration: prevIteration,
+			startedAt: iterStartedAt,
+			endedAt: new Date().toISOString(),
+			durationMs: Date.now() - new Date(iterStartedAt).getTime(),
+			toolCalls,
+			checklistDelta,
+			wasReflection:
+				state.reflectEvery > 0 &&
+				(prevIteration + 1) > 1 &&
+				((prevIteration + 1) - 1) % state.reflectEvery === 0,
+		};
+
+		try {
+			appendHistory(ctx, state.name, record);
+			appendLog(ctx, state.name, record);
+		} catch {
+			// Non-fatal
+		}
+
+		updateStruggleState(state, checklistDelta);
+		saveStateSync(ctx, state);
+	}
+
+	return result;
 }

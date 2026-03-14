@@ -37,6 +37,7 @@ import {
 	pauseLoop,
 	completeLoop,
 	stopLoop,
+	drainDoneRequest,
 } from "./runtime/loop.js";
 
 // UI
@@ -54,42 +55,19 @@ import { modeCommand } from "./commands/mode.js";
 import { createRalphStartTool } from "./tools/ralph_start.js";
 import { createRalphDoneTool } from "./tools/ralph_done.js";
 
-// ---------------------------------------------------------------------------
-// HELP string
-// ---------------------------------------------------------------------------
-
 const HELP = `Ralph Wiggum v3 — Long-running development loops
 
-Commands:
-  /ralph start <name|path> [options]  Start a new loop
-  /ralph stop                         Pause current loop
-  /ralph resume <name>                Resume a paused loop
-  /ralph status                       Show all loops
-  /ralph cancel <name>                Delete loop state
-  /ralph archive <name>               Move loop to archive
-  /ralph clean [--all]                Clean completed loops
-  /ralph list [--archived]            Show loops
-  /ralph hint <text> [--sticky]       Add a hint for the agent
-  /ralph hint --clear                 Clear all hints
-  /ralph hints                        List active hints
-  /ralph mode plan|build               Switch execution mode
-  /ralph rotate                       Force session rotation
-  /ralph nuke [--yes]                 Delete all .pi/ralph data
-  /ralph-stop                         Stop active loop (idle only)
-
-Options:
-  --mode plan|build        Execution mode (default: build)
-  --template PATH          Custom prompt template file
-  --items-per-iteration N  Suggest N items per turn
-  --reflect-every N        Checkpoint every N iterations
-  --max-iterations N       Stop after N iterations (default 50)
-
-To stop: press ESC to interrupt, then run /ralph-stop when idle
-
-Examples:
-  /ralph start my-feature
-  /ralph start review --mode plan --reflect-every 5
-  /ralph hint "Focus on error handling" --sticky`;
+  start <name> [opts]   Start loop (--mode plan|build --template PATH --items-per-iteration N --reflect-every N --max-iterations N)
+  stop                  Pause current loop
+  resume <name>         Resume paused loop
+  status / list         Show loops (--archived)
+  cancel / archive      Delete / archive loop state
+  clean [--all]         Clean completed loops
+  hint <text> [--sticky] / hints / hint --clear
+  mode plan|build       Switch mode
+  rotate                Force session rotation
+  nuke [--yes]          Delete all .pi/ralph data
+  /ralph-stop           Stop active loop (idle only; ESC to interrupt first)`;
 
 // ---------------------------------------------------------------------------
 // Extension factory
@@ -357,6 +335,12 @@ export default function (pi: ExtensionAPI) {
 		const state = loadState(ctx, shared.currentLoop);
 		if (!state || state.status !== "active") return;
 
+		// Transition "starting" → "active" when first iteration prompt is consumed
+		if (state.statusDetail === "starting") {
+			state.statusDetail = "active";
+			saveStateSync(ctx, state);
+		}
+
 		const iterStr = `${state.iteration}${state.maxIterations > 0 ? `/${state.maxIterations}` : ""}`;
 
 		let instructions = `You are in a Ralph loop working on: ${state.taskFile}\n`;
@@ -423,6 +407,15 @@ export default function (pi: ExtensionAPI) {
 				shared,
 				`Ralph loop "${state.name}" aborted by agent at iteration ${state.iteration}.`,
 			);
+			return;
+		}
+
+		// --- Deferred done: drain doneRequested flag ---
+		if (state.doneRequested && !marker) {
+			const result = drainDoneRequest(ctx, state, shared, pi);
+			if (result.action === "next" || result.action === "retry") {
+				pi.sendUserMessage(result.prompt!, { deliverAs: "followUp" });
+			}
 			return;
 		}
 

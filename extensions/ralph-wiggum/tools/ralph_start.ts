@@ -87,6 +87,7 @@ export function createRalphStartTool(pi: ExtensionAPI, shared: SharedContext) {
 			});
 
 			state.iterationStartedAt = new Date().toISOString();
+			state.statusDetail = "starting";
 			snapshotTaskFile(state, params.taskContent);
 			saveStateSync(ctx, state);
 			shared.currentLoop = loopName;
@@ -94,14 +95,14 @@ export function createRalphStartTool(pi: ExtensionAPI, shared: SharedContext) {
 
 			pi.sendUserMessage(
 				buildIterationPrompt(state, params.taskContent, false),
-				{ deliverAs: "followUp" },
+				{ deliverAs: "steer" },
 			);
 
 			return {
 				content: [
 					{
 						type: "text" as const,
-						text: `Started loop "${loopName}" [${mode}] (max ${state.maxIterations} iterations).`,
+						text: `Started loop "${loopName}" [${mode}] (max ${state.maxIterations} iterations). Iteration prompt incoming — do not call further tools; wait for the loop prompt.`,
 					},
 				],
 				details: {},

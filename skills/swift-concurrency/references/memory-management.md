@@ -539,4 +539,4 @@ When object won't deallocate:
 ## Further Learning
 
 For migration strategies, real-world examples, and advanced memory patterns, see [Swift Concurrency Course](https://www.swiftconcurrencycourse.com).
-<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
+

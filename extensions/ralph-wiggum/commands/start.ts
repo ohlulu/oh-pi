@@ -129,6 +129,7 @@ export function startCommand(
 	});
 
 	state.iterationStartedAt = new Date().toISOString();
+	state.statusDetail = "active"; // command-based start: prompt delivered immediately
 
 	// Snapshot initial task file
 	const content = tryRead(fullPath);

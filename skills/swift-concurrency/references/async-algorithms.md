@@ -820,4 +820,3 @@ final class FormValidator {
 - [Combine Migration Guide](migration.md)
 - [Async Sequences](async-sequences.md)
 - [Tasks](tasks.md) - Task groups and structured concurrency
-<!-- Source: https://github.com/AvdLee/Swift-Concurrency-Agent-Skill (MIT License) — synced 2026-02-19 -->
