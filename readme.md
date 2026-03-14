@@ -67,10 +67,12 @@ On-demand capability packages loaded by the agent when a task matches.
 
 | Name | Description |
 |------|-------------|
+| [app-store-screenshots](https://github.com/ohlulu/oh-pi/tree/main/skills/app-store-screenshots) | App Store screenshot generator — Next.js page that renders iPhone/iPad marketing screenshots and exports at Apple-required resolutions. |
 | [clean-architecture](https://github.com/ohlulu/oh-pi/tree/main/skills/clean-architecture) | Clean Architecture mindset — dependency direction, layer boundaries, abstraction decisions. |
 | [commit](https://github.com/ohlulu/oh-pi/tree/main/skills/commit) | Structured Conventional Commits workflow — analyze changes, craft message, commit. |
 | [dev-principles](https://github.com/ohlulu/oh-pi/tree/main/skills/dev-principles) | Language-agnostic development principles and design guidelines. |
 | [doc-system](https://github.com/ohlulu/oh-pi/tree/main/skills/doc-system) | Product documentation system — on-demand loading, single source of truth, open-closed structure. |
+| [postmortem](https://github.com/ohlulu/oh-pi/tree/main/skills/postmortem) | Blameless postmortem — 5-Whys root cause analysis, structured incident review, actionable lessons. |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/skills/ralph-wiggum) | Skill companion for the ralph-wiggum extension — iterative loop pacing. |
 | [sdd](https://github.com/ohlulu/oh-pi/tree/main/skills/sdd) | Spec-Driven Development — Requirements → Plan → Tasks → Verification, with approval gates and doc-system handoff. |
 | [swift-coding-style](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-coding-style) | Swift coding conventions — opaque vs existential types, naming, structure. |
@@ -81,6 +83,7 @@ On-demand capability packages loaded by the agent when a task matches.
 | [swiftui-performance-audit](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-performance-audit) | Audit SwiftUI runtime performance — slow rendering, excessive updates, layout thrash. |
 | [swiftui-ui-patterns](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-ui-patterns) | Best practices and example-driven guidance for building SwiftUI views and components. |
 | [swiftui-view-refactor](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-view-refactor) | Refactor SwiftUI views for consistent structure, dependency injection, and Observation usage. |
+| [ui-design-principles](https://github.com/ohlulu/oh-pi/tree/main/skills/ui-design-principles) | Platform-agnostic UI design principles — typography, color, spacing, motion, interaction, and the "AI slop" test. |
 | [update-changelog](https://github.com/ohlulu/oh-pi/tree/main/skills/update-changelog) | Update CHANGELOG.md with user-facing changes since the last release. |
 
 ### Third-Party Skills (pi-skills)
@@ -94,6 +97,7 @@ Slash-command prompt templates — type `/name` in the editor to expand.
 | Command | Description |
 |---------|-------------|
 | [/brainstorming](https://github.com/ohlulu/oh-pi/blob/main/prompts/brainstorming.md) | Turn ideas into fully formed designs through Diverge → Converge → Reflect dialogue before any implementation. |
+| [/ceo-review](https://github.com/ohlulu/oh-pi/blob/main/prompts/ceo-review.md) | CEO/founder-mode plan review — rethink the problem, find the 10-star product, challenge premises. Three modes: expand, hold, or reduce scope. |
 | [/dev-loop](https://github.com/ohlulu/oh-pi/blob/main/prompts/dev-loop.md) | Automated dev loop — claim todo, branch, develop, code review, merge, repeat. |
 | [/dig](https://github.com/ohlulu/oh-pi/blob/main/prompts/dig.md) | Deep-dive into a topic — research and explain in a teaching style. |
 | [/dig-lite](https://github.com/ohlulu/oh-pi/blob/main/prompts/dig-lite.md) | Fast deep-dive — resolve ambiguity and explain what changes decisions. |

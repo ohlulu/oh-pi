@@ -67,10 +67,12 @@ pi
 
 | 名稱 | 說明 |
 |------|------|
+| [app-store-screenshots](https://github.com/ohlulu/oh-pi/tree/main/skills/app-store-screenshots) | App Store 截圖產生器 — Next.js 頁面渲染 iPhone/iPad 行銷截圖，輸出 Apple 規定解析度。 |
 | [clean-architecture](https://github.com/ohlulu/oh-pi/tree/main/skills/clean-architecture) | Clean Architecture 思維 — 依賴方向、層級邊界、抽象決策。 |
 | [commit](https://github.com/ohlulu/oh-pi/tree/main/skills/commit) | 結構化 Conventional Commits 工作流 — 分析變更、撰寫訊息、提交。 |
 | [dev-principles](https://github.com/ohlulu/oh-pi/tree/main/skills/dev-principles) | 語言無關的開發原則與設計指引。 |
 | [doc-system](https://github.com/ohlulu/oh-pi/tree/main/skills/doc-system) | 文件系統設計與維護 — 按需載入、單一來源、開放封閉原則。 |
+| [postmortem](https://github.com/ohlulu/oh-pi/tree/main/skills/postmortem) | 無責檢討 — 5-Whys 根因分析、結構化事件回顧、可執行的改善項目。 |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/skills/ralph-wiggum) | ralph-wiggum extension 的 skill 搭檔 — 迭代循環節奏控制。 |
 | [sdd](https://github.com/ohlulu/oh-pi/tree/main/skills/sdd) | 規格驅動開發 — 需求 → 規劃 → 任務 → 驗證，每階段需確認才繼續，含 doc-system 交接。 |
 | [swift-coding-style](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-coding-style) | Swift 編碼風格 — opaque vs existential types、命名、結構。 |
@@ -81,6 +83,7 @@ pi
 | [swiftui-performance-audit](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-performance-audit) | SwiftUI 效能審計 — 慢渲染、過度更新、layout thrash 診斷。 |
 | [swiftui-ui-patterns](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-ui-patterns) | SwiftUI UI 元件模式 — tabs、navigation、sheets、lists 等最佳實踐與範例。 |
 | [swiftui-view-refactor](https://github.com/ohlulu/oh-pi/tree/main/skills/swiftui-view-refactor) | SwiftUI View 重構 — 統一結構排序、依賴注入和 Observation 使用方式。 |
+| [ui-design-principles](https://github.com/ohlulu/oh-pi/tree/main/skills/ui-design-principles) | 跨平台 UI 設計原則 — 字型、色彩、間距、動效、互動狀態，以及「AI 罐頭」檢測。 |
 | [update-changelog](https://github.com/ohlulu/oh-pi/tree/main/skills/update-changelog) | 將最近版本以來的使用者可見變更更新到 CHANGELOG.md。 |
 
 ### 第三方 Skills（pi-skills）
@@ -94,6 +97,7 @@ pi
 | 指令 | 說明 |
 |------|------|
 | [/brainstorming](https://github.com/ohlulu/oh-pi/blob/main/prompts/brainstorming.md) | 用 Diverge → Converge → Reflect 對話將想法轉化為完整設計，實作前必跑。 |
+| [/ceo-review](https://github.com/ohlulu/oh-pi/blob/main/prompts/ceo-review.md) | CEO/創辦人模式的方案審查 — 重新思考問題、找出 10 星產品、挑戰前提假設。三種模式：擴大、維持、縮小範圍。 |
 | [/dev-loop](https://github.com/ohlulu/oh-pi/blob/main/prompts/dev-loop.md) | 自動化開發循環 — 認領 todo、建立分支、開發、code review、合併，周而復始。 |
 | [/dig](https://github.com/ohlulu/oh-pi/blob/main/prompts/dig.md) | 深入研究主題 — 用教學方式研究並解釋。 |
 | [/dig-lite](https://github.com/ohlulu/oh-pi/blob/main/prompts/dig-lite.md) | 快速深入 — 解決歧義，只講影響決策的重點。 |
