@@ -2,6 +2,35 @@
 
 ## Unreleased
 
+## 2026.03.14-1
+
+### Extensions
+
+- Updated `ralph-wiggum` — added deferred `doneRequested` drain for reliable iteration handoff; added `statusDetail` lifecycle transitions (`starting` → `active` → `completing`); final iteration accounting in `completeLoop`/`stopLoop`; condensed HELP text; added queue-race regression test suite.
+
+### Skills
+
+- Added `app-store-screenshots` — App Store screenshot generator: Next.js page rendering iPhone/iPad marketing screenshots with `html-to-image` export at Apple-required resolutions; copy-first workflow; included iPhone mockup asset.
+- Added `postmortem` — blameless incident review: 5-Whys root cause analysis, structured template, supports project-level and global placement, pattern detection across postmortems.
+- Added `ui-design-principles` — platform-agnostic UI design principles: typography, color, spacing, motion, interaction, adaptive layout, UX writing; includes "AI slop" anti-pattern checklist; 7 reference docs.
+- Updated `sdd` — added handoff audit checklist item and anti-pattern for ambiguous specs.
+- Updated `swift-concurrency` — restructured reference docs (removed `approachable-concurrency` and `swiftui-concurrency`; content consolidated into remaining refs).
+- Updated `swiftui-expert-skill` — restructured reference docs (removed `modern-apis` and `text-formatting`; added `latest-apis`, `charts`, `charts-accessibility`, `accessibility-patterns`, `macos-scenes`, `macos-views`, `macos-window-styling`).
+- Removed `bdd` skill.
+
+### Prompts
+
+- Added `/ceo-review` — CEO/founder-mode plan review with three modes: scope expansion, hold scope, scope reduction.
+
+### Docs
+
+- Added 3 postmortems: Tuist binary xcframework silent link failure, Crashlytics dSYM silent failure, StoreKit config not in project.
+- Removed `docs/tuist.md` (content superseded by postmortem).
+
+### Config
+
+- Updated `AGENTS.md` — added "Codex will review your code" note.
+
 ## 2026.03.09-1
 
 ### Docs
