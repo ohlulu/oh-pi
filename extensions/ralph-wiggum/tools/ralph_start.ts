@@ -20,6 +20,7 @@ export function createRalphStartTool(pi: ExtensionAPI, shared: SharedContext) {
 		label: "Start Ralph Loop",
 		description:
 			"Start a long-running development loop. Use for complex multi-iteration tasks.",
+		promptSnippet: "Start a long-running development loop for complex multi-iteration tasks.",
 		parameters: Type.Object({
 			name: Type.String({ description: "Loop name (e.g., 'refactor-auth')" }),
 			taskContent: Type.String({

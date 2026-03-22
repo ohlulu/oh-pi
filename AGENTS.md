@@ -12,7 +12,6 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 - Bugs: add regression test when it fits.
 - Keep files <~500 LOC; up to 700 allowed if justified; split/refactor as needed.
 - Commits: Conventional Commits (`feat|fix|refactor|build|ci|chore|docs|style|perf|test`).
-- Subagents: read `~/.pi/agent/docs/subagent.md`.
 - Editor: `cursor <path>`.
 - New deps: quick health check (recent releases/commits, adoption).
 - Blocked on a bug: trace root cause first (read code → check logs → reproduce). Workaround only with explicit user approval.
@@ -35,6 +34,7 @@ Ohlulu owns this. Start: say hi + 1 motivating line. Work style: telegraph; noun
 - Always add `summary` & `read_when` hints on docs.
 - Front matter format: see `rules/docs-format.md`.
 - **Creating or moving any file under `docs/`**: read `doc-system` skill first for placement, structure, and style rules.
+- **Skill routing**: doc-system and sdd are independent skills — do NOT cross-reference their rules. doc-system manages doc structure (INDEX, specs layout, milestones, mockup). sdd manages feature planning workflow (requirements → plan → tasks → verification). Each skill operates without knowing the other exists.
 
 ## Skills
 - Turn 1: scan `<available_skills>` descriptions/trigger words against user intent BEFORE reading any project file.

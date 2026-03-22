@@ -27,6 +27,7 @@ export function createRalphDoneTool(pi: ExtensionAPI, shared: SharedContext) {
 			"Signal that you've completed this iteration of the Ralph loop. " +
 			"Call this after making progress to get the next iteration prompt. " +
 			"Do NOT call this if you've output the completion marker.",
+		promptSnippet: "Signal completion of current Ralph loop iteration.",
 		parameters: Type.Object({}),
 		async execute(
 			_toolCallId: string,

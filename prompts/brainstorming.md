@@ -1,6 +1,6 @@
 ---
 name: brainstorming
-description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation."
+description: "You MUST use this before any creative work — designing features, shaping user experiences, or defining product behavior. Explores user intent, requirements and product design before implementation. No tech-stack decisions here."
 ---
 
 # Brainstorming Ideas Into Designs
@@ -19,7 +19,7 @@ Do NOT invoke any implementation skill, write any code, scaffold any project, or
 
 ## Anti-Pattern: "This Is Too Simple To Need A Design"
 
-Every project goes through this process. A todo list, a single-function utility, a config change — all of them. "Simple" projects are where unexamined assumptions cause the most wasted work. The design can be short (a few sentences for truly simple projects), but you MUST present it and get approval.
+Every project goes through this process. A settings page, a notification flow, a small UX tweak — all of them. "Simple" projects are where unexamined assumptions cause the most wasted work. The design can be short (a few sentences for truly simple projects), but you MUST present it and get approval.
 
 ## Process Flow
 
@@ -27,6 +27,7 @@ Every project goes through this process. A todo list, a single-function utility,
 flowchart TD
     context[Explore project context]
     diverge[Diverge<br/>1-3 Qs per round, open-ended]
+    ideate[Ideate<br/>Mr. Beem pitches 3-5 sparks,<br/>user reacts, cherry-pick]
     converge[Converge<br/>1-2 Qs per round, decision-focused]
     reflect[Reflect<br/>summarize understanding,<br/>surface risky assumptions]
     approach[Propose 2-3 approaches]
@@ -36,7 +37,8 @@ flowchart TD
     plans([Invoke writing-plans])
 
     context --> diverge
-    diverge -- core needs covered,<br/>no new unknowns --> converge
+    diverge -- core needs covered,<br/>no new unknowns --> ideate
+    ideate -- sparks selected or<br/>all discarded --> converge
     converge -- key decisions answered --> reflect
     reflect -- gaps found --> converge
     reflect -- understanding confirmed --> approach
@@ -53,7 +55,7 @@ flowchart TD
 
 ### 1. Explore Project Context
 
-Check out the current project state first — files, docs, recent commits. Build enough context before asking questions.
+Understand the product's current state first — existing features, user-facing docs, recent changes, and any known pain points. Build enough context before asking questions.
 
 ### 2. Diverge — Explore the Problem Space
 
@@ -62,9 +64,23 @@ Check out the current project state first — files, docs, recent commits. Build
 - Prefer multiple choice when the option space is knowable; open-ended when it isn't
 - Focus on: purpose, users, constraints, success criteria, edge cases
 
-**Transition signal → Converge:** core requirements are surfaced and no significant unknowns remain.
+**Transition signal → Ideate:** core requirements are surfaced and no significant unknowns remain.
 
-### 3. Converge — Narrow to Decisions
+### 3. Ideate — Creative Sparks
+
+This is where Mr. Beem earns his name. Stop asking — start pitching.
+
+- Present 3–5 creative sparks: unexpected angles, analogies from other products/domains, "what if we flip this", provocative alternatives the user hasn't considered
+- Each spark is 1–2 sentences max — a headline, not an essay
+- Sparks should range from safe-but-solid to bold-and-weird; at least one should make the user uncomfortable
+- After presenting, ask the user to react: ❤️ love / 🤔 interesting / ❌ kill for each
+- Cherry-pick surviving sparks into the problem framing going forward
+- If all sparks are killed, that's fine — it means the user's original direction was strong. Move on.
+- Multiple rounds allowed if the user asks for more or energy is high
+
+**Transition signal → Converge:** sparks are selected (or all discarded) and the creative space has been explored.
+
+### 4. Converge — Narrow to Decisions
 
 - Ask 1–2 questions per round
 - Decision-focused: binary choices, trade-off comparisons, priority ranking
@@ -72,7 +88,7 @@ Check out the current project state first — files, docs, recent commits. Build
 
 **Transition signal → Reflect:** all key decision points have answers.
 
-### 4. Reflect — Verify Understanding
+### 5. Reflect — Verify Understanding
 
 - Present a concise summary of what you believe you're building
 - List any assumptions that carry risk (things inferred but never explicitly confirmed)
@@ -81,20 +97,21 @@ Check out the current project state first — files, docs, recent commits. Build
 **If gaps are found:** return to Converge to resolve them.
 **If understanding confirmed:** proceed to approaches.
 
-### 5. Propose 2–3 Approaches
+### 6. Propose 2–3 Approaches
 
 - Present options conversationally with trade-offs
 - Lead with your recommended option and explain why
 - YAGNI ruthlessly — strip unnecessary features from all options
 
-### 6. Present Design
+### 7. Present Design
 
 - Scale each section to its complexity: a few sentences if straightforward, up to 200–300 words if nuanced
 - Ask after each section whether it looks right so far
-- Cover: architecture, components, data flow, error handling, testing
+- Cover: problem definition, target users & scenarios, user flows, scope (in/out), acceptance criteria, success metrics, edge cases
+- Technical decisions (tech stack, architecture, data model) are explicitly deferred to writing-plans — do NOT include them here
 - Be ready to go back and clarify if something doesn't fit
 
-### 7. Write Design Doc & Transition
+### 8. Write Design Doc & Transition
 
 - Write the validated design to `docs/` with skill doc-system
 - Commit the design document to git

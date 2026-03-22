@@ -8,9 +8,10 @@
  * Flow:
  *   1. Check git repo + has changes
  *   2. Snapshot HEAD
- *   3. Spawn pi subprocess (haiku, bash-only, no-extensions)
- *   4. Stream progress via JSON events → notify
- *   5. On exit: compare HEAD to count new commits
+ *   3. Pre-gather git status/diff/staged (eliminates 3 API round-trips)
+ *   4. Spawn pi subprocess (haiku, bash-only, no-extensions) with context
+ *   5. Stream progress via JSON events → notify
+ *   6. On exit: compare HEAD to count new commits
  */
 import { spawn } from "node:child_process";
 import { mkdtempSync, writeFileSync, rmSync, readFileSync } from "node:fs";
@@ -53,10 +54,9 @@ function inferPhase(event: Record<string, unknown>): string | null {
       const m = cmd.match(/committer\s+(?:--force\s+)?"([^"]+)"/);
       return m ? `Committing: ${truncate(m[1], 60)}` : "Running committer…";
     }
-    if (/git\s+diff/.test(cmd)) return "Reading diff…";
-    if (/git\s+status/.test(cmd)) return "Scanning status…";
-    if (/git\s+add/.test(cmd)) return "Staging files…";
-    if (/git\s+restore/.test(cmd)) return "Restoring index…";
+    // git diff/status are pre-gathered by the extension; haiku only runs
+    // them as fallback when pre-gather failed, so keep a generic label.
+    if (/git\s+(diff|status|add|restore)/.test(cmd)) return `Running: ${truncate(cmd, 50)}`;
     return `Running: ${truncate(cmd, 50)}`;
   }
 
@@ -68,12 +68,70 @@ function truncate(s: string, max: number): string {
 }
 
 // ---------------------------------------------------------------------------
+// Pre-gathered git context
+// ---------------------------------------------------------------------------
+
+interface GitContext {
+  status: string;        // git status --porcelain
+  diff: string;          // git diff (unstaged)
+  staged: string;        // git diff --staged
+  diffFailed: boolean;   // true when git diff exited non-zero
+  stagedFailed: boolean; // true when git diff --staged exited non-zero
+}
+
+const MAX_DIFF_CHARS = 80_000; // avoid blowing context window
+
+function clipDiff(raw: string, label: string): string {
+  if (raw.length <= MAX_DIFF_CHARS) return raw;
+  const cut = raw.lastIndexOf("\n", MAX_DIFF_CHARS);
+  const safeCut = cut > 0 ? cut : MAX_DIFF_CHARS;
+  return raw.slice(0, safeCut) + `\n\n... (${label} truncated at ${safeCut} chars, run git diff yourself for full output)`;
+}
+
+function buildTask(gitCtx: GitContext, hint: string | undefined): string {
+  const parts: string[] = [];
+
+  const hasFallback = gitCtx.diffFailed || gitCtx.stagedFailed;
+  if (hasFallback) {
+    parts.push("Some git diffs could not be pre-gathered (see below). For those marked FAILED, run the git command yourself before analyzing.\n");
+  } else {
+    parts.push("The git status and diffs are provided below. Do NOT run git status, git diff, or git diff --staged yourself — go straight to analysis and committing.\n");
+  }
+
+  parts.push("## git status --porcelain\n````\n" + gitCtx.status + "\n````\n");
+
+  if (gitCtx.diffFailed) {
+    parts.push("## git diff (unstaged)\n⚠️ FAILED to gather — run `git diff` yourself.\n");
+  } else if (gitCtx.diff) {
+    parts.push("## git diff (unstaged)\n````diff\n" + clipDiff(gitCtx.diff, "unstaged diff") + "\n````\n");
+  } else {
+    parts.push("## git diff (unstaged)\n(empty — no unstaged changes)\n");
+  }
+
+  if (gitCtx.stagedFailed) {
+    parts.push("## git diff --staged\n⚠️ FAILED to gather — run `git diff --staged` yourself.\n");
+  } else if (gitCtx.staged) {
+    parts.push("## git diff --staged\n````diff\n" + clipDiff(gitCtx.staged, "staged diff") + "\n````\n");
+  } else {
+    parts.push("## git diff --staged\n(empty — no staged changes)\n");
+  }
+
+  if (hint?.trim()) {
+    parts.push("## Additional context\n" + hint.trim() + "\n");
+  }
+
+  parts.push("Analyze the changes above and create appropriate commits using the committer script.");
+  return parts.join("\n");
+}
+
+// ---------------------------------------------------------------------------
 // Spawn with progress
 // ---------------------------------------------------------------------------
 
 async function spawnCommitAgent(
   cwd: string,
   hint: string | undefined,
+  gitCtx: GitContext,
   signal: AbortSignal | undefined,
   onProgress?: (phase: string) => void,
 ): Promise<{ exitCode: number; stderr: string }> {
@@ -82,9 +140,7 @@ async function spawnCommitAgent(
     const promptPath = join(tmpDir, "prompt.txt");
     writeFileSync(promptPath, loadCommitSkill());
 
-    const task = hint?.trim()
-      ? `Analyze the current git changes and create appropriate commits using the committer script. Additional context: ${hint.trim()}`
-      : "Analyze the current git changes and create appropriate commits using the committer script.";
+    const task = buildTask(gitCtx, hint);
 
     const args = [
       "-p",
@@ -185,6 +241,24 @@ export default function commitExtension(pi: ExtensionAPI) {
       const headBefore = await pi.exec("git", ["rev-parse", "HEAD"]);
       const headBeforeSha = headBefore.stdout?.trim();
 
+      // Pre-gather git context to eliminate 3 API round-trips in subprocess.
+      // On failure, leave field empty so haiku falls back to running git itself.
+      const [diffResult, stagedResult] = await Promise.all([
+        pi.exec("git", ["diff"]),
+        pi.exec("git", ["diff", "--staged"]),
+      ]);
+
+      const diffOk = diffResult.code === 0;
+      const stagedOk = stagedResult.code === 0;
+
+      const gitCtx: GitContext = {
+        status: statusCheck.stdout?.trim() ?? "",
+        diff: diffOk ? (diffResult.stdout?.trim() ?? "") : "",
+        staged: stagedOk ? (stagedResult.stdout?.trim() ?? "") : "",
+        diffFailed: !diffOk,
+        stagedFailed: !stagedOk,
+      };
+
       // Progress callback → notify
       const onProgress = (phase: string) => {
         ctx.ui.notify(phase, "info");
@@ -198,7 +272,7 @@ export default function commitExtension(pi: ExtensionAPI) {
       let exitCode: number;
       let stderr: string;
       try {
-        ({ exitCode, stderr } = await spawnCommitAgent(ctx.cwd, args, ac.signal, onProgress));
+        ({ exitCode, stderr } = await spawnCommitAgent(ctx.cwd, args, gitCtx, ac.signal, onProgress));
       } finally {
         clearTimeout(timer);
       }

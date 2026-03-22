@@ -124,6 +124,7 @@ export default function askMeBatchExtension(pi: ExtensionAPI) {
     label: "Ask Me Batch",
     description:
       "Ask multiple confirmation questions in one pass. Each question uses option keys 1..N and includes ✍️ custom input.",
+    promptSnippet: "Ask multiple confirmation questions in one pass.",
     parameters: AskMeBatchParams,
 
     async execute(_toolCallId, params, _signal, _onUpdate, ctx) {

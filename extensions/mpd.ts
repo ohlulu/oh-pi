@@ -45,18 +45,7 @@ export default function mpdExtension(pi: ExtensionAPI) {
         return;
       }
 
-      // --- Confirmation ---
-
-      if (!force && ctx.hasUI) {
-        const ok = await ctx.ui.confirm(
-          "MPD",
-          `Merge \`${currentBranch}\` → \`${defaultBranch}\`, push, delete local branch?`,
-        );
-        if (!ok) {
-          ctx.ui.notify("Cancelled", "info");
-          return;
-        }
-      }
+      // --- Auto-proceed (confirm only on errors) ---
 
       // --- Execute ---
 

@@ -140,7 +140,7 @@ export function renderTodoDetail(theme: Theme, todo: TodoRecord, expanded: boole
 }
 
 export function appendExpandHint(theme: Theme, text: string): string {
-    return `${text}\n${theme.fg("dim", `(${keyHint("expandTools", "to expand")})`)}`;
+    return `${text}\n${theme.fg("dim", `(${keyHint("app.tools.expand", "to expand")})`)}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -325,24 +325,24 @@ export class TodoSelectorComponent extends Container implements Focusable {
 
     handleInput(keyData: string): void {
         const kb = getEditorKeybindings();
-        if (kb.matches(keyData, "selectUp")) {
+        if (kb.matches(keyData, "tui.select.up")) {
             if (this.treeLines.length === 0) return;
             this.selectedIndex = this.selectedIndex === 0 ? this.treeLines.length - 1 : this.selectedIndex - 1;
             this.updateList();
             return;
         }
-        if (kb.matches(keyData, "selectDown")) {
+        if (kb.matches(keyData, "tui.select.down")) {
             if (this.treeLines.length === 0) return;
             this.selectedIndex = this.selectedIndex === this.treeLines.length - 1 ? 0 : this.selectedIndex + 1;
             this.updateList();
             return;
         }
-        if (kb.matches(keyData, "selectConfirm")) {
+        if (kb.matches(keyData, "tui.select.confirm")) {
             const selected = this.treeLines[this.selectedIndex]?.todo;
             if (selected) this.onSelectCallback(selected);
             return;
         }
-        if (kb.matches(keyData, "selectCancel")) {
+        if (kb.matches(keyData, "tui.select.cancel")) {
             this.onCancelCallback();
             return;
         }
@@ -524,27 +524,27 @@ export class TodoDetailOverlayComponent {
 
     handleInput(keyData: string): void {
         const kb = getEditorKeybindings();
-        if (kb.matches(keyData, "selectCancel")) {
+        if (kb.matches(keyData, "tui.select.cancel")) {
             this.onAction("back");
             return;
         }
-        if (kb.matches(keyData, "selectConfirm")) {
+        if (kb.matches(keyData, "tui.select.confirm")) {
             this.onAction("work");
             return;
         }
-        if (kb.matches(keyData, "selectUp")) {
+        if (kb.matches(keyData, "tui.select.up")) {
             this.scrollBy(-1);
             return;
         }
-        if (kb.matches(keyData, "selectDown")) {
+        if (kb.matches(keyData, "tui.select.down")) {
             this.scrollBy(1);
             return;
         }
-        if (kb.matches(keyData, "selectPageUp")) {
+        if (kb.matches(keyData, "tui.select.pageUp")) {
             this.scrollBy(-this.viewHeight || -1);
             return;
         }
-        if (kb.matches(keyData, "selectPageDown")) {
+        if (kb.matches(keyData, "tui.select.pageDown")) {
             this.scrollBy(this.viewHeight || 1);
             return;
         }

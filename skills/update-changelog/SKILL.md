@@ -5,12 +5,12 @@ description: "Update CHANGELOG.md with user-facing changes since the last releas
 
 # Update Changelog
 
-Curate user-facing changes from git history and record them in `CHANGELOG.md` under the Unreleased section.
+Curate user-facing changes from git history and record them in `CHANGELOG.md`.
 
 ## When to Use
 
 - User asks to update the changelog.
-- Preparing a release (pre-release step).
+- Preparing a release.
 - Accumulating notable changes after a batch of commits.
 
 ## When Not to Use
@@ -30,7 +30,16 @@ git describe --tags --abbrev=0
 
 This returns the most recent tag — that's the starting point.
 
-### 2. Collect commits since baseline
+### 2. Determine next version
+
+Check the repo's existing version tags to detect the scheme (semver `X.Y.Z` or two-segment `X.Y`), then bump accordingly:
+- **Major** bump for breaking changes.
+- **Minor** bump for new features.
+- **Patch** bump for bug fixes only (semver repos).
+
+If unsure, ask the user.
+
+### 3. Collect commits since baseline
 
 ```bash
 git log <tag>..HEAD --oneline --reverse
@@ -38,7 +47,7 @@ git log <tag>..HEAD --oneline --reverse
 
 Skim diffs as needed (`git diff <tag>..HEAD -- <file>`) to understand user-visible impact.
 
-### 3. Curate entries (user-facing only)
+### 4. Curate entries (user-facing only)
 
 **Include:**
 - Shipped features, bug fixes, breaking changes
@@ -60,26 +69,20 @@ Skim diffs as needed (`git diff <tag>..HEAD -- <file>`) to understand user-visib
 - Add PR/issue numbers when available (`#123`)
 - Never include raw commit hashes
 
-### 4. Edit CHANGELOG.md
+### 5. Edit CHANGELOG.md
 
 - If `CHANGELOG.md` doesn't exist, check for `CHANGELOG` (no extension).
-- Ensure an `## Unreleased` section exists at the top; create it if missing.
-- Preserve the existing style (`## Unreleased` vs `## [Unreleased]`, bullet style `*` vs `-`, spacing).
-- Append new entries under Unreleased; do not replace existing entries.
+- **Read the existing file first** to detect the heading style and conventions.
+- Add a new version section at the top with today's date. Match the repo's existing versioning scheme (e.g. `## [X.Y.Z] — YYYY-MM-DD` or `## [X.Y] — YYYY-MM-DD`).
+- Preserve the existing style (heading format, bullet style `*` vs `-`, spacing).
 - Group related changes together when appropriate.
 
-### 5. Sanity checks
+### 6. Sanity checks
 
 - Markdown renders correctly.
 - No duplicate entries.
 - Wording is concise, past-tense verbs or short descriptors.
 - Code references use backticks.
-
-### 6. Post-release bookkeeping
-
-If a release just shipped (Unreleased section was converted to a version):
-- Add a fresh `## Unreleased` section at the top.
-- This prevents new changes from landing in the shipped section.
 
 ## Style Guidelines
 
@@ -93,7 +96,7 @@ If a release just shipped (Unreleased section was converted to a version):
 ### Good entries
 
 ```markdown
-## Unreleased
+## [1.3.0] — 2026-03-18
 - Added configurable status probe refresh interval. #123
 - Fixed menu bar icon dimming on sleep/wake. #128
 - Improved error reporting when task claim expires.

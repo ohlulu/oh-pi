@@ -30,7 +30,7 @@ Spec is the source of truth. Code is derived from spec, not the other way around
 - Trivial bug fixes or single-file edits (just do it)
 - Highly uncertain domains where you need to spike/prototype first (explore, then spec)
 - Pure refactoring with no behavior change (no spec needed)
-- Existing spec documents that just need doc-system organization (use doc-system skill)
+- Existing spec documents that just need reorganization (not a feature change)
 
 ## Core Principles
 
@@ -156,36 +156,24 @@ docs/specs/{feature-name}/
 └── tasks.md
 ```
 
-If the project uses doc-system, this integrates naturally under `docs/specs/`.
-When the feature ships, requirements content can feed into the main product spec.
+Adapt the location to project conventions:
+- Projects with `docs/specs/`: place under `docs/specs/{feature-name}/`
+- Projects without `docs/`: place where it makes sense (project root, etc.)
 
-For projects without a `docs/` structure, adapt the location to project conventions.
+SDD artifacts are feature-scoped specs. They remain valid long-term references
+for "what this feature does and why it was built this way."
 
-## Relationship with doc-system
+### Post-Completion
 
-| Concern | doc-system | SDD |
-|---------|-----------|-----|
-| Purpose | Organize and route documentation | Plan and validate a feature change |
-| Spec meaning | Long-lived product truth | Development-time planning artifact |
-| Lifecycle | Permanent, evolves with product | Temporary per-change, archivable |
-| Directory | `docs/specs/` (flat, one file per topic) | `docs/specs/{feature-name}/` (trio per feature) |
+When all tasks in tasks.md are checked:
 
-SDD produces artifacts. doc-system organizes them.
-When a feature ships, the requirements may merge into a product-level spec file.
-
-### Handoff to doc-system
-
-SDD is responsible for producing specs. Integrating them into the doc system is a required handoff step — not optional, not "someone else's job."
-
-**After Phase 3 (Tasks approved):**
-1. Add the new spec to `INDEX.md` Specs table (one row)
-2. Add/update the milestone `_index.md` entry — link directly to the spec, do NOT create a separate milestone file (the SDD tasks.md already serves as the checklist)
-
-**After Phase 4 (Verification / feature ships):**
-1. Update milestone `_index.md` status to Done
-2. Update milestone overview (`milestones/_index.md`) if it has a summary table
-
-**Rule: no separate milestone file when SDD spec exists.** The milestone `_index.md` row links to the spec. The spec's `tasks.md` is the single checklist. A separate milestone file with its own checklist violates single source of truth.
+1. **Settle behavior rules** — are there rules in requirements.md that should also be
+   reflected in a broader product spec (e.g., business-rules.md)? SDD requirements are
+   feature-scoped; product specs are topic-scoped. Both are valid, but product specs are
+   where developers look first for cross-cutting rules.
+2. **Capture decisions** — are there architecture decisions in plan.md worth recording
+   as standalone knowledge? If the project has a decisions log or knowledge base, distill
+   the key rationale there.
 
 ## Spec Evolution
 

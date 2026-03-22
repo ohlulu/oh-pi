@@ -148,6 +148,7 @@ export default function todosExtension(pi: ExtensionAPI) {
       "Dependencies are managed via depends_on on create/update (accepts TODO-<hex> or raw hex and stores raw ids). " +
       "Todo ids are shown as TODO-<hex>; id parameters accept TODO-<hex> or the raw hex filename. " +
       "Claim tasks before working on them to avoid conflicts, and close them when complete.",
+    promptSnippet: "Manage file-based todos (list, create, update, delete, claim, release).",
     parameters: TodoParams,
 
     async execute(_toolCallId, params, _signal, _onUpdate, ctx) {

@@ -74,6 +74,7 @@ export default function askMeExtension(pi: ExtensionAPI) {
     name: "ask_me",
     label: "Ask Me",
     description: "Call this when you need user confirmation. Option keys are fixed to 1..N, with optional free-text input.",
+    promptSnippet: "User confirmation with selectable options and free-text input.",
     parameters: AskMeParams,
 
     async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
