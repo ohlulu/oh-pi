@@ -56,6 +56,7 @@ Reusable pi extensions that add tools, commands, and event hooks to the agent.
 | [mpd](https://github.com/ohlulu/oh-pi/blob/main/extensions/mpd.ts) | `/mpd` command — merge feature branch into default, push, and delete local branch in one shot. |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/extensions/ralph-wiggum) | Long-running iterative dev loops with plan → execute → verify cycles, pacing, and checkpoints. |
 | [review](https://github.com/ohlulu/oh-pi/tree/main/extensions/review) | `/review` command — interactive code review based on git diff / PR / files. |
+| [statusbar](https://github.com/ohlulu/oh-pi/blob/main/extensions/statusbar.ts) | Footer status bar — model name, cwd, git branch with uncommitted count, and context window usage. |
 | [tab-status](https://github.com/ohlulu/oh-pi/blob/main/extensions/tab-status.ts) | Updates terminal tab title with agent status (☘️ idle · 🔄 working · 🛑 error). |
 | [todo](https://github.com/ohlulu/oh-pi/tree/main/extensions/todo) | File-based todo management tool — the agent can create, update, and query todos. |
 | [worktree](https://github.com/ohlulu/oh-pi/tree/main/extensions/worktree) | `/wt` command — git worktree management. |
@@ -70,11 +71,12 @@ On-demand capability packages loaded by the agent when a task matches.
 | [app-store-screenshots](https://github.com/ohlulu/oh-pi/tree/main/skills/app-store-screenshots) | App Store screenshot generator — Next.js page that renders iPhone/iPad marketing screenshots and exports at Apple-required resolutions. |
 | [clean-architecture](https://github.com/ohlulu/oh-pi/tree/main/skills/clean-architecture) | Clean Architecture mindset — dependency direction, layer boundaries, abstraction decisions. |
 | [commit](https://github.com/ohlulu/oh-pi/tree/main/skills/commit) | Structured Conventional Commits workflow — analyze changes, craft message, commit. |
+| [deep-research](https://github.com/ohlulu/oh-pi/tree/main/skills/deep-research) | Autonomous multi-step web research — parallel search, source triangulation, cited Markdown report. |
 | [dev-principles](https://github.com/ohlulu/oh-pi/tree/main/skills/dev-principles) | Language-agnostic development principles and design guidelines. |
 | [doc-system](https://github.com/ohlulu/oh-pi/tree/main/skills/doc-system) | Product documentation system — on-demand loading, single source of truth, open-closed structure. |
 | [postmortem](https://github.com/ohlulu/oh-pi/tree/main/skills/postmortem) | Blameless postmortem — 5-Whys root cause analysis, structured incident review, actionable lessons. |
 | [ralph-wiggum](https://github.com/ohlulu/oh-pi/tree/main/skills/ralph-wiggum) | Skill companion for the ralph-wiggum extension — iterative loop pacing. |
-| [sdd](https://github.com/ohlulu/oh-pi/tree/main/skills/sdd) | Spec-Driven Development — Requirements → Plan → Tasks → Verification, with approval gates and doc-system handoff. |
+| [sdd](https://github.com/ohlulu/oh-pi/tree/main/skills/sdd) | Spec-Driven Development — Requirements → Plan → Tasks → Verification, with approval gates. |
 | [swift-coding-style](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-coding-style) | Swift coding conventions — opaque vs existential types, naming, structure. |
 | [swift-concurrency](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-concurrency) | Swift Concurrency best practices — async/await, actors, Sendable, migration to Swift 6. |
 | [swift-testing-expert](https://github.com/ohlulu/oh-pi/tree/main/skills/swift-testing-expert) | Swift Testing expert — #expect/#require macros, traits, parameterized tests, XCTest migration. |

@@ -14,8 +14,9 @@ Prepare release notes since the last tag
 ## What It Does
 
 - Finds the latest tag, collects commits since then
+- Determines next version by detecting the repo's versioning scheme (semver or two-segment) and bumping accordingly
 - Filters for user-facing changes only (no internal refactors or typo fixes)
-- Writes entries under `## Unreleased` section
+- Writes a new versioned section at the top (e.g., `## [1.3.0] — 2026-03-18`)
 - Preserves existing changelog style and entries
 
 ## When to Use
@@ -48,7 +49,7 @@ Prepare release notes since the last tag
 ## Example
 
 ```markdown
-## Unreleased
+## [1.3.0] — 2026-03-18
 - Added configurable status probe refresh interval. #123
 - Fixed menu bar icon dimming on sleep/wake. #128
 - Improved error reporting when task claim expires.

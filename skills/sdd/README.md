@@ -23,9 +23,9 @@ Verify the implementation against the spec
 - Captures user-visible behavior (WHAT) before technical approach (HOW)
 - Uses RFC 2119 keywords (MUST/SHALL/SHOULD/MAY) in requirements
 - Documents architecture decisions with rationale and rejected alternatives
-- Outputs artifacts to `docs/specs/{feature-name}/`
+- Outputs artifacts to `docs/specs/{feature-name}/` (adapts to project conventions)
 - Handles spec evolution: edit-in-place for small changes, delta workflow for large ones
-- Hands off to doc-system after Tasks approval (INDEX.md + milestone entry)
+- Post-completion: settle behavior rules into broader product specs, capture key architecture decisions
 
 ## When to Use
 
@@ -39,7 +39,7 @@ Verify the implementation against the spec
 - Trivial bug fixes or single-file edits (just do it)
 - Highly uncertain domains needing a spike first (explore, then spec)
 - Pure refactoring with no behavior change
-- Doc organization work (use doc-system skill instead)
+- Existing spec documents that just need reorganization (not a feature change)
 
 ## Key Rules
 
@@ -48,7 +48,7 @@ Verify the implementation against the spec
 - Requirements describe behavior, not implementation mechanics
 - Every requirement needs at least one Given/When/Then scenario
 - Tasks must reference the requirement(s) they satisfy
-- After Tasks approval: add spec to INDEX.md and link milestone `_index.md` row to spec (no separate milestone file)
+- Post-completion: settle rules into product specs when they apply cross-feature; capture architecture rationale
 - Spec evolution: small change → edit in-place; large change → delta workflow then merge markers
 
 ## References

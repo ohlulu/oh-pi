@@ -15,10 +15,11 @@ Type `/commit` and a lightweight `pi` subprocess handles git analysis and commit
 
 1. Checks you're in a git repo with uncommitted changes
 2. Snapshots current HEAD
-3. Spawns `pi -p --mode json` with `claude-haiku-4-5`, bash-only, no extensions/skills/templates
-4. Streams JSON events from stdout → live progress notifications (reading diff, staging, committing…)
-5. Hard timeout of 2 minutes; escalates SIGTERM → SIGKILL on abort
-6. On exit, compares HEAD to count new commits and notifies you
+3. Pre-gathers `git status`, `git diff`, and `git diff --staged` (eliminates 3 API round-trips in subprocess)
+4. Spawns `pi -p --mode json` with `claude-haiku-4-5`, bash-only, no extensions/skills/templates, injecting pre-gathered context
+5. Streams JSON events from stdout → live progress notifications (reading diff, staging, committing…)
+6. Hard timeout of 2 minutes; escalates SIGTERM → SIGKILL on abort
+7. On exit, compares HEAD to count new commits and notifies you
 
 ## Commands
 
