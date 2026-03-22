@@ -2,6 +2,32 @@
 
 ## Unreleased
 
+## 2026.03.21-1
+
+### Extensions
+
+- Added `statusbar` — footer status bar showing model name with provider-colored text, cwd basename, git branch with uncommitted file count (auto-refreshes on tool results), and context window usage.
+- Updated `commit` — pre-gathers `git status`, `git diff`, and `git diff --staged` before spawning subprocess, eliminating 3 API round-trips for faster commits.
+- Updated `mpd` — removed interactive confirmation prompt; auto-proceeds by default.
+- Added `promptSnippet` metadata to `ralph-wiggum`, `todo`, `ask-me`, and `ask-me-batch` tools for improved tool discovery.
+- Updated `todo` — migrated keybinding identifiers to namespaced format (`tui.select.*`).
+
+### Skills
+
+- Added `deep-research` — autonomous multi-step web research: parallel Brave Search workers, source triangulation, cited Markdown report; supports quick (1-round) and deep (up to 3-round) modes.
+- Updated `doc-system` — decoupled milestone rules from SDD; "no separate milestone file" now applies generically when any checklist already exists.
+- Updated `sdd` — removed doc-system cross-references; simplified post-completion to settling behavior rules and capturing architecture decisions; made spec output location project-adaptive.
+- Updated `update-changelog` — changed from `## Unreleased` accumulation to versioned sections with automatic version determination (detects repo's semver or two-segment scheme).
+
+### Prompts
+
+- Updated `/brainstorming` — added "Ideate" phase where Mr. Beem pitches 3–5 creative sparks before converging; refined to product-focused language.
+- Updated `/tech-stack-decision` — restructured into Must-Decide (10 mandatory categories) and Conditional categories; relaxed package health checks to use existing knowledge for well-known packages.
+
+### Config
+
+- Updated `AGENTS.md` — added skill routing independence rule (doc-system and sdd operate without cross-references).
+
 ## 2026.03.14-1
 
 ### Extensions
