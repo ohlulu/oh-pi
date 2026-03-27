@@ -49,6 +49,8 @@ A type should have one, and only one, reason to change.
   three reasons to change — split until each piece changes for exactly one reason
 - If testing requires setting up multiple unrelated dependencies, it's a signal
   to split
+- SRP says when to **split**; cohesion says when to **keep together** — they
+  are two sides of the same coin (see Cohesion below)
 
 ### Open/Closed (OCP)
 Open for extension, closed for modification.
@@ -64,6 +66,23 @@ Clients should not be forced to depend on interfaces they don't use.
 - Design interfaces around behaviors/roles, not objects
 - A single-method interface is perfectly valid
 - If a conformer implements some methods as no-ops, it's a signal to split
+
+### Cohesion & Change Boundaries
+Every split has a cost: one more file, one more indirection hop, one more name
+to remember. Split only when the benefit (independent change, testability,
+clarity, ownership) clearly exceeds that cost.
+
+- **Things that change together should live together.** A helper used only in
+  one context usually belongs next to its caller. A type used by exactly one
+  feature does not automatically need its own file.
+- **File count is a cost, not a virtue.** 10 focused files beat 30 ceremonial
+  ones. A tiny abstraction created only to "follow SRP" is overhead.
+- **Split by independent change, not by ideology.** If you can't name a
+  realistic scenario where a piece changes independently, it likely hasn't
+  earned its own file or abstraction yet.
+- **Beware interface explosion.** ISP rejects fat interfaces, but excessive
+  micro-interfaces can be just as harmful when they don't represent real roles
+  or stable seams. Group by responsibility and usage, not by method count alone.
 
 ---
 

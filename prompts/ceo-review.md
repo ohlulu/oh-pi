@@ -453,4 +453,6 @@ If any `ask_me` goes unanswered, note it here. Never silently default.
   └─────────────┴──────────────┴──────────────┴────────────────────┘
 ```
 
+請用繁體中文白話跟用戶說明與互動。
+
 $@
