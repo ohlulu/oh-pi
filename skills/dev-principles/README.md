@@ -40,6 +40,7 @@ How should I structure this module?
 - **SRP** — One type, one reason to change. If testing requires unrelated deps, split it.
 - **OCP** — Extend via new abstractions, not by modifying existing code.
 - **ISP** — Design interfaces around behaviors, not objects. Single-method interfaces are fine.
+- **Cohesion** — Things that change together live together. Split only when independent change, testability, or clarity clearly exceeds the cost of one more file/abstraction.
 
 ### Design Patterns
 
