@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## 2026.03.27-1
+
+### Extensions
+
+- Fixed `context` — migrated from deprecated `c.path` to `c.sourceInfo.path` for pi 0.62.0 compatibility.
+
+### Skills
+
+- Updated `dev-principles` — added Cohesion & Change Boundaries section: split-vs-keep heuristics, file count as cost not virtue, interface explosion warning.
+
+### Prompts
+
+- Updated `/ceo-review` — switched interaction language to 繁體中文.
+
 ## 2026.03.21-1
 
 ### Extensions
